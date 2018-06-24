@@ -13,8 +13,9 @@ const routes: Routes = [
   { path: 'users', component: UsersComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignUpComponent },
-  { path: 'user-details', component: UserDetailsComponent }
-  //{ path: 'app/games', loadChildren: 'app/games/games.module#GamesModule' }
+  { path: 'user-details', component: UserDetailsComponent },
+  //{ path: 'games', loadChildren: './games/games.module' }
+  { path: 'games', loadChildren: './games/games.module#GamesModule' }
   //{ path: 'app/games', loadChildren: 'app/games/games.module' }
 
 ];

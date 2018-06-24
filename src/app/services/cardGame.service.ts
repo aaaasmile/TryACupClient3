@@ -6,8 +6,9 @@ import { CardGame } from '../data-models/cardGame';
 export class CardGameService {
   getCardGames(): CardGame[] {
     const games: CardGame[] = [
-      { id: 1, name: 'Briscola in due', link: 'app/games/briscola/briscola-in-due' },
-      { id: 2, name: 'Test Gfx', link: 'app/games/test-gfx' }
+      { id: 1, name: 'Briscola in due', link: 'games/briscola/briscola-in-due' },
+      //{ id: 1, name: 'Briscola in due', link: 'games' },
+      { id: 2, name: 'Test Gfx', link: 'games/test-gfx' }
     ];
     return games;
   }

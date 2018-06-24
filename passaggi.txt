@@ -23,6 +23,7 @@ npm i semantic-ui-css --save
 e in angular.joson va messo come referenza:
 "node_modules/semantic-ui-css/semantic.css"
 anche se magari in src/styles.css si potrebbe importare meglio.
+- problema loadChildren: https://github.com/angular/angular-cli/issues/10673
 
 
 == deploy
