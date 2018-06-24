@@ -9,7 +9,7 @@
 </div>
 
 
-<div *ngIf="isloggedin">
+
   <h3>Giochi disponibili</h3>
   <div class="grid grid-pad">
     <div *ngFor="let cardGame of cardGames" (click)="gotoCardGame(cardGame)" class="col-1-4">
@@ -18,4 +18,3 @@
       </div>
     </div>
   </div>
-</div>

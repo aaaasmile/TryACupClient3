@@ -10,6 +10,7 @@ Poi ho creato una nuova app che usa 6.0
 - Ho copiato i files di src\app
 - ho copiato la dir src\asset
 - il file src\index.html e cancellato fav.ico
+- Nello styles.css ho aggiunto una linea
 Ora mancano i moduli che ho installato a parte:
 createjs:
 npm install createjs-module --save
@@ -17,6 +18,12 @@ rxjs non funziona più, ha bisogno di compatibilità:
 npm i rxjs-compat
 manca il module:
 types: ["node"] to tsconfig.app.ts
+Poi il css di semantic
+npm i semantic-ui-css --save
+e in angular.joson va messo come referenza:
+"node_modules/semantic-ui-css/semantic.css"
+anche se magari in src/styles.css si potrebbe importare meglio.
+
 
 == deploy
 Il deploy lo faccio con sinatra usando la directory public.
