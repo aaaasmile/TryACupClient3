@@ -23,6 +23,9 @@ e in angular.joson va messo come referenza:
 "node_modules/semantic-ui-css/semantic.css"
 anche se magari in src/styles.css si potrebbe importare meglio.
 - problema loadChildren: https://github.com/angular/angular-cli/issues/10673
+- websocket applica due volte il stringify: https://github.com/ReactiveX/rxjs/pull/3489
+   Questo è il modo corretto di creare il websocket: this.ws = webSocket({url: mybase_url, serializer: x => x});
+   per avere la compatibilità con la versione 5 di rx
 
 
 == deploy

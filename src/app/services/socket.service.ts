@@ -40,12 +40,13 @@ export class SocketService {
         if (location.hostname === 'localhost') {
             port = "3000"; // overwritten because dev
         }
-        var base_url = prefix + "://" + location.hostname + (port ? ':' + port : '');
-        base_url += "/websocket";
+        var mybase_url = prefix + "://" + location.hostname + (port ? ':' + port : '');
+        mybase_url += "/websocket";
 
         this.Messages = new Subject<Message>();
 
-        this.ws = webSocket(base_url);
+        //this.ws = webSocket({url: mybase_url, deserializer: x => x, serializer: x => x});
+        this.ws = webSocket({url: mybase_url, serializer: x => x});
         this.ws.subscribe(
             (msg) => {
                 console.log('socket received: ' + msg);
@@ -129,8 +130,7 @@ export class SocketService {
         this.connectSocketServer();
 
         let det_json = JSON.stringify({ name: login, password: btoa(password), token: token });
-        //let det: string  = "LOGIN:" + det_json;
-        let det: string  = "LOGIN:"
+        let det: string  = "LOGIN:" + det_json;
         console.log("Send cmd: ", det);
 
         this.ws.next(det);
