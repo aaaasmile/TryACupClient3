@@ -1,0 +1,10 @@
+﻿<div *ngIf="message">
+  <p></p>
+  <div [ngClass]="{ 'ui message': message, 'info': message.type === 'success', 'error': message.type === 'error' }">
+    <a class="red" (click)=dismiss()><i class="window close outline icon" 
+                                        style="float:right; margin-right:-20px;"
+                                        [ngClass]="{'red': message.type === 'error'}"></i></a> 
+    <p>{{message.text}}</p>
+  </div>
+  <p></p>
+</div>

@@ -1,0 +1,23 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import * as createjs from 'createjs-module';
+
+@Component({
+  moduleId: module.id,
+  selector: 'my-test-gfx',
+  templateUrl: 'test-gfx.component.html',
+  styleUrls: ['test-gfx.component.css']
+})
+
+export class TestGfxComponent implements OnInit {
+  private mainStage: createjs.Stage;
+  private imgTmp;
+
+  constructor(
+    private router: Router) {
+  }
+
+  ngOnInit(): void {
+    console.log('test-gfx initialization');
+  }
+}

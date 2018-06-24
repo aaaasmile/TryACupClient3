@@ -1,0 +1,123 @@
+== cli
+questo progetto l'ho ricreato usando il cli di angular.
+Il comando ng si trova solo locale, nella parent di questa dir si ha:
+node_modules\.bin\ng 
+che può  così essere usato in qesto sottoprogetto.
+
+== Update da 4.4 a 6.0
+Ho fatto un update di app-cli.
+Poi ho creato una nuova app che usa 6.0
+- Ho copiato i files di src\app
+- ho copiato la dir src\asset
+- il file src\index.html e cancellato fav.ico
+Ora mancano i moduli che ho installato a parte:
+createjs:
+npm install createjs-module --save
+rxjs non funziona più, ha bisogno di compatibilità:
+npm i rxjs-compat
+manca il module:
+types: ["node"] to tsconfig.app.ts
+
+== deploy
+Il deploy lo faccio con sinatra usando la directory public.
+Per generare i vari files che vanno messi nella directory public di sinatra, uso ng.
+In questa dir si lancia:
+..\node_modules\.bin\ng build --prod
+quindi il risultato viene messo nella dir ./dist
+Ora basta copiare la dist in sinatra e fare il deploy con heroku.
+
+== Combi tasti in code
+Autoformat: ALT + Shift + F
+Cancella linea: CTRL + Shift + K
+
+== Per partire
+In powershell:
+npm start
+Per usare un approccio partendo dall'unit test, va bene persviluppare il core del gioco:
+npm test 
+Per aggiungere un nuovo componente (esempio sign-up):
+<dir_root_dove_si_inserisce>D:\scratch\angular\cli_app\cli-cup-client\node_modules\.bin\ng g component sign-up
+Per aggiungere un nuovo service, vai nella dir service e lancia (nome va senza il suffisso service):
+ng g service Alert
+
+Per far partire il backend di sinatra, invece si usa la powershell e si setta il path:
+D:\scratch\sinatra\cup_sinatra> $env:path += "D:\ruby\ruby_2_3_1\bin"
+per poi lanciare il server:
+bundle exec puma -p 3000
+
+== Recaptacha
+Ho installato il componente direttamente nella direttiva senza npm. (https://github.com/xmaestro/angular2-recaptcha/blob/master/lib/captcha.component.ts)
+Per la validazione ho messo il token in nuovo campo di input hidden 
+Per vedere i settings: https://www.google.com/recaptcha/admin#site/340286801?setup
+Info per lo sviluppo: https://developers.google.com/recaptcha/docs/display?authuser=1
+Implementata col doppio check, sia lato client (token viene genearto) e lato server (validazione token usando api google).
+
+== Robot google
+Al momento ho escluso l'applicazione pubblicata su heroku dall'indicizzazione su google.
+Questo per evitare collegamenti partendo da google search su un'applicazione che è lontana dall'essere finita.
+Una vota conclusa, rimuovi questo meta tag dall'header di index.html:
+<meta name="robots" content="noindex">
+
+==  TODO
+- bug nella registrazione: se il server fornisce un errore nell'insert, la maschera della registrazione è bloccata
+- password reset
+- sidebar menu se la dimensione è minore di 700px
+* La grafica.*
+Usa TestCard2 per vedere di testare le carte da cliccare in tutte le sue varianti (selezionata,invalida,giocata,deck,figura).
+- Ci vuole un componente ResourceLoader che carichi tutte le immagini (vedi doc di preloadjs della libreria createjs). OK
+- ResourceLoader singleton e carica le resource una sola volta
+- ResourceLoader avanti indietro con il browser, crea una nuova istanza
+Crea poi qualcosa di simile alla CardGfx.
+
+== Npm troubles
+Ho avuto che 'npm start' non ha funzionato. La ragione è che il compiler tsc non ha funzionato.
+Basta provare con "node_modules\.bin\tsc"
+Il problema è che prende anche i files della directory aot, e può darsi che non sia compilabile.
+Quando si usa il jit è meglio cancellare il contenuto della dir aot.
+
+Bisogna capire bene route
+https://angular.io/docs/ts/latest/guide/router.html
+(Milestone #1: Getting Started with the Router)
+
+== Npm
+I comandi di npm vanno messi in package.json, per esempio quello per npm test.
+I pacchetti che mi mancavano in package.json per fare andare karma (npm test) erano:
+"jasmine-core": "~2.4.1",
+"karma": "^1.3.0",
+"karma-chrome-launcher": "^2.0.0",
+"karma-cli": "^1.0.1",
+"karma-htmlfile-reporter": "^0.3.4",
+"karma-jasmine": "^1.0.2",
+"karma-jasmine-html-reporter": "^0.2.2",
+"@types/jasmine": "^2.5.36"
+
+== AOT
+Con aot non riesco a fare andare le route che riguardano /app/games
+dove vengono caricati tutti i children.
+L'errore che ricevo è troppo oscuro e il JIt è molto diverso dall'aot.
+Fino a quando l'aot risulterà stabile, uso per il deploy i files .js
+generati nela directory app. Per il deploy va copiata in public di cup_sinatra
+i files app/*.js.
+Poi se cambia il file systemjs.config.js, va adattato anche in cup_sinatra
+in quanto non uso node_modules, ma dist con i files in formato .min. 
+
+
+== createJs
+La libreria creataJs non ha il pacchetto npm, ma perlomeno ha il type (vedi http://microsoft.github.io/TypeSearch/)
+Ho fatto il download manuale della libreria easeljs-0.8.2.min.js e messa in dist.
+Poi ho fatto l'installazione dei types con:
+npm install @types/createjs --save 
+Ora ho il type createjs disponibile in ogni componente. Quindi non mi serve il comando import.
+Quello che mi serve è caricare la libreria easeljs-0.8.2.min.js nel file index.html.
+
+== Source
+I sorgenti sono su github al progetto TryACupClient
+
+== Creare un nuovo componente
+Si usa la cli dalla directory root dell'app che in automatico mette il componente in src/app
+Per esempio, quando ho creato il compoente UserDetails ho usato:
+..\node_modules\.bin\ng generate component UserDetails
+
+
+
+

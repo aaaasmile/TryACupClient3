@@ -1,0 +1,55 @@
+<h2>Lista utenti</h2>
+<ul class="users">
+  <li *ngFor="let user of users" [class.selected]="user === selectedUser" (click)="onSelect(user)">
+    <span class="badge">{{user.id}}</span> {{user.name}}
+  </li>
+</ul>
+<div *ngIf="selectedUser">
+  <h2>
+    {{selectedUser.name | uppercase}} is my user
+  </h2>
+  <button (click)="gotoDetail()">View Details</button>
+  <button (click)="doLogout()">Logout</button>
+  <button (click)="doPendingGameRe2()">PendingGameRe2</button>
+  <button (click)="doUsersConnectedReq()">UserReq</button>
+  <button (click)="doCreateNewGameReq()">New Game Briscola</button>
+  <br/>
+  <ul>
+    <li>
+      <div><button (click)="doJoinGame()">Join Game</button>
+        <input id="ixgame" [(ngModel)]="ixgame" placeholder="ixgame" />
+      </div>
+    </li>
+    <li>
+      <div><button (click)="doChatLobby()">Chat Lobby</button>
+        <input id="chatLobbyText" [(ngModel)]="chatLobbyText" placeholder="chat lobby text" />
+      </div>
+    </li>
+    <li>
+      <div><button (click)="doChatTable()">Chat Table</button>
+        <input id="chatTableText" [(ngModel)]="chatTableText" placeholder="chat table text" />
+      </div>
+    </li>
+    <li>
+      <div><button (click)="doAlgPlayCard()">Play card</button>
+        <input id="cardToPlay" [(ngModel)]="cardToPlay" placeholder="i.e. _Ab" />
+      </div>
+    </li>
+    <li>
+      <div><button (click)="doAlgLeaveTable()">Leave Table</button>
+      </div>
+    </li>
+    <li>
+      <div><button (click)="doAlgResign()">Resign</button>
+      </div>
+    </li>
+    <li>
+      <div><button (click)="doAlgRestartSameGame()">Restart same Game</button>
+      </div>
+    </li>
+    <li>
+      <div><button (click)="doAlgRestartNewGame()">Restart with another Game</button>
+      </div>
+    </li>
+  </ul>
+</div>

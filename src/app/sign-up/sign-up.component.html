@@ -1,0 +1,86 @@
+<div class="ui middle aligned center aligned grid">
+  <div class="column">
+    <h2>Nuovo utente</h2>
+    <form class="ui large form" name="form" (ngSubmit)="f.form.valid && signup(f)" #f="ngForm" novalidate>
+      <div class="field" [ngClass]="{ 'error': username.touched && !username.valid }">
+        <div class="ui left icon input">
+          <i class="user icon"></i>
+          <input type="text" name="username" placeholder="Login utente*" [(ngModel)]="model.username" 
+                 #username="ngModel" required minlength="5" maxlength="20" pattern="^[a-zA-Z0-9_]*$" cupLoginExistsValidator>
+        </div>
+        <cup-show-error path="username" text="Login"></cup-show-error>
+      </div>
+      <div class="field" [ngClass]="{ 'error': password.touched && !password.valid }">
+        <div class="ui left icon input">
+          <i class="lock icon"></i>
+          <input type="password" name="password" placeholder="Password*" [(ngModel)]="model.password" #password="ngModel" required minlength="6" maxlength="20">
+        </div>
+        <cup-show-error path="password" text="Password"></cup-show-error>
+      </div>
+      <div class="field" [ngClass]="{ 'error': rep_password.touched && !rep_password.valid }">
+        <div class="ui left icon input">
+          <i class="lock icon"></i>
+          <input type="password" name="rep_password" placeholder="Ripeti la password*" [(ngModel)]="model.rep_password" 
+                 #rep_password="ngModel" required minlength="6" maxlength="20" validateEqual="password">
+        </div>
+        <cup-show-error path="rep_password" text="La conferma della Password è errata"></cup-show-error>
+      </div>
+      <div class="field" [ngClass]="{ 'error': email.touched && !email.valid }">
+        <div class="ui left icon input">
+          <i class="mail icon"></i>
+          <input type="text" name="email" placeholder="Email*" [(ngModel)]="model.email" 
+                 #email="ngModel" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                 maxlength="30" required>
+        </div>
+        <cup-show-error path="email" text="Email"></cup-show-error>
+      </div>
+      <div class="field" [ngClass]="{ 'error': fullname.touched && !fullname.valid }">
+        <div class="ui left icon input">
+          <i class="user icon"></i>
+          <input type="text" name="fullname" placeholder="Nome completo" [(ngModel)]="model.fullname" 
+                 #fullname="ngModel" pattern="^[A-zÀ-ÿ ]*$" maxlength="40">
+        </div>
+        <cup-show-error path="fullname" text="Nome completo"></cup-show-error>
+      </div>
+      <div class="field">
+        <div class="ui left select">
+          <select name="deckname" class="ui fluid dropdown" [(ngModel)]="model.deckname" #deckname="ngModel">
+            <option value="" disabled>Seleziona il tipo di carte</option>
+            <option value="piac">Piacentine</option>
+            <option value="francesi">Francesi</option>
+            <option value="milano">Milanesi</option>
+            <option value="napoli">Napoletane</option>
+            <option value="sicilia">Siciliane</option>
+            <option value="treviso">Trevigiane</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui left select">
+          <select name="gender" class="ui fluid dropdown" [(ngModel)]="model.gender" #gender="ngModel">
+            <option value="" disabled>Seleziona il sesso</option>
+            <option value=""></option>
+            <option value="M">Maschio</option>
+            <option value="F">Femmina</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <re-captcha site_key="6LdRXUgUAAAAAD0ztsAYdqCKlJpWTT9rv874YgU2" 
+             (captchaResponse)="handleCorrectCaptcha($event)" 
+             (captchaExpired)="handleCaptchaExpired"
+             language="it" ></re-captcha> 
+        <input type="hidden" name="token_captcha" [(ngModel)]="model.token_captcha" #token_captcha="ngModel" required />
+      </div>
+      <!-- button submit -->
+      <div class="form-group">
+        <button [disabled]="loading || !f.valid" class="ui fluid large teal submit button">Registra</button>
+        <div *ngIf="loading" class="ui active inverted dimmer">
+          <div class="ui text loader large">
+            Registrazione in corso...
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

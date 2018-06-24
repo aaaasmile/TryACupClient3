@@ -1,0 +1,37 @@
+<div class="ui middle aligned center aligned grid">
+  <div class="column">
+    <h2>Login</h2>
+    <form class="ui large form" name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+      <div class="field" [ngClass]="{ 'error': f.submitted && !username.valid }">
+        <div class="ui left icon input">
+          <i class="user icon"></i>
+          <input type="text" name="username" placeholder="Utente" [(ngModel)]="model.username" #username="ngModel" required>
+        </div>
+      </div>
+      <div class="field" [ngClass]="{ 'error': f.submitted && !password.valid }">
+        <div class="ui left icon input">
+          <i class="lock icon"></i>
+          <input type="password" name="password" placeholder="Password" [(ngModel)]="model.password" #password="ngModel" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <button [disabled]="loading" class="ui fluid large teal submit button">Login</button>
+        <div *ngIf="loading" class="ui active inverted dimmer">
+          <div class="ui text loader large">
+            Autenticazione in corso...
+          </div>
+        </div>
+        <div class="ui message">
+          Nuovo utente?
+          <a [routerLink]="['/signup']">Registrati subito</a>
+        </div>
+      </div>
+    </form>
+    <div *ngIf="f.submitted && (!username.valid || !password.valid)" class="ui error message">
+      <ul class="list" *ngIf="f.submitted">
+          <li *ngIf="f.submitted && !username.valid">Login utente non valido</li>
+          <li *ngIf="f.submitted && !password.valid">Password non valida</li>
+      </ul>
+    </div>
+  </div>
+</div>
