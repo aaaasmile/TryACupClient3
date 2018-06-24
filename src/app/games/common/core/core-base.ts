@@ -1,5 +1,5 @@
 import { Log4Cup } from '../../../shared/log4cup'
-import * as Rx from 'rxjs/Rx'
+import { Subject } from 'rxjs';
 
 //-------------------INTERFACES ---------------------------
 
@@ -132,8 +132,8 @@ export class CoreStateEventBase implements ICore, ICoreActor {
   private _processor: StateActionProcessor;
   private _alg_action: CoreQueue;
   private _core_state: CoreQueue;
-  private _subStateAction = new Rx.Subject();
-  private event_for_all = new Rx.Subject();
+  private _subStateAction = new Subject();
+  private event_for_all = new Subject();
   private event_for_player = {};
 
   // _env: 'develop', 'production'
@@ -191,7 +191,7 @@ export class CoreStateEventBase implements ICore, ICoreActor {
 
   get_subject_for_player(player) {
     if (this.event_for_player[player] == null) {
-      this.event_for_player[player] = new Rx.Subject();
+      this.event_for_player[player] = new Subject();
     }
     return this.event_for_player[player];
   }

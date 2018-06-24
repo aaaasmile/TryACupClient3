@@ -3,9 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { AlertService } from '../services/alert.service';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import { SocketService } from '../services/socket.service';
 import { NgForm } from '@angular/forms';
-import "rxjs/add/operator/takeWhile";
+import { takeWhile } from 'rxjs/operators'
 import { ViewChild } from '@angular/core';
 import { ReCaptchaComponent } from '../directives/captcha.component';
 
@@ -59,7 +58,7 @@ export class SignUpComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loading = true;
     this.authenticationService.signup(this.model.username, this.model.password, this.model.email, this.model.gender,
       this.model.fullname, this.model.deckname, this.model.token_captcha)
-      .takeWhile(() => this._alive)
+      .pipe(takeWhile(() => this._alive))
       .subscribe(
       data => {
         if (data.is_ok){

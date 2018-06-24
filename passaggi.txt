@@ -14,8 +14,7 @@ Poi ho creato una nuova app che usa 6.0
 Ora mancano i moduli che ho installato a parte:
 createjs:
 npm install createjs-module --save
-rxjs non funziona più, ha bisogno di compatibilità:
-npm i rxjs-compat
+- rxjs non funziona più, la compatibilità fa pena (npm i rxjs-compat), quindi ho fatto la conversione manuale
 manca il module:
 types: ["node"] to tsconfig.app.ts
 Poi il css di semantic

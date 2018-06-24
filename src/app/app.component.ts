@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './services/authentication.service';
 import { Log4Cup } from './shared/log4cup'
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
+import { takeWhile } from 'rxjs/operators'
 import { SocketService } from './services/socket.service';
 import { OnlineService } from './services/online.service';
 
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // monitor login
     this.authenticationService.LoginChangeEvent
-      .takeWhile(() => this._alive)
+      .pipe(takeWhile(() => this._alive))
       .subscribe(evt => {
         this._log.debug("Login event received");
         this.isloggedin = this.authenticationService.isLoggedin();
@@ -42,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     // monitor socket connection
     this.socketService.ConnectEvent
-      .takeWhile(() => this._alive)
+      .pipe(takeWhile(() => this._alive))
       .subscribe(evt => {
         this.checkProtocolConnection();
       }, () => {

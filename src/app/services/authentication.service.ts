@@ -2,11 +2,8 @@ import { Injectable } from '@angular/core';
 import { SocketService } from './socket.service'
 import { UserMessage } from '../data-models/SocketMessages'
 import { User } from '../data-models/user'
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map'
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/of';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
+import { map, filter, catchError, mergeMap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthenticationService {
@@ -48,40 +45,46 @@ export class AuthenticationService {
     autologin(user: User): Observable<UserMessage> {
         console.log('Try to atuologin with user :', user.login);
         return this.socketService.loginReq(user.login, '', user.token)
-            .map((lm: UserMessage) => {
-                if (lm.is_ok && lm.user) {
-                    this._isLoggedIn = true;
-                    this._user_name = lm.user.login;
-                    this.LoginChangeEvent.next(true);
-                }
-                return lm;
-            });
+            .pipe(
+                map((lm: UserMessage) => {
+                    if (lm.is_ok && lm.user) {
+                        this._isLoggedIn = true;
+                        this._user_name = lm.user.login;
+                        this.LoginChangeEvent.next(true);
+                    }
+                    return lm;
+                })
+            );
     }
 
     login(username: string, password: string): Observable<UserMessage> {
         return this.socketService.loginReq(username, password, '')
-            .map((lm: UserMessage) => {
-                if (lm.is_ok && lm.user && lm.user.token && lm.user.token.length > 0) {
-                    this._isLoggedIn = true;
-                    this._user_name = lm.user.login;
-                    this.LoginChangeEvent.next(true);
-                    localStorage.setItem('currentUser', JSON.stringify(lm.user));
-                }
-                return lm;
-            });
+            .pipe(
+                map((lm: UserMessage) => {
+                    if (lm.is_ok && lm.user && lm.user.token && lm.user.token.length > 0) {
+                        this._isLoggedIn = true;
+                        this._user_name = lm.user.login;
+                        this.LoginChangeEvent.next(true);
+                        localStorage.setItem('currentUser', JSON.stringify(lm.user));
+                    }
+                    return lm;
+                })
+            );
         // code from :https://github.com/cornflourblue/angular2-registration-login-example/blob/master/app/_services/authentication.service.ts
     }
 
     signup(login: string, password: string, email: string, gender: string, fullname: string, deckname: string, token_captcha: string): Observable<UserMessage> {
         return this.socketService.signup(login, password, email, gender, fullname, deckname, token_captcha)
-            .map((lm: UserMessage) => {
-                if (lm.is_ok && lm.user) {
-                    this._isLoggedIn = true;
-                    this._user_name = lm.user.login;
-                    this.LoginChangeEvent.next(true);
-                }
-                return lm;
-            });
+            .pipe(
+                map((lm: UserMessage) => {
+                    if (lm.is_ok && lm.user) {
+                        this._isLoggedIn = true;
+                        this._user_name = lm.user.login;
+                        this.LoginChangeEvent.next(true);
+                    }
+                    return lm;
+                })
+            );
     }
 
     checkLoginExists(login: string): Observable<UserMessage> {

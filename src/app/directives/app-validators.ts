@@ -7,9 +7,8 @@ import {
   NG_ASYNC_VALIDATORS
 } from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/debounceTime'; // prevent : debounceTime is not a function on runtime
-import 'rxjs/add/operator/first';
+import { Observable } from 'rxjs';
+import { map, debounceTime, first} from 'rxjs/operators'
 
 
 @Directive({
@@ -27,12 +26,13 @@ export class LoginExistsValidatorDirective implements Validator {
 
   validate(control: AbstractControl): Observable<any> {
     return this.authService.checkLoginExists(control.value)
-       .map(userExists => {
+       .pipe(
+         map(userExists => {
          console.log("Validation terminated, user exits: ", userExists.is_ok);
          return (userExists.is_ok) ? { userAlreadyExists: true } : null;
-       })
-      .debounceTime(500)
-      .first(); // fondamentale nella validazione: This is happening because the observable never completes, so Angular does not know when to change the form status. So remember your observable must to complete.
+       }))
+      .pipe(debounceTime(500))
+      .pipe(first()); // fondamentale nella validazione: This is happening because the observable never completes, so Angular does not know when to change the form status. So remember your observable must to complete.
                 // Ref: https://netbasal.com/angular-2-forms-create-async-validator-directive-dd3fd026cb45
       
   }

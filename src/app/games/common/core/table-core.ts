@@ -1,11 +1,11 @@
 import { ICore, CoreSubjectNtfy } from './core-base'
 import { Log4Cup } from '../../../shared/log4cup'
-import * as Rx from 'rxjs/Rx'
+import { Subject } from 'rxjs';
 
 export class TableStateCore {
   private _log: Log4Cup = new Log4Cup('TableStateCore');
   private _currNumPlayers: number;
-  TableFullSub = new Rx.Subject();
+  TableFullSub = new Subject();
   private _players: string[] = [];
   private _notifyer: CoreSubjectNtfy;
 

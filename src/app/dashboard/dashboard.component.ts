@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { CardGame } from '../data-models/cardGame';
 import { CardGameService } from '../services/cardGame.service';
-import { ISubscription } from "rxjs/Subscription";
+import { Subscription } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 import { OnlineService } from '../services/online.service';
 
 
@@ -20,21 +21,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isloggedin: boolean;
   isConnected: boolean;
   private _alive: boolean;
-  private _subscription: ISubscription;
+  private _subscription: Subscription;
 
   constructor(
     private authService: AuthenticationService,
     private onlineService: OnlineService,
     private cardGameService: CardGameService,
     private router: Router) {
-      this.isloggedin = authService.isLoggedin();
-      this.isConnected = authService.isAvailable();
-      this._alive = true;
+    this.isloggedin = authService.isLoggedin();
+    this.isConnected = authService.isAvailable();
+    this._alive = true;
   }
 
   ngOnInit(): void {
     this.authService.LoginChangeEvent
-      .takeWhile(() => this._alive)
+      .pipe(
+        takeWhile(() => this._alive)
+      )
       .subscribe(evt => {
         this.isloggedin = this.authService.isLoggedin();
       });

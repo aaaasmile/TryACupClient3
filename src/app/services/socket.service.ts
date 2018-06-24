@@ -5,18 +5,11 @@ import { User } from '../data-models/user';
 import { OnlineService } from './online.service';
 import { Message, InfoMessage, UserMessage, VerMessage, MessageBuilder } from '../data-models/SocketMessages';
 
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-//import websocketConnect from 'rxjs-websockets'
-import { WebSocketSubject } from 'rxjs/observable/dom/WebSocketSubject'
+import { Subscription, Subject, Observable, Observer, ReplaySubject } from 'rxjs';
+import { map, filter, catchError, mergeMap } from 'rxjs/operators';
 
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/observable/dom/webSocket';
-import 'rxjs/add/observable/throw';
+import { WebSocketSubject, webSocket } from 'rxjs/WebSocket'
+
 
 
 // reference is: https://github.com/lwojciechowski/mildchat-client/blob/master/src/app/chat.service.ts
@@ -52,7 +45,7 @@ export class SocketService {
 
         this.Messages = new Subject<Message>();
 
-        this.ws = Observable.webSocket(base_url);
+        this.ws = webSocket(base_url);
         this.ws.subscribe(
             (msg) => {
                 console.log('socket received: ' + msg);
@@ -142,9 +135,9 @@ export class SocketService {
 
         this.ws.next(det);
         this._log.debug('Send login: ' + login);
-        return this.Messages.map(msg => {
+        return this.Messages.pipe(map(msg => {
             return (msg instanceof UserMessage) ? msg : null;
-        }).filter(m => m != null);
+        })).pipe(filter(m => m != null));
     }
 
     signup(login: string, password: string, email: string, gender: string, fullname: string, deckname: string, token_captcha: string): Observable<UserMessage> {
@@ -158,9 +151,9 @@ export class SocketService {
       
         this.ws.next(det);
         this._log.debug('Send signup for: ' + login);
-        return this.Messages.map(msg => {
+        return this.Messages.pipe(map(msg => {
             return (msg instanceof UserMessage) ? msg : null;
-        }).filter(m => m != null);
+        })).pipe(filter(m => m != null));
     }
 
     userExists(login: string): Observable<UserMessage> {
@@ -171,10 +164,10 @@ export class SocketService {
 
         this.ws.next(det);
         this._log.debug('user exists for: ' + login);
-        return this.Messages.map(msg => {
+        return this.Messages.pipe(map(msg => {
             //console.log('**** user exxist result', msg, msg instanceof UserMessage);
             return (msg instanceof UserMessage) ? msg : null;
-        }).filter(m => m != null);
+        })).pipe(filter(m => m != null));
     }
 
     logoutReq(): void {
@@ -243,8 +236,8 @@ export class SocketService {
     private sendCmdDetReq(det: string): Observable<Message> {
         this._log.debug('send ' + det);
         this.ws.next(det);
-        return this.Messages.map(msg => {
+        return this.Messages.pipe(map(msg => {
             return msg;
-        }).filter(m => m != null);
+        })).pipe(filter(m => m != null));
     }
 }
