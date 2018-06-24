@@ -136,7 +136,9 @@ export class SocketService {
         this.connectSocketServer();
 
         let det_json = JSON.stringify({ name: login, password: btoa(password), token: token });
-        var det = "LOGIN:" + det_json;
+        //let det: string  = "LOGIN:" + det_json;
+        let det: string  = "LOGIN:"
+        console.log("Send cmd: ", det);
 
         this.ws.next(det);
         this._log.debug('Send login: ' + login);
@@ -153,7 +155,7 @@ export class SocketService {
             fullname: fullname, email: email, gender: gender, deck_name: deckname, token_captcha: token_captcha
         });
         var det = "USEROP:" + det_json;
-
+      
         this.ws.next(det);
         this._log.debug('Send signup for: ' + login);
         return this.Messages.map(msg => {
