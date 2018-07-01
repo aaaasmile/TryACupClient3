@@ -3,18 +3,24 @@ import { SocketService } from './socket.service'
 import { UserMessage } from '../data-models/SocketMessages'
 import { User } from '../data-models/user'
 import { Observable, Subject } from 'rxjs';
-import { map, filter, catchError, mergeMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { CanActivate }    from '@angular/router';
+
 
 @Injectable({
     providedIn: 'root',
   })
-export class AuthenticationService {
+export class AuthenticationService implements CanActivate {
     private _isLoggedIn: boolean = false;
     private _user_name: string = '';
     public LoginChangeEvent: Subject<boolean>;
 
     constructor(private socketService: SocketService) {
         this.LoginChangeEvent = new Subject();
+    }
+
+    canActivate() {
+        return this._isLoggedIn;
     }
 
     isLoggedin(): boolean {

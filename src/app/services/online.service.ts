@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { CanActivate } from '@angular/router';
 
 @Injectable({
   providedIn: 'root', // singleton service
 })
-export class OnlineService {
+export class OnlineService implements CanActivate {
   private _isOnline: boolean;
 
   constructor() {
@@ -15,6 +16,10 @@ export class OnlineService {
       this._isOnline = true;
     }
 
+  }
+
+  canActivate() {
+    return this._isOnline;
   }
 
   goOffline(): void {
