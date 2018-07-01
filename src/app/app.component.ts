@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './services/authentication.service';
 import { Log4Cup } from './shared/log4cup'
-import { Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators'
 import { SocketService } from './services/socket.service';
 import { OnlineService } from './services/online.service';
@@ -59,6 +58,9 @@ export class AppComponent implements OnInit, OnDestroy {
     let newConnect = this.socketService.getProtocollConnected();
     if (this.isConnected != newConnect) {
       this.isConnected = newConnect;
+      if (!newConnect) {
+        this.isloggedin = false;
+      }
     }
   }
 
