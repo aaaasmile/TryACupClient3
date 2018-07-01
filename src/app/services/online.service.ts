@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root', // singleton service
+})
 export class OnlineService {
   private _isOnline: boolean;
 

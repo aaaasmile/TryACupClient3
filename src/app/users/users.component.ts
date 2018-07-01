@@ -32,7 +32,7 @@ export class UsersComponent implements OnInit {
     this.getUsers();
   }
   getUsers(): void {
-    this.userService.getUsers().then(users => this.users = users);
+    //this.userService.getUsers().then(users => this.users = users); // TODO
   }
   onSelect(user: User): void {
     this.selectedUser = user;

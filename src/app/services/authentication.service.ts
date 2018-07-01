@@ -5,7 +5,9 @@ import { User } from '../data-models/user'
 import { Observable, Subject } from 'rxjs';
 import { map, filter, catchError, mergeMap } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+  })
 export class AuthenticationService {
     private _isLoggedIn: boolean = false;
     private _user_name: string = '';

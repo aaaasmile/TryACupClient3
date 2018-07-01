@@ -14,7 +14,9 @@ import { WebSocketSubject, webSocket } from 'rxjs/WebSocket'
 
 // reference is: https://github.com/lwojciechowski/mildchat-client/blob/master/src/app/chat.service.ts
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+  })
 export class SocketService {
     private _log: Log4Cup = new Log4Cup('SocketService');
 
