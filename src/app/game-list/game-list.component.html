@@ -1,3 +1,34 @@
 <p>
   game-list works!
 </p>
+
+<table class="ui very basic collapsing celled table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Nome</th>
+      <th>Gioco</th>
+      <th>Comandi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let game of games">
+      <td>
+        {{game.index}}
+      </td>
+      <td>
+        {{game.user}}
+      </td>
+      <td>
+        <h4 class="ui image header">
+          <div> <i class="{{game.iconname}} icon"></i></div>
+          <div class="content">
+            {{game.game_name}}
+            <div class="sub header">Opzioni: {{game.opzioni_short}}</div>
+          </div>
+        </h4>
+      </td>
+      <td><a href="#" (click)="selectGame(game)">Gioca <i class="hand point right outline icon"></i></a> </td>
+    </tr>
+  </tbody>
+</table>

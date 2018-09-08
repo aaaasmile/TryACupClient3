@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CardGame } from '../data-models/cardGame';
 import { SocketService } from './socket.service'
+import { Observable } from 'rxjs';
+import { List2Message } from '../data-models/SocketMessages';
+import { map, filter, } from 'rxjs/operators';
 
 
 @Injectable()
@@ -18,7 +21,7 @@ export class CardGameService {
     return games;
   }
 
-  reqGameList() {
-    this.socketService.pendingGame2Req()
+  reqGameList(): Observable<List2Message> {
+    return this.socketService.pendingGame2Req();
   }
 }

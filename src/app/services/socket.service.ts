@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Log4Cup } from '../shared/log4cup';
 import { ChatType } from '../data-models/sharedEnums';
 import { OnlineService } from './online.service';
-import { Message, InfoMessage, UserMessage, VerMessage, MessageBuilder } from '../data-models/SocketMessages';
+import { Message, UserMessage,  MessageBuilder, List2Message } from '../data-models/SocketMessages';
 
 import { Subscription, Subject, Observable, Observer, ReplaySubject } from 'rxjs';
 import { map, filter, catchError, mergeMap } from 'rxjs/operators';
@@ -46,7 +46,6 @@ export class SocketService {
 
         this.Messages = new Subject<Message>();
 
-        //this.ws = webSocket({url: mybase_url, deserializer: x => x, serializer: x => x});
         this.ws = webSocket({url: mybase_url, serializer: x => x});
         this.ws.subscribe(
             (msg) => {
@@ -54,6 +53,7 @@ export class SocketService {
                 if (this.Messages != null) {
                     this.setProtocolConnected(true);
                     let msgParsed = MessageBuilder.parse(msg);
+                    console.log("Msg parsed is:", msgParsed);
                     this.Messages.next(msgParsed);
                 } else {
                     this.setProtocolConnected(false);
@@ -175,8 +175,11 @@ export class SocketService {
         this.closeSocketServer();
     }
 
-    pendingGame2Req(): void {
-        this.sendCmdDetReq('PENDINGGAMESREQ2:');
+    pendingGame2Req(): Observable<List2Message> {
+        this.sendCmdDetReq('PENDINGGAMESREQ2:')
+        return this.Messages.pipe(map(msg => {
+            return (msg instanceof List2Message) ? msg : null;
+          })).pipe(filter(m => m != null));
     }
 
     usersConnectedReq(): void {

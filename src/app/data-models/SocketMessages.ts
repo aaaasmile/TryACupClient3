@@ -1,10 +1,11 @@
 import { User } from './user';
-import { forEach } from '@angular/router/src/utils/collection';
+import { GameCreatorUserType } from './sharedEnums'
 
 enum MessageType {
   Info,
   Ver,
-  User
+  User,
+  List2
 }
 export interface Message {
   msgType(): MessageType;
@@ -58,31 +59,51 @@ export class List2detailOption {
 export class List2detail {
   index: number;
   user: string;
-  user_type: string;
+  user_type: GameCreatorUserType;
   user_score: number;
   game: string;
   prive: boolean;
   rated: boolean;
-  options: Map<string,List2detailOption>;
+  options: Map<string, List2detailOption>;
   players: string[];
 
   assignPayload(p: any) {
     this.index = p.index;
     this.user = p.user;
-    this.user_type = p.user_type;
+    switch (p.user_type) {//(:user, :computer, :female)
+      case "user":
+        this.user_type = GameCreatorUserType.user;
+        break;
+      case "computer":
+        this.user_type = GameCreatorUserType.computer;
+        break;
+      case "female":
+        this.user_type = GameCreatorUserType.female;
+        break;
+      default:
+        console.warn("User type not recognized: ", p.user_type);
+    }
     this.user_score = parseInt(p.user_score, 10);
     this.game = p.game;
     this.prive = p.prive;
     this.rated = p.class;
     this.options = new Map<string, List2detailOption>();
-    for (const [key, value] of Object.entries(p.opt_game)){
+    for (const [key, value] of Object.entries(p.opt_game)) {
       this.options[key] = new List2detailOption();
       this.options[key].assignPayload(value);
     };
     this.players = new Array<string>();
-    for(let pl of p.players){
+    for (let pl of p.players) {
       this.players.push(pl);
     }
+  }
+
+  getOptionsShortText(): string{
+    let res =  "Num Giocatori 2";
+    if (this.options["num_segni_match"] != null){
+      res += ", segni " + this.options["num_segni_match"].value.toString();
+    }
+    return res;
   }
 }
 
@@ -119,7 +140,7 @@ export class List2Message implements Message {
   }
 
   msgType(): MessageType {
-    return MessageType.Info;
+    return MessageType.List2;
   }
 
   toString(): string {
