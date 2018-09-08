@@ -22,6 +22,12 @@ export class CardGameService {
   }
 
   reqGameList(): Observable<List2Message> {
-    return this.socketService.pendingGame2Req();
+    return this.socketService.pendingGame2Req()
+    .pipe(
+      map((lm: List2Message) => {
+          console.log("List2Message recognized");
+          return lm;
+      })
+  );
   }
 }
