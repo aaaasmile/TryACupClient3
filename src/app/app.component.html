@@ -16,7 +16,7 @@
             <i class="sidebar icon"></i>
           </a>
           <a class="item" routerLink="/dashboard" routerLinkActive="active">Cuperativa</a>
-          <a *ngIf="isloggedin" class="item" routerLink="/app/games" routerLinkActive="active">Giochi in rete</a>
+          <a *ngIf="isloggedin" class="item" routerLink="/app/games" routerLinkActive="active">Giochi</a>
           <a *ngIf="isloggedin" class="item" routerLink="/users" routerLinkActive="active">Utenti collegati</a>
           <div *ngIf="isConnected" class="ui container">
             <div *ngIf="!isloggedin" class="right item">

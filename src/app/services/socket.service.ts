@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Log4Cup } from '../shared/log4cup';
 import { ChatType } from '../data-models/sharedEnums';
-import { User } from '../data-models/user';
 import { OnlineService } from './online.service';
 import { Message, InfoMessage, UserMessage, VerMessage, MessageBuilder } from '../data-models/SocketMessages';
 
