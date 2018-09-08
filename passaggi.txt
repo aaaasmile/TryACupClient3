@@ -9,29 +9,6 @@ Il comando ng si trova solo locale, nella parent di questa dir si ha:
 node_modules\.bin\ng 
 che può  così essere usato in qesto sottoprogetto.
 
-== Update da 4.4 a 6.0
-Ho fatto un update di app-cli.
-Poi ho creato una nuova app che usa 6.0
-- Ho copiato i files di src\app
-- ho copiato la dir src\asset
-- il file src\index.html e cancellato fav.ico creato dalla cli
-- Nello styles.css ho aggiunto una linea
-Ora mancano i moduli che ho installato a parte:
-createjs:
-npm install createjs-module --save
-- rxjs non funziona più, la compatibilità fa pena (npm i rxjs-compat), quindi ho fatto la conversione manuale (pipe e dichiarazioni)
-- rxjs websocket applica due volte il stringify: https://github.com/ReactiveX/rxjs/pull/3489
-   Questo è il modo corretto di creare il websocket: this.ws = webSocket({url: mybase_url, serializer: x => x});
-   per avere la compatibilità con la versione 5 di rx
-
-manca il module:
-types: ["node"] to tsconfig.app.ts
-Poi il css di semantic
-npm i semantic-ui-css --save
-e in angular.json va messo come referenza:
-"node_modules/semantic-ui-css/semantic.css"
-anche se magari in src/styles.css si potrebbe importare meglio.
-- problema loadChildren: https://github.com/angular/angular-cli/issues/10673
 
 
 == deploy
@@ -73,6 +50,11 @@ Al momento ho escluso l'applicazione pubblicata su heroku dall'indicizzazione su
 Questo per evitare collegamenti partendo da google search su un'applicazione che è lontana dall'essere finita.
 Una vota conclusa, rimuovi questo meta tag dall'header di index.html:
 <meta name="robots" content="noindex">
+
+== Creare un nuovo componente
+Si usa la cli dalla directory root dell'app che in automatico mette il componente in src/app
+Per esempio, quando ho creato il compoente UserDetails ho usato:
+..\node_modules\.bin\ng generate component UserDetails
 
 ==  TODO
 - bug nella registrazione: se il server fornisce un errore nell'insert, la maschera della registrazione è bloccata
@@ -129,11 +111,28 @@ Quello che mi serve è caricare la libreria easeljs-0.8.2.min.js nel file index.
 == Source
 I sorgenti sono su github al progetto TryACupClient
 
-== Creare un nuovo componente
-Si usa la cli dalla directory root dell'app che in automatico mette il componente in src/app
-Per esempio, quando ho creato il compoente UserDetails ho usato:
-..\node_modules\.bin\ng generate component UserDetails
 
+== Update da 4.4 a 6.0
+Ho fatto un update di app-cli.
+Poi ho creato una nuova app che usa 6.0
+- Ho copiato i files di src\app
+- ho copiato la dir src\asset
+- il file src\index.html e cancellato fav.ico creato dalla cli
+- Nello styles.css ho aggiunto una linea
+Ora mancano i moduli che ho installato a parte:
+createjs:
+npm install createjs-module --save
+- rxjs non funziona più, la compatibilità fa pena (npm i rxjs-compat), quindi ho fatto la conversione manuale (pipe e dichiarazioni)
+- rxjs websocket applica due volte il stringify: https://github.com/ReactiveX/rxjs/pull/3489
+   Questo è il modo corretto di creare il websocket: this.ws = webSocket({url: mybase_url, serializer: x => x});
+   per avere la compatibilità con la versione 5 di rx
 
-
+manca il module:
+types: ["node"] to tsconfig.app.ts
+Poi il css di semantic
+npm i semantic-ui-css --save
+e in angular.json va messo come referenza:
+"node_modules/semantic-ui-css/semantic.css"
+anche se magari in src/styles.css si potrebbe importare meglio.
+- problema loadChildren: https://github.com/angular/angular-cli/issues/10673
 

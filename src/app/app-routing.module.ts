@@ -7,6 +7,7 @@ import { SignUpComponent } from './sign-up/sign-up.component'
 import { UserDetailsComponent } from './user-details/user-details.component'
 import { AuthenticationService } from './services/authentication.service'
 import { OnlineService } from './services/online.service'
+import { GameListComponent } from './game-list/game-list.component'
 
 
 const routes: Routes = [
@@ -17,8 +18,8 @@ const routes: Routes = [
   { path: 'signup', component: SignUpComponent, canActivate: [OnlineService] },
   { path: 'user-details', component: UserDetailsComponent, canActivate: [AuthenticationService] },
   //{ path: 'games', loadChildren: './games/games.module' }
-  { path: 'games', loadChildren: './games/games.module#GamesModule', canActivate: [AuthenticationService]  }
-  //{ path: 'app/games', loadChildren: 'app/games/games.module' }
+  { path: 'games', loadChildren: './games/games.module#GamesModule', canActivate: [AuthenticationService]  },
+  { path: 'app/games', component: GameListComponent, canActivate: [AuthenticationService] }
 
 ];
 @NgModule({

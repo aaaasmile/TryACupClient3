@@ -24,6 +24,7 @@ import { APPLICATION_VALIDATORS } from './directives/app-validators';
 import { ShowErrorComponent } from './show-error/show-error.component';
 import { ReCaptchaComponent } from './directives/captcha.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { GameListComponent } from './game-list/game-list.component';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import { UserDetailsComponent } from './user-details/user-details.component';
     SignUpComponent,
     ShowErrorComponent,
     ReCaptchaComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    GameListComponent
   ],
   providers: [
     UserService,
