@@ -175,11 +175,11 @@ export class SocketService {
         this.closeSocketServer();
     }
 
-    pendingGame2Req(): Observable<List2Message> {
-        this.sendCmdDetReq('PENDINGGAMESREQ2:')
-        return this.Messages.pipe(map(msg => {
-            return (msg instanceof List2Message) ? msg : null;
-          })).pipe(filter(m => m != null));
+    pendingGame2Req(): Observable<Message> {
+        return this.sendCmdDetReq('PENDINGGAMESREQ2:');
+        // return this.Messages.pipe(map(msg => {
+        //     return (msg instanceof List2Message) ? msg : null;
+        //   })).pipe(filter(m => m != null));
     }
 
     usersConnectedReq(): void {

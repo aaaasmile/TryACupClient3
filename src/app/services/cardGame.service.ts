@@ -25,7 +25,7 @@ export class CardGameService {
     return this.socketService.pendingGame2Req()
     .pipe(
       map((lm: List2Message) => {
-          console.log("List2Message recognized");
+          console.log("List2Message recognized,now...");
           return lm;
       })
   );
