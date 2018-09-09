@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { User } from '../data-models/user';
+import { User } from '../data-models/socket/UserMessage';
 import { UserService } from '../services/user.service';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';

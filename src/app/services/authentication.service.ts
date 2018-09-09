@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SocketService } from './socket.service'
-import { UserMessage, Message } from '../data-models/socket/SocketMessages'
-import { User } from '../data-models/user'
+import { Message } from '../data-models/socket/SocketMessages'
+import {UserMessage, User} from '../data-models/socket/UserMessage'
 import { Observable, Subject } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { CanActivate } from '@angular/router';

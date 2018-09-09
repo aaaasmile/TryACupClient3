@@ -1,6 +1,7 @@
-import {Message, InfoMessage, VerMessage, UserMessage} from './SocketMessages'
-import {List2Message} from './List2Message'
-import { User } from '../user';
+import { Message, InfoMessage, VerMessage } from './SocketMessages'
+import { UserMessage, User } from './UserMessage'
+import { List2Message } from './List2Message'
+
 
 export class MessageBuilder {
 
