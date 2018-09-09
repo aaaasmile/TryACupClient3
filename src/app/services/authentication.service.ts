@@ -107,7 +107,7 @@ export class AuthenticationService implements CanActivate {
     checkLoginExists(login: string): Observable<UserMessage> {
         
         return this.socketService.userExists(login)
-        .pipe(map(msg => {
+        .pipe(map((msg: Message) => {
             return (msg instanceof UserMessage) ? msg : null;
         })).pipe(filter(m => m != null));
     }
