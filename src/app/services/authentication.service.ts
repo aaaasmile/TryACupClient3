@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SocketService } from './socket.service'
 import { Message } from '../data-models/socket/SocketMessages'
-import { UserMessage, User, UserSignupReq } from '../data-models/socket/UserMessage'
+import { UserMessage, User, UserSignupReq, UserLogoutOk } from '../data-models/socket/UserMessage'
 import { Observable, Subject } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { CanActivate } from '@angular/router';
@@ -121,12 +121,23 @@ export class AuthenticationService implements CanActivate {
             })).pipe(filter(m => m != null));
     }
 
-    logout() {
+    logout(username: string): Observable<UserLogoutOk> {
         // remove user from local storage to log user out
-        this._isLoggedIn = false;
-        this.LoginChangeEvent.next(false);
-        this._user_name = '';
-        this.socketService.logoutReq();
-        localStorage.removeItem('currentUser');
+        return this.socketService.logoutReq(username)
+            .pipe(
+                map((msg: Message) => {
+                    if (msg instanceof UserLogoutOk) {
+                        let lm = msg as UserLogoutOk;
+                        if (lm.is_ok && lm.user) {
+                            this._isLoggedIn = false;
+                            this._user_name = '';
+                            localStorage.removeItem('currentUser');
+                            this.LoginChangeEvent.next(false);
+                        }
+                        return lm;
+                    }
+                })
+            )
+            .pipe(filter(m => m != null));
     }
 }

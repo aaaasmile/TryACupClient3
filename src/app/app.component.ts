@@ -21,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isConnected: boolean;
   cup_version: string = '1.0.09092018';
   subsc_login: Subscription;
+  subsc_logout: Subscription;
   subsc_connect: Subscription;
 
   constructor(private authenticationService: AuthenticationService,
@@ -57,6 +58,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this._alive = false;
     this.subsc_login.unsubscribe();
     this.subsc_connect.unsubscribe();
+    if(this.subsc_logout){
+      this.subsc_logout.unsubscribe();
+    }
   }
 
   private checkProtocolConnection() {
@@ -71,7 +75,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this._log.debug("Logut user: " + this.user_name);
-    this.authenticationService.logout();
+    this.subsc_logout = this.authenticationService.logout(this.user_name)
+      .subscribe(msg => {
+        if (msg.is_ok) {
+          this.isloggedin = false;
+          this.user_name = "";
+        }
+      });
     this.router.navigate(['/']);
   }
 
@@ -81,11 +91,8 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.isConnected) {
       // TODO ask before exit if an online game is ongoing
       this.onlineService.goOffline();
-      if (this.authenticationService.isLoggedin()) {
-        this.authenticationService.logout();
-      } else {
-        this.socketService.closeSocketServer();
-      }
+     
+      this.socketService.closeSocketServer();
       this.router.navigate(['/']);
     } else {
       this.onlineService.goOnline();

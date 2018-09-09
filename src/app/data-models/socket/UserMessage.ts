@@ -49,6 +49,17 @@ export class UserLoginOk extends UserMessage {
   }
 }
 
+export class UserLogoutOk extends UserMessage {
+  constructor(cmd: string, cmd_details: string) {
+    super();
+    let det = JSON.parse(cmd_details);
+    this.cmd = cmd;
+    this.is_ok = true;
+    this.user = new User();
+    this.user.login = det.name;
+  }
+}
+
 export class UserOperationResult extends UserMessage {
   constructor(cmd: string, cmd_details: string) {
     super();

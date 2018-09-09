@@ -139,7 +139,6 @@ export class SocketService {
         console.log("Send cmd: ", det);
 
         this.ws.next(det);
-        this._log.debug('Send login: ' + login);
         return this.Messages;
     }
 
@@ -162,8 +161,13 @@ export class SocketService {
         return this.Messages;
     }
 
-    logoutReq(): void {
-        this.closeSocketServer();
+    logoutReq(login: string): Observable<Message> {
+        let det_json = JSON.stringify({ name: login});
+        let det: string = "LOGOUT:" + det_json;
+        console.log("Send cmd: ", det);
+
+        this.ws.next(det);
+        return this.Messages;
     }
 
     pendingGame2Req(): Observable<Message> {

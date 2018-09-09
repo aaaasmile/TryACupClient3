@@ -1,5 +1,5 @@
 import { Message, InfoMessage, VerMessage } from './SocketMessages'
-import { UserMessage,  UserLoginFailed, UserLoginOk, UserExistResult, UserOperationResult } from './UserMessage'
+import { UserLogoutOk,  UserLoginFailed, UserLoginOk, UserExistResult, UserOperationResult } from './UserMessage'
 import { List2Message } from './List2Message'
 
 
@@ -39,6 +39,12 @@ export class MessageBuilder {
       case 'LOGINOK':
         {
           let msg = new UserLoginOk(cmd, cmd_details);
+          result = msg;
+          break;
+        }
+      case 'LOGOUTOK':
+        {
+          let msg = new UserLogoutOk(cmd, cmd_details);
           result = msg;
           break;
         }

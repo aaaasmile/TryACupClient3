@@ -44,7 +44,7 @@ export class UsersComponent implements OnInit {
     this.router.navigate(['/detail', this.selectedUser.id]);
   }
   doLogout(): void {
-    this.socketService.logoutReq();
+    this.socketService.logoutReq(this.selectedUser.login);
     this.selectedUser = null;
   }
   doPendingGameRe2(): void {
