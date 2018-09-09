@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CardGame } from '../data-models/cardGame';
 import { SocketService } from './socket.service'
 import { Observable } from 'rxjs';
-import { List2Message } from '../data-models/SocketMessages';
+import { List2Message } from '../data-models/socket/List2Message';
 import { map, filter, } from 'rxjs/operators';
 
 

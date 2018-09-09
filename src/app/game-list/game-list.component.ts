@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CardGameService } from '../services/cardGame.service'
-import { List2Message, List2detail } from '../data-models/SocketMessages';
+import { List2Message, List2detail } from '../data-models/socket/List2Message';
 import { map } from 'rxjs/operators';
 import { GameCreatorUserType } from '../data-models/sharedEnums'
 

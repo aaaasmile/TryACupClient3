@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Log4Cup } from '../shared/log4cup';
 import { ChatType } from '../data-models/sharedEnums';
 import { OnlineService } from './online.service';
-import { Message, UserMessage,  MessageBuilder, List2Message } from '../data-models/SocketMessages';
+import { Message, UserMessage } from '../data-models/socket/SocketMessages';
+import { MessageBuilder } from '../data-models/socket/MessageBuilder';
 
 import { Subscription, Subject, Observable, Observer, ReplaySubject } from 'rxjs';
 import { map, filter, catchError, mergeMap } from 'rxjs/operators';
@@ -15,7 +16,7 @@ import { WebSocketSubject, webSocket } from 'rxjs/WebSocket'
 
 @Injectable({
     providedIn: 'root',
-  })
+})
 export class SocketService {
     private _log: Log4Cup = new Log4Cup('SocketService');
 
@@ -46,7 +47,7 @@ export class SocketService {
 
         this.Messages = new Subject<Message>();
 
-        this.ws = webSocket({url: mybase_url, serializer: x => x});
+        this.ws = webSocket({ url: mybase_url, serializer: x => x });
         this.ws.subscribe(
             (msg) => {
                 console.log('socket received: ' + msg);
@@ -131,7 +132,7 @@ export class SocketService {
         this.connectSocketServer();
 
         let det_json = JSON.stringify({ name: login, password: btoa(password), token: token });
-        let det: string  = "LOGIN:" + det_json;
+        let det: string = "LOGIN:" + det_json;
         console.log("Send cmd: ", det);
 
         this.ws.next(det);
@@ -149,7 +150,7 @@ export class SocketService {
             fullname: fullname, email: email, gender: gender, deck_name: deckname, token_captcha: token_captcha
         });
         var det = "USEROP:" + det_json;
-      
+
         this.ws.next(det);
         this._log.debug('Send signup for: ' + login);
         return this.Messages.pipe(map(msg => {
@@ -175,7 +176,7 @@ export class SocketService {
         this.closeSocketServer();
     }
 
-    pendingGame2Req():Observable<Message> {
+    pendingGame2Req(): Observable<Message> {
         return this.sendCmdDetReq('PENDINGGAMESREQ2:');
     }
 
@@ -234,7 +235,7 @@ export class SocketService {
         this.sendCmdDetReq('RESTARTGAME:' + ix);
     }
 
-    private sendCmdDetReq(det: string) : Observable<Message> {
+    private sendCmdDetReq(det: string): Observable<Message> {
         this._log.debug('send ' + det);
         this.ws.next(det);
         return this.Messages;
