@@ -58,7 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this._alive = false;
     this.subsc_login.unsubscribe();
     this.subsc_connect.unsubscribe();
-    if(this.subsc_logout){
+    if (this.subsc_logout) {
       this.subsc_logout.unsubscribe();
     }
   }
@@ -89,11 +89,14 @@ export class AppComponent implements OnInit, OnDestroy {
     console.log('Toggle server connction');
     this.checkProtocolConnection();
     if (this.isConnected) {
-      // TODO ask before exit if an online game is ongoing
-      this.onlineService.goOffline();
-     
-      this.socketService.closeSocketServer();
-      this.router.navigate(['/']);
+      if (!this.authenticationService.isLoggedin()) {
+        this.onlineService.goOffline();
+
+        this.socketService.closeSocketServer();
+        this.router.navigate(['/']);
+      }else{
+        console.log("No connection toggle when the user is logged in");
+      }
     } else {
       this.onlineService.goOnline();
       this.socketService.connectSocketServer();
