@@ -5,7 +5,7 @@ import { OnlineService } from './online.service';
 import { Message } from '../data-models/socket/SocketMessages';
 import { MessageBuilder } from '../data-models/socket/MessageBuilder';
 
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, Subscription } from 'rxjs';
 
 import { WebSocketSubject, webSocket } from 'rxjs/WebSocket'
 
@@ -24,6 +24,7 @@ export class SocketService {
     private _closing: boolean;
     private _protocollConnected: boolean;
     private _reconnect: boolean;
+    private subsc_ws: Subscription;
 
     private ws: WebSocketSubject<any>; // Websocket is a subject in RxJs
 
@@ -47,7 +48,7 @@ export class SocketService {
         this.Messages = new Subject<Message>();
 
         this.ws = webSocket({ url: mybase_url, serializer: x => x });
-        this.ws.subscribe(
+        this.subsc_ws = this.ws.subscribe(
             (msg) => {
                 console.log('socket received: ' + msg);
                 if (this.Messages != null) {
@@ -112,6 +113,7 @@ export class SocketService {
     closeSocketServer(): void {
         if (this.ws != null) {
             this._log.debug("Close the socket by user action");
+            this.subsc_ws.unsubscribe();
             this.ws.unsubscribe();
             this._reconnect = false;
             this.ws = null;

@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isConnected: boolean;
   private _alive: boolean;
   private _subscription: Subscription;
+  private _subscription2: Subscription;
 
   constructor(
     private authService: AuthenticationService,
@@ -34,7 +35,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.authService.LoginChangeEvent
+    this._subscription2 = this.authService.LoginChangeEvent
       .pipe(
         takeWhile(() => this._alive)
       )
@@ -63,6 +64,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this._subscription) {
       this._subscription.unsubscribe();
+    }
+    if (this._subscription2) {
+      this._subscription2.unsubscribe();
     }
     this._alive = false;
   }

@@ -5,10 +5,11 @@ import {
     Output,
     EventEmitter,
     NgZone,
-    ViewChild, ElementRef, forwardRef
+    ViewChild, ElementRef, forwardRef, OnDestroy
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { ReCaptchaService } from './captcha.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 're-captcha',
@@ -21,7 +22,7 @@ import { ReCaptchaService } from './captcha.service';
         }
     ]
 })
-export class ReCaptchaComponent implements OnInit, ControlValueAccessor {
+export class ReCaptchaComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
     @Input() site_key: string = null;
     @Input() theme = 'light';
@@ -40,7 +41,8 @@ export class ReCaptchaComponent implements OnInit, ControlValueAccessor {
 
     onChange: Function = () => { };
     onTouched: Function = () => { };
-    private _captchaService: ReCaptchaService
+    private _captchaService: ReCaptchaService;
+    private subsc_capat: Subscription;
 
     constructor(
         private _zone: NgZone
@@ -49,7 +51,7 @@ export class ReCaptchaComponent implements OnInit, ControlValueAccessor {
     }
 
     ngOnInit() {
-        this._captchaService.getReady(this.language)
+        this.subsc_capat = this._captchaService.getReady(this.language)
             .subscribe((ready) => {
                 if (!ready)
                     return;
@@ -65,6 +67,10 @@ export class ReCaptchaComponent implements OnInit, ControlValueAccessor {
                     'expired-callback': <any>(() => this._zone.run(this.recaptchaExpiredCallback.bind(this)))
                 });
             });
+    }
+
+    ngOnDestroy(){
+        this.subsc_capat.unsubscribe();
     }
 
     // noinspection JSUnusedGlobalSymbols

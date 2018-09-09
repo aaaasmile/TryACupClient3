@@ -1,18 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, Subscription } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root',
 })
-export class AlertService {
+export class AlertService implements  OnDestroy {
   private subject = new Subject<any>();
   private keepAfterNavigationChange = false;
+  private subsc_router: Subscription;
 
   constructor(private router: Router) {
     // clear alert message on route change
-    router.events.subscribe(event => {
+    this.subsc_router = router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         if (this.keepAfterNavigationChange) {
           // only keep for a single location change
@@ -23,6 +24,10 @@ export class AlertService {
         }
       }
     });
+  }
+
+  ngOnDestroy(){
+    this.subsc_router.unsubscribe();
   }
   
   success(message: string, keepAfterNavigationChange = false) {

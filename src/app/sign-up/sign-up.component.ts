@@ -5,6 +5,7 @@ import { AlertService } from '../services/alert.service';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { NgForm } from '@angular/forms';
 import { takeWhile } from 'rxjs/operators'
+import { Subscription } from 'rxjs'
 import { ViewChild } from '@angular/core';
 import { ReCaptchaComponent } from '../directives/captcha.component';
 import { UserSignupReq } from '../data-models/socket/UserMessage';
@@ -21,6 +22,7 @@ export class SignUpComponent implements OnInit, AfterViewInit, OnDestroy {
   loading = false;
   returnUrl: string;
   private _alive: boolean;
+  private subsc_signup: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +48,7 @@ export class SignUpComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._alive = false;
+    this.subsc_signup.unsubscribe();
   }
 
   signup(form: NgForm) {
@@ -66,7 +69,7 @@ export class SignUpComponent implements OnInit, AfterViewInit, OnDestroy {
     req.deckname = this.model.deckname;
     req.token_captcha = this.model.token_captcha;
 
-    this.authenticationService.signup(req)
+    this.subsc_signup = this.authenticationService.signup(req)
       .pipe(takeWhile(() => this._alive))
       .subscribe(
         data => {

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { AlertService } from '../services/alert.service';
 import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
-import { SocketService } from '../services/socket.service';
+import { Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 
 @Component({
@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   loading = false;
   returnUrl: string;
   private _alive: boolean;
+  private subsc_login: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._alive = false;
+    this.subsc_login.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -39,7 +41,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
   login() {
     this.loading = true;
-    this.authenticationService.login(this.model.username, this.model.password)
+    this.subsc_login = this.authenticationService.login(this.model.username, this.model.password)
       .pipe(takeWhile(() => this._alive))
       .subscribe(
       data => {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from './services/authentication.service';
 import { Log4Cup } from './shared/log4cup'
 import { takeWhile } from 'rxjs/operators'
+import { Subscription } from 'rxjs';
 import { SocketService } from './services/socket.service';
 import { OnlineService } from './services/online.service';
 
@@ -18,7 +19,9 @@ export class AppComponent implements OnInit, OnDestroy {
   user_name: string;
   isloggedin: boolean;
   isConnected: boolean;
-  cup_version: string = '1.0.01012018';
+  cup_version: string = '1.0.09092018';
+  subsc_login: Subscription;
+  subsc_connect: Subscription;
 
   constructor(private authenticationService: AuthenticationService,
     private router: Router,
@@ -32,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // monitor login
-    this.authenticationService.LoginChangeEvent
+    this.subsc_login = this.authenticationService.LoginChangeEvent
       .pipe(takeWhile(() => this._alive))
       .subscribe(evt => {
         this._log.debug("Login event received");
@@ -41,7 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.isConnected = this.socketService.isConnected();
       });
     // monitor socket connection
-    this.socketService.ConnectEvent
+    this.subsc_connect = this.socketService.ConnectEvent
       .pipe(takeWhile(() => this._alive))
       .subscribe(evt => {
         this.checkProtocolConnection();
@@ -52,6 +55,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._alive = false;
+    this.subsc_login.unsubscribe();
+    this.subsc_connect.unsubscribe();
   }
 
   private checkProtocolConnection() {

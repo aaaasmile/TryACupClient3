@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CardGameService } from '../services/cardGame.service'
 import { List2Message, List2detail } from '../data-models/socket/List2Message';
-import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { GameCreatorUserType } from '../data-models/sharedEnums'
 
 class GameItem {
@@ -11,6 +11,7 @@ class GameItem {
   opzioni_short: string;
   message: List2Message;
   game_name: string;
+  
 
   constructor(list2Det: List2detail) {
     this.index = list2Det.index;
@@ -35,22 +36,27 @@ class GameItem {
   selector: 'app-game-list',
   templateUrl: './game-list.component.html'
 })
-export class GameListComponent implements OnInit {
+
+export class GameListComponent implements OnInit, OnDestroy {
   games: GameItem[];
   private countMsg: number;
+  private subsc_list2: Subscription;
 
   constructor(private cardGameService: CardGameService) { 
     this.countMsg = 0;
   }
 
   ngOnInit() {
+  }
 
+  ngOnDestroy(){
+    this.subsc_list2.unsubscribe();
   }
 
   ngAfterViewInit() {
     console.log('Request table list');
     this.countMsg += 1;
-    this.cardGameService.reqGameList()
+    this.subsc_list2 = this.cardGameService.reqGameList()
       .subscribe(lm => {
           this.countMsg -= 1;
           console.log("*** Msg recognized,is...", lm.details, this.countMsg);
@@ -61,7 +67,6 @@ export class GameListComponent implements OnInit {
             this.games.push(gi);
           }
         });
-    // TODO Unsubscribe
   }
 
   selectGame(gi: GameItem) {
