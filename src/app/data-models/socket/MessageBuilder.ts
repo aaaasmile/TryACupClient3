@@ -1,5 +1,5 @@
 import { Message, InfoMessage, VerMessage } from './SocketMessages'
-import { UserMessage, User } from './UserMessage'
+import { UserMessage,  UserLoginFailed, UserLoginOk, UserExistResult, UserOperationResult } from './UserMessage'
 import { List2Message } from './List2Message'
 
 
@@ -32,50 +32,25 @@ export class MessageBuilder {
         }
       case 'LOGINERROR':
         {
-          let msg = new UserMessage(false);
-          let det = JSON.parse(cmd_details);
-          msg.cmd = cmd;
-          msg.info = det.info;
-          msg.error_code = det.code;
+          let msg = new UserLoginFailed(cmd, cmd_details);
           result = msg;
           break;
         }
       case 'LOGINOK':
         {
-          let msg = new UserMessage(true);
-          let det = JSON.parse(cmd_details);
-          msg.cmd = cmd;
-          msg.user = new User();
-          msg.user.login = det.name;
-          msg.user.token = det.token;
+          let msg = new UserLoginOk(cmd, cmd_details);
           result = msg;
           break;
         }
       case 'USEREXISTRESULT':
         {
-          let msg = new UserMessage(true);
-          let det = JSON.parse(cmd_details);
-          msg.cmd = cmd;
-          msg.is_ok = det.exists;
-          if (det.exists == true) {
-            msg.user = new User();
-            msg.user.login = det.login;
-          }
+          let msg = new UserExistResult(cmd, cmd_details);
           result = msg;
           break;
         }
       case 'USEROPRESULT':
         {
-          //{"login":null,"is_ok":false,"code":1,"info":"Impossibile inserire l'utente"}
-          let msg = new UserMessage(true);
-          let det = JSON.parse(cmd_details);
-          msg.cmd = cmd;
-          msg.is_ok = det.is_ok;
-          msg.info = det.info;
-          if (det.is_ok == true) {
-            msg.user = new User();
-            msg.user.login = det.login;
-          }
+          let msg = new UserOperationResult(cmd, cmd_details);
           result = msg;
           break;
         }
