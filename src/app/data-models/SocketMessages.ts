@@ -99,7 +99,7 @@ export class List2detail {
   }
 
   getOptionsShortText(): string{
-    let res =  "Num Giocatori 2";
+    let res =  "2 giocatori";
     if (this.options["num_segni_match"] != null){
       console.log(this.options);
       //res += ", segni " + this.options["num_segni_match"].value.toString(); //TODO
