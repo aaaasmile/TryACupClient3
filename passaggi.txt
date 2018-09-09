@@ -57,8 +57,6 @@ Per esempio, quando ho creato il compoente UserDetails ho usato:
 ..\node_modules\.bin\ng generate component UserDetails
 
 ==  TODO
-- finire la lsta dei giochi creati online. Il messaggio viene ricevuto nel socket, ma non arriva al componente.
-- bug nella registrazione: se il server fornisce un errore nell'insert, la maschera della registrazione è bloccata
 - password reset
 - sidebar menu se la dimensione è minore di 700px
 * La grafica.*
@@ -67,6 +65,9 @@ Usa TestCard2 per vedere di testare le carte da cliccare in tutte le sue variant
 - ResourceLoader singleton e carica le resource una sola volta
 - ResourceLoader avanti indietro con il browser, crea una nuova istanza
 Crea poi qualcosa di simile alla CardGfx.
+
+- bug nella registrazione: se il server fornisce un errore nell'insert, la maschera della registrazione è bloccata [DONE]
+- finire la lsta dei giochi creati online. Il messaggio viene ricevuto nel socket, ma non arriva al componente. [DONE]
 
 == Npm troubles
 Ho avuto che 'npm start' non ha funzionato. La ragione è che il compiler tsc non ha funzionato.
