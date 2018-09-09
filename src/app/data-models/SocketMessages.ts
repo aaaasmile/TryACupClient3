@@ -101,7 +101,8 @@ export class List2detail {
   getOptionsShortText(): string{
     let res =  "Num Giocatori 2";
     if (this.options["num_segni_match"] != null){
-      res += ", segni " + this.options["num_segni_match"].value.toString();
+      console.log(this.options);
+      //res += ", segni " + this.options["num_segni_match"].value.toString(); //TODO
     }
     return res;
   }
@@ -112,7 +113,7 @@ export class List2Message implements Message {
   type: string;
   slice: number;
   slice_state: string;
-  details: List2detail[]
+  details: List2detail[];
   /* Esempio di messaggio in json
   {
     "type":"pgamelist","slice":0,"slice_state":"last","detail":[

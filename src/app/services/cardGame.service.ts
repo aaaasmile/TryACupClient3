@@ -8,14 +8,13 @@ import { map, filter, } from 'rxjs/operators';
 
 @Injectable()
 export class CardGameService {
+ 
   constructor(private socketService: SocketService) {
-
   }
 
   getCardGames(): CardGame[] {
     const games: CardGame[] = [
       { id: 1, name: 'Briscola in due', link: 'games/briscola/briscola-in-due' },
-      //{ id: 1, name: 'Briscola in due', link: 'games' },
       { id: 2, name: 'Test Gfx', link: 'games/test-gfx' }
     ];
     return games;
@@ -23,11 +22,10 @@ export class CardGameService {
 
   reqGameList(): Observable<List2Message> {
     return this.socketService.pendingGame2Req()
-    .pipe(
-      map((lm: List2Message) => {
-          console.log("List2Message recognized,now...");
-          return lm;
-      })
-  );
+      .pipe(map(msg => {
+        (msg instanceof List2Message) ? msg : null;
+        return (msg instanceof List2Message) ? msg : null;
+      }))
+      .pipe(filter(m => m != null));
   }
 }

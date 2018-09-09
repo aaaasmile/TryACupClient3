@@ -37,25 +37,31 @@ class GameItem {
 })
 export class GameListComponent implements OnInit {
   games: GameItem[];
+  private countMsg: number;
 
-  constructor(private cardGameService: CardGameService) { }
+  constructor(private cardGameService: CardGameService) { 
+    this.countMsg = 0;
+  }
 
   ngOnInit() {
+
   }
 
   ngAfterViewInit() {
     console.log('Request table list');
+    this.countMsg += 1;
     this.cardGameService.reqGameList()
-      .pipe(
-        map((lm: List2Message) => {
+      .subscribe(lm => {
+          this.countMsg -= 1;
+          console.log("*** Msg recognized,is...", lm.details, this.countMsg);
           this.games = new Array<GameItem>();
           for (let item of lm.details) {
             let gi = new GameItem(item);
             gi.message = lm;
             this.games.push(gi);
           }
-          console.log('Recognized games num', this.games.length);
-        }));
+        });
+    // TODO Unsubscribe
   }
 
   selectGame(gi: GameItem) {

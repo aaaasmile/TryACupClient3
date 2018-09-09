@@ -175,11 +175,8 @@ export class SocketService {
         this.closeSocketServer();
     }
 
-    pendingGame2Req(): Observable<Message> {
+    pendingGame2Req():Observable<Message> {
         return this.sendCmdDetReq('PENDINGGAMESREQ2:');
-        // return this.Messages.pipe(map(msg => {
-        //     return (msg instanceof List2Message) ? msg : null;
-        //   })).pipe(filter(m => m != null));
     }
 
     usersConnectedReq(): void {
@@ -237,11 +234,9 @@ export class SocketService {
         this.sendCmdDetReq('RESTARTGAME:' + ix);
     }
 
-    private sendCmdDetReq(det: string): Observable<Message> {
+    private sendCmdDetReq(det: string) : Observable<Message> {
         this._log.debug('send ' + det);
         this.ws.next(det);
-        return this.Messages.pipe(map(msg => {
-            return msg;
-        })).pipe(filter(m => m != null));
+        return this.Messages;
     }
 }
