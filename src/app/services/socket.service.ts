@@ -5,8 +5,7 @@ import { OnlineService } from './online.service';
 import { Message } from '../data-models/socket/SocketMessages';
 import { MessageBuilder } from '../data-models/socket/MessageBuilder';
 
-import { Subscription, Subject, Observable, Observer, ReplaySubject } from 'rxjs';
-import { map, filter, catchError, mergeMap } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
 
 import { WebSocketSubject, webSocket } from 'rxjs/WebSocket'
 
@@ -140,17 +139,11 @@ export class SocketService {
         return this.Messages;
     }
 
-    signup(login: string, password: string, email: string, gender: string, fullname: string, deckname: string, token_captcha: string): Observable<Message> {
+    signup(det_json: string): Observable<Message> {
         this.connectSocketServer();
-
-        let det_json = JSON.stringify({
-            type: 'insert', login: login, password: btoa(password),
-            fullname: fullname, email: email, gender: gender, deck_name: deckname, token_captcha: token_captcha
-        });
         var det = "USEROP:" + det_json;
 
         this.ws.next(det);
-        this._log.debug('Send signup for: ' + login);
         return this.Messages;
     }
 

@@ -76,3 +76,13 @@ export class UserExistResult extends UserMessage {
     }
   }
 }
+
+export class UserSignupReq {
+  login: string; 
+  password: string; 
+  email: string;
+  gender: string; 
+  fullname: string; 
+  deckname: string;
+  token_captcha: string;
+}

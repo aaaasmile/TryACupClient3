@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SocketService } from './socket.service'
 import { Message } from '../data-models/socket/SocketMessages'
-import {UserMessage, User} from '../data-models/socket/UserMessage'
+import { UserMessage, User, UserSignupReq } from '../data-models/socket/UserMessage'
 import { Observable, Subject } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { CanActivate } from '@angular/router';
@@ -87,8 +87,14 @@ export class AuthenticationService implements CanActivate {
         // code from :https://github.com/cornflourblue/angular2-registration-login-example/blob/master/app/_services/authentication.service.ts
     }
 
-    signup(login: string, password: string, email: string, gender: string, fullname: string, deckname: string, token_captcha: string): Observable<UserMessage> {
-        return this.socketService.signup(login, password, email, gender, fullname, deckname, token_captcha)
+    signup(req: UserSignupReq): Observable<UserMessage> {
+        let det_json = JSON.stringify({
+            type: 'insert', login: req.login, password: btoa(req.password),
+            fullname: req.fullname, email: req.email, gender: req.gender, deck_name: req.deckname, token_captcha: req.token_captcha
+        });
+        console.log('Send signup for: ', req.login);
+
+        return this.socketService.signup(det_json)
             .pipe(
                 map((msg: Message) => {
                     if (msg instanceof UserMessage) {
@@ -105,11 +111,11 @@ export class AuthenticationService implements CanActivate {
     }
 
     checkLoginExists(login: string): Observable<UserMessage> {
-        
+
         return this.socketService.userExists(login)
-        .pipe(map((msg: Message) => {
-            return (msg instanceof UserMessage) ? msg : null;
-        })).pipe(filter(m => m != null));
+            .pipe(map((msg: Message) => {
+                return (msg instanceof UserMessage) ? msg : null;
+            })).pipe(filter(m => m != null));
     }
 
     logout() {

@@ -7,6 +7,7 @@ import { NgForm } from '@angular/forms';
 import { takeWhile } from 'rxjs/operators'
 import { ViewChild } from '@angular/core';
 import { ReCaptchaComponent } from '../directives/captcha.component';
+import { UserSignupReq } from '../data-models/socket/UserMessage';
 
 @Component({
   selector: 'app-sign-up',
@@ -50,37 +51,45 @@ export class SignUpComponent implements OnInit, AfterViewInit, OnDestroy {
   signup(form: NgForm) {
     let conn = this.authenticationService.isAvailable();
     console.log('Connection available? ', conn);
-    if (!conn){
+    if (!conn) {
       this.router.navigate([this.returnUrl]);
       this.alertService.error('Servizio non disponibile');
     }
     console.info('signup model is ', this.model);
     this.loading = true;
-    this.authenticationService.signup(this.model.username, this.model.password, this.model.email, this.model.gender,
-      this.model.fullname, this.model.deckname, this.model.token_captcha)
+    let req = new UserSignupReq();
+    req.login = this.model.username;
+    req.password = this.model.password;
+    req.gender = this.model.gender;
+    req.email = this.model.email;
+    req.fullname = this.model.fullname;
+    req.deckname = this.model.deckname;
+    req.token_captcha = this.model.token_captcha;
+
+    this.authenticationService.signup(req)
       .pipe(takeWhile(() => this._alive))
       .subscribe(
-      data => {
-        if (data.is_ok){
-          this.router.navigate([this.returnUrl]);
-          this.alertService.success('Utente ' + this.model.username + ' creato con successo');
-        }
-        else {
-          form.reset();
-          this.resetModel();
-          this.router.navigate([this.returnUrl]);
-          this.alertService.error(data.info);
-          this.loading = false;
-        }
-      });
+        data => {
+          if (data.is_ok) {
+            this.router.navigate([this.returnUrl]);
+            this.alertService.success('Utente ' + this.model.username + ' creato con successo');
+          }
+          else {
+            form.reset();
+            this.resetModel();
+            this.router.navigate([this.returnUrl]);
+            this.alertService.error(data.info);
+            this.loading = false;
+          }
+        });
   }
 
-  handleCorrectCaptcha(evt: any){
+  handleCorrectCaptcha(evt: any) {
     console.info('Captcha is ok', evt);
     this.model.token_captcha = evt;
   }
 
-  handleCaptchaExpired(){
+  handleCaptchaExpired() {
     console.info('Captcha is expired');
     this.model.token_captcha = '';
     this.captcha.reset();
