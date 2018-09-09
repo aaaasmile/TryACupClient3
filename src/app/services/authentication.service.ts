@@ -65,7 +65,8 @@ export class AuthenticationService implements CanActivate {
                         return lm;
                     }
                 })
-            );
+            )
+            .pipe(filter(m => m != null));
     }
 
     login(username: string, password: string): Observable<UserMessage> {
@@ -83,8 +84,8 @@ export class AuthenticationService implements CanActivate {
                         return lm;
                     }
                 })
-            );
-        // code from :https://github.com/cornflourblue/angular2-registration-login-example/blob/master/app/_services/authentication.service.ts
+            )
+            .pipe(filter(m => m != null));
     }
 
     signup(req: UserSignupReq): Observable<UserMessage> {
@@ -100,6 +101,7 @@ export class AuthenticationService implements CanActivate {
                     if (msg instanceof UserMessage) {
                         let lm = msg as UserMessage;
                         if (lm.is_ok && lm.user) {
+                            console.log("Signup ok for user ", lm.user.login);
                             this._isLoggedIn = true;
                             this._user_name = lm.user.login;
                             this.LoginChangeEvent.next(true);
@@ -107,7 +109,8 @@ export class AuthenticationService implements CanActivate {
                         return lm;
                     }
                 })
-            );
+            )
+            .pipe(filter(m => m != null));
     }
 
     checkLoginExists(login: string): Observable<UserMessage> {

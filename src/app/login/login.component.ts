@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private authenticationService: AuthenticationService,
     private alertService: AlertService) {
-      this._alive = true;
-     }
+    this._alive = true;
+  }
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -32,7 +32,9 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._alive = false;
-    this.subsc_login.unsubscribe();
+    if (this.subsc_login) {
+      this.subsc_login.unsubscribe();
+    }
   }
 
   ngAfterViewInit() {
@@ -44,13 +46,13 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subsc_login = this.authenticationService.login(this.model.username, this.model.password)
       .pipe(takeWhile(() => this._alive))
       .subscribe(
-      data => {
-        if (data.is_ok)
-          this.router.navigate([this.returnUrl]);
-        else {
-          this.alertService.error(data.info);
-          this.loading = false;
-        }
-      });
+        data => {
+          if (data.is_ok)
+            this.router.navigate([this.returnUrl]);
+          else {
+            this.alertService.error(data.info);
+            this.loading = false;
+          }
+        });
   }
 }

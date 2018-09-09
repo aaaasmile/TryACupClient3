@@ -52,14 +52,18 @@ export class UserLoginOk extends UserMessage {
 export class UserOperationResult extends UserMessage {
   constructor(cmd: string, cmd_details: string) {
     super();
-    let det = JSON.parse(cmd_details); //{"login":null,"is_ok":false,"code":1,"info":"Impossibile inserire l'utente"}
+    let det = JSON.parse(cmd_details); 
+    // In caso di errore:
+    //{"login":null,"is_ok":false,"code":1,"info":"Impossibile inserire l'utente"}
+    // In caso ok:
+    //{"login":"luzzo14","is_ok":true,"code":0,"info":"Utente creato con successo"}
     this.cmd = cmd;
     this.is_ok = det.is_ok;
     this.info = det.info;
-    if (det.is_ok == true) {
+    console.log("User operation: ", det);
+    if (det.is_ok === true) {
       this.user = new User();
-      this.user.login = det.name;
-      this.user.token = det.token;
+      this.user.login = det.login;
     }
   }
 }

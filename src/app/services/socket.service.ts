@@ -48,6 +48,9 @@ export class SocketService {
         this.Messages = new Subject<Message>();
 
         this.ws = webSocket({ url: mybase_url, serializer: x => x });
+        if (this.subsc_ws) {
+            this.subsc_ws.unsubscribe();
+        }
         this.subsc_ws = this.ws.subscribe(
             (msg) => {
                 console.log('socket received: ' + msg);
@@ -113,7 +116,6 @@ export class SocketService {
     closeSocketServer(): void {
         if (this.ws != null) {
             this._log.debug("Close the socket by user action");
-            this.subsc_ws.unsubscribe();
             this.ws.unsubscribe();
             this._reconnect = false;
             this.ws = null;

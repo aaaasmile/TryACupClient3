@@ -48,7 +48,9 @@ export class SignUpComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._alive = false;
-    this.subsc_signup.unsubscribe();
+    if (this.subsc_signup) {
+      this.subsc_signup.unsubscribe();
+    }
   }
 
   signup(form: NgForm) {
