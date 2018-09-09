@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { SocketService } from '../services/socket.service';
 import { ChatType } from '../data-models/sharedEnums'
 
+// Nota che quest service è obsoleto ed è stato usato solo per provare dei comandi
+
 
 @Component({
   selector: 'my-users',

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Log4Cup } from '../shared/log4cup';
 import { ChatType } from '../data-models/sharedEnums';
 import { OnlineService } from './online.service';
-import { Message, UserMessage } from '../data-models/socket/SocketMessages';
+import { Message } from '../data-models/socket/SocketMessages';
 import { MessageBuilder } from '../data-models/socket/MessageBuilder';
 
 import { Subscription, Subject, Observable, Observer, ReplaySubject } from 'rxjs';
@@ -128,7 +128,7 @@ export class SocketService {
         return this.ws != null;
     }
 
-    loginReq(login: string, password: string, token: string): Observable<UserMessage> {
+    loginReq(login: string, password: string, token: string): Observable<Message> {
         this.connectSocketServer();
 
         let det_json = JSON.stringify({ name: login, password: btoa(password), token: token });
@@ -137,12 +137,10 @@ export class SocketService {
 
         this.ws.next(det);
         this._log.debug('Send login: ' + login);
-        return this.Messages.pipe(map(msg => {
-            return (msg instanceof UserMessage) ? msg : null;
-        })).pipe(filter(m => m != null));
+        return this.Messages;
     }
 
-    signup(login: string, password: string, email: string, gender: string, fullname: string, deckname: string, token_captcha: string): Observable<UserMessage> {
+    signup(login: string, password: string, email: string, gender: string, fullname: string, deckname: string, token_captcha: string): Observable<Message> {
         this.connectSocketServer();
 
         let det_json = JSON.stringify({
@@ -153,12 +151,10 @@ export class SocketService {
 
         this.ws.next(det);
         this._log.debug('Send signup for: ' + login);
-        return this.Messages.pipe(map(msg => {
-            return (msg instanceof UserMessage) ? msg : null;
-        })).pipe(filter(m => m != null));
+        return this.Messages;
     }
 
-    userExists(login: string): Observable<UserMessage> {
+    userExists(login: string): Observable<Message> {
         this.connectSocketServer();
 
         let det_json = JSON.stringify({ login: login });
@@ -166,10 +162,7 @@ export class SocketService {
 
         this.ws.next(det);
         this._log.debug('user exists for: ' + login);
-        return this.Messages.pipe(map(msg => {
-            //console.log('**** user exxist result', msg, msg instanceof UserMessage);
-            return (msg instanceof UserMessage) ? msg : null;
-        })).pipe(filter(m => m != null));
+        return this.Messages;
     }
 
     logoutReq(): void {

@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { SocketService } from './socket.service'
-import { UserMessage } from '../data-models/socket/SocketMessages'
+import { UserMessage, Message } from '../data-models/socket/SocketMessages'
 import { User } from '../data-models/user'
 import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { CanActivate }    from '@angular/router';
+import { map, filter } from 'rxjs/operators';
+import { CanActivate } from '@angular/router';
 
 
 @Injectable({
     providedIn: 'root',
-  })
+})
 export class AuthenticationService implements CanActivate {
     private _isLoggedIn: boolean = false;
     private _user_name: string = '';
@@ -54,13 +54,16 @@ export class AuthenticationService implements CanActivate {
         console.log('Try to atuologin with user :', user.login);
         return this.socketService.loginReq(user.login, '', user.token)
             .pipe(
-                map((lm: UserMessage) => {
-                    if (lm.is_ok && lm.user) {
-                        this._isLoggedIn = true;
-                        this._user_name = lm.user.login;
-                        this.LoginChangeEvent.next(true);
+                map((msg: Message) => {
+                    if (msg instanceof UserMessage) {
+                        let lm = msg as UserMessage;
+                        if (lm.is_ok && lm.user) {
+                            this._isLoggedIn = true;
+                            this._user_name = lm.user.login;
+                            this.LoginChangeEvent.next(true);
+                        }
+                        return lm;
                     }
-                    return lm;
                 })
             );
     }
@@ -68,14 +71,17 @@ export class AuthenticationService implements CanActivate {
     login(username: string, password: string): Observable<UserMessage> {
         return this.socketService.loginReq(username, password, '')
             .pipe(
-                map((lm: UserMessage) => {
-                    if (lm.is_ok && lm.user && lm.user.token && lm.user.token.length > 0) {
-                        this._isLoggedIn = true;
-                        this._user_name = lm.user.login;
-                        this.LoginChangeEvent.next(true);
-                        localStorage.setItem('currentUser', JSON.stringify(lm.user));
+                map((msg: Message) => {
+                    if (msg instanceof UserMessage) {
+                        let lm = msg as UserMessage;
+                        if (lm.is_ok && lm.user && lm.user.token && lm.user.token.length > 0) {
+                            this._isLoggedIn = true;
+                            this._user_name = lm.user.login;
+                            this.LoginChangeEvent.next(true);
+                            localStorage.setItem('currentUser', JSON.stringify(lm.user));
+                        }
+                        return lm;
                     }
-                    return lm;
                 })
             );
         // code from :https://github.com/cornflourblue/angular2-registration-login-example/blob/master/app/_services/authentication.service.ts
@@ -84,19 +90,26 @@ export class AuthenticationService implements CanActivate {
     signup(login: string, password: string, email: string, gender: string, fullname: string, deckname: string, token_captcha: string): Observable<UserMessage> {
         return this.socketService.signup(login, password, email, gender, fullname, deckname, token_captcha)
             .pipe(
-                map((lm: UserMessage) => {
-                    if (lm.is_ok && lm.user) {
-                        this._isLoggedIn = true;
-                        this._user_name = lm.user.login;
-                        this.LoginChangeEvent.next(true);
+                map((msg: Message) => {
+                    if (msg instanceof UserMessage) {
+                        let lm = msg as UserMessage;
+                        if (lm.is_ok && lm.user) {
+                            this._isLoggedIn = true;
+                            this._user_name = lm.user.login;
+                            this.LoginChangeEvent.next(true);
+                        }
+                        return lm;
                     }
-                    return lm;
                 })
             );
     }
 
     checkLoginExists(login: string): Observable<UserMessage> {
-        return this.socketService.userExists(login);
+        
+        return this.socketService.userExists(login)
+        .pipe(map(msg => {
+            return (msg instanceof UserMessage) ? msg : null;
+        })).pipe(filter(m => m != null));
     }
 
     logout() {
