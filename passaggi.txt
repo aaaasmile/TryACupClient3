@@ -58,6 +58,7 @@ Per esempio, quando ho creato il compoente UserDetails ho usato:
 
 ==  TODO
 - password reset
+- admin pagina per vedere la lista degli utenti resitrati e cancellarne qualcuno
 - sidebar menu se la dimensione è minore di 700px
 * La grafica.*
 Usa TestCard2 per vedere di testare le carte da cliccare in tutte le sue varianti (selezionata,invalida,giocata,deck,figura).

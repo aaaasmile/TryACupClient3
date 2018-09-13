@@ -7,6 +7,7 @@ import { CardGameService } from '../services/cardGame.service';
 import { Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { OnlineService } from '../services/online.service';
+import {SocketService} from '../services/socket.service';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private authService: AuthenticationService,
     private onlineService: OnlineService,
     private cardGameService: CardGameService,
+    private socketService: SocketService,
     private router: Router) {
     this.isloggedin = authService.isLoggedin();
     this.isConnected = authService.isAvailable();
@@ -46,16 +48,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
 
     if (this.onlineService.isOnline()) {
+      if (!this.authService.isAvailable) {
+        this.onlineService.goOnline();
+        this.socketService.connectSocketServer();
+        this.authService.Refresh();
+      }
       let user = this.authService.get_autologin_user();
       if (user != null) {
         console.log('Start autologin');
         this._subscription = this.authService.autologin(user)
           .subscribe(
             data => {
-              if (data.is_ok){
+              if (data.is_ok) {
                 console.log('Connected as user: ', data.user.login);
                 this.isloggedin = true;
-              }else {
+              } else {
                 console.log('Not logged in');
                 this.isloggedin = false;
               }

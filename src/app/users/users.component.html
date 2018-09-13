@@ -1,4 +1,4 @@
-<h2>Lista utenti</h2>
+<h3>Utenti colegati in rete</h3>
 <ul class="users">
   <li *ngFor="let user of users" [class.selected]="user === selectedUser" (click)="onSelect(user)">
     <span class="badge">{{user.id}}</span> {{user.name}}

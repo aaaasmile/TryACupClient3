@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './services/authentication.service';
 import { Log4Cup } from './shared/log4cup'
@@ -24,17 +24,26 @@ export class AppComponent implements OnInit, OnDestroy {
   subsc_logout: Subscription;
   subsc_connect: Subscription;
 
+
   constructor(private authenticationService: AuthenticationService,
     private router: Router,
     private socketService: SocketService,
+    private cdRef: ChangeDetectorRef,
     private onlineService: OnlineService) {
     this._alive = true;
-    this.isloggedin = authenticationService.isLoggedin();
-    this.user_name = authenticationService.get_user_name();
     this.checkProtocolConnection();
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewChecked() {
+    this.isloggedin = this.authenticationService.isLoggedin();
+    this.user_name = this.authenticationService.get_user_name();
+    this.cdRef.detectChanges();
+  }
+
+  ngAfterViewInit() {
     // monitor login
     this.subsc_login = this.authenticationService.LoginChangeEvent
       .pipe(takeWhile(() => this._alive))
@@ -95,7 +104,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.socketService.closeSocketServer();
         this.authenticationService.Refresh();
         this.router.navigate(['/']);
-      }else{
+      } else {
         console.log("No connection toggle when the user is logged in");
       }
     } else {
