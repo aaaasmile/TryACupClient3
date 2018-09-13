@@ -103,6 +103,7 @@ export class SocketService {
             if (this.ws == null) {
                 if (!this._closing) {
                     this._reconnect = false;
+                    this.setProtocolConnected(true);
                     this.createSocket();
                 } else {
                     this._reconnect = true;
@@ -124,6 +125,7 @@ export class SocketService {
                 this.Messages.complete();
                 this.Messages = null;
             }
+            this.setProtocolConnected(false);
         }
     }
 

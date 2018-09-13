@@ -93,6 +93,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.onlineService.goOffline();
 
         this.socketService.closeSocketServer();
+        this.authenticationService.Refresh();
         this.router.navigate(['/']);
       }else{
         console.log("No connection toggle when the user is logged in");
@@ -100,6 +101,7 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       this.onlineService.goOnline();
       this.socketService.connectSocketServer();
+      this.authenticationService.Refresh();
     }
   }
 }

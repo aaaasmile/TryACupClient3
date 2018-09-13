@@ -40,7 +40,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         takeWhile(() => this._alive)
       )
       .subscribe(evt => {
+        console.log('Login event received')
         this.isloggedin = this.authService.isLoggedin();
+        this.isConnected = this.authService.isAvailable();
       });
 
     if (this.onlineService.isOnline()) {
@@ -50,11 +52,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this._subscription = this.authService.autologin(user)
           .subscribe(
             data => {
-              if (data.is_ok)
+              if (data.is_ok){
                 console.log('Connected as user: ', data.user.login);
-              else {
+                this.isloggedin = true;
+              }else {
                 console.log('Not logged in');
+                this.isloggedin = false;
               }
+              this.isConnected = this.authService.isAvailable();
             });
       }
     }

@@ -51,7 +51,7 @@
         <div class="two wide column">
           <h4 class="ui header">Server</h4>
           <!-- <p ><i class="server icon" [ngClass]="{'green': isConnected}"></i></p> -->
-          <button (click)=toggleConnect()><i class="server icon" [ngClass]="{'green': isConnected}"></i></button>
+          <button  [ngClass]="{'disabled': isloggedin, ui: true, button: true}"  (click)=toggleConnect()><i class="server icon" [ngClass]="{'green': isConnected}"></i></button>
         </div>
       </div>
     </div>

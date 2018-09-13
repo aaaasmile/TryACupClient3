@@ -27,6 +27,10 @@ export class AuthenticationService implements CanActivate {
         console.debug('is logged in' + this._isLoggedIn.toString());
         return this._isLoggedIn;
     }
+    
+    Refresh(){
+        this.LoginChangeEvent.next(true);
+    }
 
     isAvailable(): boolean {
         return this.socketService.getProtocollConnected();
@@ -78,9 +82,9 @@ export class AuthenticationService implements CanActivate {
                         if (lm.is_ok && lm.user && lm.user.token && lm.user.token.length > 0) {
                             this._isLoggedIn = true;
                             this._user_name = lm.user.login;
-                            this.LoginChangeEvent.next(true);
                             localStorage.setItem('currentUser', JSON.stringify(lm.user));
                         }
+                        this.LoginChangeEvent.next(true);
                         return lm;
                     }
                 })
