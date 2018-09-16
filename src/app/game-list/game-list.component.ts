@@ -3,6 +3,7 @@ import { CardGameService } from '../services/cardGame.service';
 import { Subscription } from 'rxjs';
 import { GameItem } from './game-item';
 import { ModalService } from '../services/modal.service';
+import { NgForm } from '@angular/forms';
 
 
 
@@ -22,6 +23,10 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.model = {
+      num_segni: 2,
+      game: "Briscola" // valore preso dal file game_info di cup_srv/games/briscola campo :name
+    }
   }
 
   ngOnDestroy() {
@@ -50,16 +55,19 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   cancelNewGame() {
+    console.log("Cancel modal create neew game")
     this.modalService.close("");
   }
 
-  createNewGame() {
-    console.log("Create a new game request");
-    //this.cardGameService.createNewGame(gameName, this.getOpt(gameName));
+  createNewGame(form: NgForm) {
+    console.log("Create a new game request", this.model);
     this.modalService.close("");
+    let gameName = this.model.game;
+    let opt = this.getOpt(gameName, this.model);
+    this.cardGameService.createNewGame(gameName, opt);
   }
 
-  getOpt(gameName: string) {
+  getOpt(gameName: string, diaOpt: any) {
     switch (gameName) {
       case "Briscola":
         return {
@@ -71,11 +79,11 @@ export class GameListComponent implements OnInit, OnDestroy {
           num_segni_match: {
             type: 'textbox',
             name: 'Segni in una partita',
-            val: 2
+            val: diaOpt.num_segni
           }
         };
       default:
-        console.warn("Game option not found");
+        console.error("Game %s option not found (programming error)", gameName);
         break;
     }
   }

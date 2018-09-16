@@ -47,29 +47,63 @@
 </table>
 
 <jw-modal id="modalGamesAsk">
-  <div class="ui dimmer modals page transition visible active" style="display: flex !important;">
-    <div class="ui standard test modal transition visible active" style="display: block !important;">
-      <div class="header">
-        Crea un nuovo gioco
-      </div>
-      <div class="image content">
-        <div class="ui large image">
-          <img src="/assets/images/bar_cooperativa.jpg">
+  <form class="ui large form" name="form" #f="ngForm" novalidate>
+    <div class="ui dimmer modals page transition visible active" style="display: flex !important;">
+      <div class="ui standard test modal transition visible active" style="display: block !important;">
+        <div class="header">
+          Crea un nuovo gioco
         </div>
-        <div class="description">
-          <div class="ui header">Giochi</div>
+        <div class="image content">
+          <div class="ui large image">
+            <img src="/assets/images/bar_cooperativa.jpg">
+          </div>
+          <div class="description">
+            <div class="ui header">Partita</div>
+            <div class="grouped fields">
+              <label for="game">Seleziona il tuo gioco preferito:</label>
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="game-sel" value="Briscola" [(ngModel)]="model.game">
+                  <label>Briscola in due</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="game-sel" value="Mariazza" [(ngModel)]="model.game">
+                  <label>Mariazza</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="game-sel" value="Briscolone" [(ngModel)]="model.game">
+                  <label>Briscolone</label>
+                </div>
+              </div>
 
+            </div>
+            <div class="field" [ngClass]="{ 'error': num_segni.touched && !num_segni.valid }">
+              <div class="ui label">Numero dei segni</div>
+              <div class="ui left icon input">
+                <i class="tasks icon"></i>
+                <input type="text" name="num_segni" pattern="^[1-5]" required placeholder="Segni" [(ngModel)]="model.num_segni"
+                  #num_segni="ngModel">
+              </div>
+              <cup-show-error path="num_segni" text="Il numero dei segni (corretto tra 1 e 5) "></cup-show-error>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="actions">
-        <button class="ui deny button" (click)="cancelNewGame()">
-          Cancella
-        </button>
-        <button class="ui positive right labeled icon button" (click)="createNewGame()">
-          OK
-          <i class="checkmark icon"></i>
-        </button>
+        <div class="actions">
+          <button class="ui deny button submit" (click)="cancelNewGame()">
+            Cancella
+          </button>
+          <button class="ui positive right labeled icon submit button" (click)="f.form.valid && createNewGame(f)">
+            OK
+            <i class="checkmark icon"></i>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </form>
+
+
 </jw-modal>

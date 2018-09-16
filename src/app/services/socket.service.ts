@@ -71,7 +71,7 @@ export class SocketService {
                 this.setProtocolConnected(false);
             },
             () => {
-                console.log('socket complete');
+                console.log('socket complete - DISCONNECTED');
                 if (this.Messages != null) {
                     this.Messages.complete();
                 }
@@ -232,7 +232,7 @@ export class SocketService {
     }
 
     private sendCmdDetReq(det: string): Observable<Message> {
-        this._log.debug('send ' + det);
+        //this._log.debug('send ' + det);
         this.ws.next(det);
         return this.Messages;
     }

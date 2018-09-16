@@ -73,11 +73,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private checkProtocolConnection() {
+    console.log('Check the connection protocoll');
     let newConnect = this.socketService.getProtocollConnected();
     if (this.isConnected != newConnect) {
       this.isConnected = newConnect;
       if (!newConnect) {
         this.isloggedin = false;
+        this.router.navigate(['/']);
+        this.authenticationService.Refresh();
       }
     }
   }

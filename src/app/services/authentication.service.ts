@@ -30,6 +30,10 @@ export class AuthenticationService implements CanActivate {
     
     Refresh(){
         console.log("Refresh login message")
+        if(!this.socketService.isConnected()){
+            this._isLoggedIn = false;
+        }
+
         this.LoginChangeEvent.next(true);
     }
 
