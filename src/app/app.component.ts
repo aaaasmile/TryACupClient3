@@ -5,7 +5,7 @@ import { Log4Cup } from './shared/log4cup'
 import { takeWhile } from 'rxjs/operators'
 import { Subscription } from 'rxjs';
 import { SocketService } from './services/socket.service';
-import { OnlineService } from './services/online.service';
+import { OnlineModeService } from './services/onlineMode.service';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private socketService: SocketService,
     private cdRef: ChangeDetectorRef,
-    private onlineService: OnlineService) {
+    private onlineService: OnlineModeService) {
     this._alive = true;
     this.checkProtocolConnection();
   }

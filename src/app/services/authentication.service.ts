@@ -29,6 +29,7 @@ export class AuthenticationService implements CanActivate {
     }
     
     Refresh(){
+        console.log("Refresh login message")
         this.LoginChangeEvent.next(true);
     }
 
@@ -41,11 +42,12 @@ export class AuthenticationService implements CanActivate {
     }
 
     activate_loginService() {
+        console.log('Activate login service and connect the socket');
         this.socketService.connectSocketServer();
+        this.Refresh();
     }
 
     get_autologin_user(): User {
-        this.socketService.connectSocketServer();
         if (this.socketService.isConnected && !this._isLoggedIn) {
             let cu_str: string = localStorage.getItem('currentUser');
             let user: User = JSON.parse(cu_str);

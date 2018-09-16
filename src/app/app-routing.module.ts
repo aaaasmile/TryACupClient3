@@ -6,7 +6,7 @@ import { LoginComponent } from './login/login.component'
 import { SignUpComponent } from './sign-up/sign-up.component'
 import { UserDetailsComponent } from './user-details/user-details.component'
 import { AuthenticationService } from './services/authentication.service'
-import { OnlineService } from './services/online.service'
+import { OnlineModeService } from './services/onlineMode.service'
 import { GameListComponent } from './game-list/game-list.component'
 
 
@@ -14,8 +14,8 @@ const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'users', component: UsersComponent, canActivate: [AuthenticationService]  },
-  { path: 'login', component: LoginComponent, canActivate: [OnlineService] },
-  { path: 'signup', component: SignUpComponent, canActivate: [OnlineService] },
+  { path: 'login', component: LoginComponent, canActivate: [OnlineModeService] },
+  { path: 'signup', component: SignUpComponent, canActivate: [OnlineModeService] },
   { path: 'user-details', component: UserDetailsComponent, canActivate: [AuthenticationService] },
   //{ path: 'games', loadChildren: './games/games.module' }
   { path: 'games', loadChildren: './games/games.module#GamesModule', canActivate: [AuthenticationService]  },

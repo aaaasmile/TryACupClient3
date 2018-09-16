@@ -6,7 +6,7 @@ import { CardGame } from '../data-models/cardGame';
 import { CardGameService } from '../services/cardGame.service';
 import { Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
-import { OnlineService } from '../services/online.service';
+import { OnlineModeService } from '../services/onlineMode.service';
 import {SocketService} from '../services/socket.service';
 
 
@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthenticationService,
-    private onlineService: OnlineService,
+    private onlineService: OnlineModeService,
     private cardGameService: CardGameService,
     private socketService: SocketService,
     private router: Router) {
@@ -46,13 +46,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.isloggedin = this.authService.isLoggedin();
         this.isConnected = this.authService.isAvailable();
       });
+    this.cardGames = this.cardGameService.getCardGames();
+  }
 
-    if (this.onlineService.isOnline()) {
-      if (!this.authService.isAvailable) {
-        this.onlineService.goOnline();
-        this.socketService.connectSocketServer();
-        this.authService.Refresh();
-      }
+  ngAfterViewInit() {
+    if (this.onlineService.isModeOnline()) {
+      this.authService.activate_loginService();
       let user = this.authService.get_autologin_user();
       if (user != null) {
         console.log('Start autologin');
@@ -68,9 +67,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
               }
               this.isConnected = this.authService.isAvailable();
             });
+      }else{
+        console.log('No autologing because no user is setup');
       }
     }
-    this.cardGames = this.cardGameService.getCardGames();
   }
 
   ngOnDestroy(): void {

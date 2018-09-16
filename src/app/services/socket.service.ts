@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Log4Cup } from '../shared/log4cup';
 import { ChatType } from '../data-models/sharedEnums';
-import { OnlineService } from './online.service';
+import { OnlineModeService } from './onlineMode.service';
 import { Message } from '../data-models/socket/SocketMessages';
 import { MessageBuilder } from '../data-models/socket/MessageBuilder';
 
@@ -28,7 +28,7 @@ export class SocketService {
 
     private ws: WebSocketSubject<any>; // Websocket is a subject in RxJs
 
-    constructor(private onlineService: OnlineService) {
+    constructor(private onlineService: OnlineModeService) {
         this._log.debug("socket - constructor");
         this.ConnectEvent = new Subject<boolean>();
         this._protocollConnected = false;
@@ -36,7 +36,7 @@ export class SocketService {
     }
 
     private createSocket(): void {
-        this._log.debug('Create socket on SocketService');
+        console.log('Create socket on SocketService');
         var port = location.port;
         var prefix = (window.location.protocol.match(/https/) ? 'wss' : 'ws')
         if (location.hostname === 'localhost') {
@@ -99,7 +99,7 @@ export class SocketService {
     }
 
     connectSocketServer(): void {
-        if (this.onlineService.isOnline()) {
+        if (this.onlineService.isModeOnline()) {
             if (this.ws == null) {
                 if (!this._closing) {
                     this._reconnect = false;
@@ -110,7 +110,7 @@ export class SocketService {
                 }
             }
         } else {
-            console.log('Ignore connect because app is offline');
+            console.log('Ignore connect because app is in offline mode');
         }
     }
 

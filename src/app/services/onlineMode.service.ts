@@ -4,41 +4,41 @@ import { CanActivate } from '@angular/router';
 @Injectable({
   providedIn: 'root', // singleton service
 })
-export class OnlineService implements CanActivate {
-  private _isOnline: boolean;
+export class OnlineModeService implements CanActivate {
+  private _onlineMode: string; //online/offline
 
   constructor() {
     let mode_str: string = localStorage.getItem('onlineMode');
     console.log('Online mode is ', mode_str);
     if (mode_str != null) {
-      this._isOnline = JSON.parse(mode_str);
+      this._onlineMode = JSON.parse(mode_str);
     } else {
-      this._isOnline = true;
+      this._onlineMode = 'online';
     }
 
   }
 
   canActivate() {
-    return this._isOnline;
+    return this._onlineMode === 'online';
   }
 
   goOffline(): void {
-    this._isOnline = false;
+    this._onlineMode = 'offline';
     this.persistOnline();
   }
 
   goOnline(): void {
-    this._isOnline = true;
+    this._onlineMode = 'online';
     this.persistOnline();
   }
 
   private persistOnline(): void {
-    localStorage.setItem('onlineMode', JSON.stringify(this._isOnline));
-    console.log('Online is ', this._isOnline);
+    localStorage.setItem('onlineMode', JSON.stringify(this._onlineMode));
+    console.log('online mode is now', this._onlineMode);
   }
 
-  isOnline(): boolean {
-    return this._isOnline;
+  isModeOnline(): boolean {
+    return this._onlineMode === 'online';
   }
 
 }

@@ -12,7 +12,7 @@ import { UserService } from './services/user.service';
 import { CardGameService } from './services/cardGame.service';
 import { AuthenticationService } from './services/authentication.service';
 import { AlertService } from './services/alert.service';
-import { OnlineService } from './services/online.service';
+import { OnlineModeService } from './services/onlineMode.service';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';
@@ -52,7 +52,7 @@ import { GameListComponent } from './game-list/game-list.component';
     ResourceLoader,
     AuthenticationService,
     AlertService,
-    OnlineService,
+    OnlineModeService,
     { provide: LocationStrategy, useClass: HashLocationStrategy } // Hash in url to avoid browser reload issue
   ],
   bootstrap: [AppComponent]
