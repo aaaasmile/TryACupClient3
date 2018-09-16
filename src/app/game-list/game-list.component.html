@@ -47,29 +47,31 @@
 </table>
 
 <jw-modal id="modalGamesAsk">
-    <div class="ui">
-        <i class="close icon"></i>
-        <div class="header">
-          Profile Picture
+  <div class="ui dimmer modals page transition visible active" style="display: flex !important;">
+    <div class="ui standard test modal transition visible active" style="display: block !important;">
+      <div class="header">
+        Select a Photo
+      </div>
+      <div class="image content">
+        <div class="ui large image">
+          <img src="/assets/carte/piac/01_basto.png">
         </div>
-        <div class="image content">
-          <div class="ui large image">
-            <img src="/assets/carte/piac/01_basto.png">
-          </div>
-          <div class="description">
-            <div class="ui header">We've auto-chosen a profile image for you.</div>
-            <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
-            <p>Is it okay to use this photo?</p>
-          </div>
-        </div>
-        <div class="actions">
-          <button class="ui black deny button" (click)="cancelNewGame()">
-            Nope
-          </button>
-          <div class="ui positive right labeled icon button">
-            Yep, that's me
-            <i class="checkmark icon"></i>
-          </div>
+        <div class="description">
+          <div class="ui header">We've auto-chosen a profile image for you.</div>
+          <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a>
+            image associated with your registered e-mail address.</p>
+          <p>Is it okay to use this photo?</p>
         </div>
       </div>
+      <div class="actions">
+        <button class="ui black deny button" (click)="cancelNewGame()">
+          Nope
+        </button>
+        <div class="ui positive right labeled icon button">
+          Yep, that's me
+          <i class="checkmark icon"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 </jw-modal>

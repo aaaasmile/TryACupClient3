@@ -32,16 +32,6 @@ export class ModalComponent implements OnInit, OnDestroy {
 
         // move element to bottom of page (just before </body>) so it can be displayed above everything else
         document.body.appendChild(this.element);
-
-        // close modal on background click
-        this.element.addEventListener('click', function (e: any) {
-            if (e.target.className === 'jw-modal') {
-                modal.close();
-            }
-        });
-
-        // add self (this modal instance) to the modal service so it's accessible from controllers
-        //console.log("*** ADD jw modal: ", this.id);
         this.modalService.add(this);
     }
 
