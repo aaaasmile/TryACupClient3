@@ -13,6 +13,7 @@ import { CardGameService } from './services/cardGame.service';
 import { AuthenticationService } from './services/authentication.service';
 import { AlertService } from './services/alert.service';
 import { OnlineModeService } from './services/networkMode.service';
+import { ModalService } from './services/modal.service';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';
@@ -20,6 +21,7 @@ import { ResourceLoader } from './games/common/gfx/resource-loader';
 import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './sign-up/sign-up.component'
 import { AlertComponent } from './directives/alert.component';
+import { ModalComponent } from './directives/modal.component';
 import { APPLICATION_VALIDATORS } from './directives/app-validators';
 import { ShowErrorComponent } from './show-error/show-error.component';
 import { ReCaptchaComponent } from './directives/captcha.component';
@@ -36,6 +38,7 @@ import { GameListComponent } from './game-list/game-list.component';
     APPLICATION_VALIDATORS,
     AppComponent,
     AlertComponent,
+    ModalComponent,
     DashboardComponent,
     UsersComponent,
     LoginComponent,
@@ -53,6 +56,7 @@ import { GameListComponent } from './game-list/game-list.component';
     AuthenticationService,
     AlertService,
     OnlineModeService,
+    ModalService,
     { provide: LocationStrategy, useClass: HashLocationStrategy } // Hash in url to avoid browser reload issue
   ],
   bootstrap: [AppComponent]

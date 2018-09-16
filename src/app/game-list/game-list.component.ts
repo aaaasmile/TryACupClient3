@@ -3,6 +3,7 @@ import { CardGameService } from '../services/cardGame.service'
 import { List2Message, List2detail } from '../data-models/socket/List2Message';
 import { Subscription } from 'rxjs';
 import { GameCreatorUserType } from '../data-models/sharedEnums'
+import { ModalService } from '../services/modal.service'
 
 // Used in html template
 export class GameItem {
@@ -42,8 +43,8 @@ export class GameListComponent implements OnInit, OnDestroy {
   games: GameItem[];
   private countMsg: number;
   private subsc_list2: Subscription;
-
-  constructor(private cardGameService: CardGameService) {
+  
+  constructor(private cardGameService: CardGameService, private modalService: ModalService) {
     this.countMsg = 0;
   }
 
@@ -70,9 +71,15 @@ export class GameListComponent implements OnInit, OnDestroy {
       });
   }
 
-  createNewGame(gameName: string) {
-    console.log('Create a new game', gameName);
+  askNewGame(modalId: string) {
+    console.log('Ask for a new game with a modal', modalId);
+
+    this.modalService.open(modalId);
     //this.cardGameService.createNewGame(gameName, this.getOpt(gameName));
+  }
+
+  cancelNewGame(){
+    this.modalService.close("");
   }
 
   getOpt(gameName: string) {
@@ -96,7 +103,7 @@ export class GameListComponent implements OnInit, OnDestroy {
     }
   }
 
-  
+
 
   selectGame(gi: GameItem) {
 
