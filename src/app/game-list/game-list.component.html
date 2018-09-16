@@ -50,27 +50,25 @@
   <div class="ui dimmer modals page transition visible active" style="display: flex !important;">
     <div class="ui standard test modal transition visible active" style="display: block !important;">
       <div class="header">
-        Select a Photo
+        Crea un nuovo gioco
       </div>
       <div class="image content">
         <div class="ui large image">
-          <img src="/assets/carte/piac/01_basto.png">
+          <img src="/assets/images/bar_cooperativa.jpg">
         </div>
         <div class="description">
-          <div class="ui header">We've auto-chosen a profile image for you.</div>
-          <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a>
-            image associated with your registered e-mail address.</p>
-          <p>Is it okay to use this photo?</p>
+          <div class="ui header">Giochi</div>
+
         </div>
       </div>
       <div class="actions">
-        <button class="ui black deny button" (click)="cancelNewGame()">
-          Nope
+        <button class="ui deny button" (click)="cancelNewGame()">
+          Cancella
         </button>
-        <div class="ui positive right labeled icon button">
-          Yep, that's me
+        <button class="ui positive right labeled icon button" (click)="createNewGame()">
+          OK
           <i class="checkmark icon"></i>
-        </div>
+        </button>
       </div>
     </div>
   </div>

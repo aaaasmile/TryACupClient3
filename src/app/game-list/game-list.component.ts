@@ -1,38 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CardGameService } from '../services/cardGame.service'
-import { List2Message, List2detail } from '../data-models/socket/List2Message';
+import { CardGameService } from '../services/cardGame.service';
 import { Subscription } from 'rxjs';
-import { GameCreatorUserType } from '../data-models/sharedEnums'
-import { ModalService } from '../services/modal.service'
-
-// Used in html template
-export class GameItem {
-  index: number;
-  iconname: string;
-  user: string;
-  opzioni_short: string;
-  message: List2Message;
-  game_name: string;
+import { GameItem } from './game-item';
+import { ModalService } from '../services/modal.service';
 
 
-  constructor(list2Det: List2detail) {
-    this.index = list2Det.index;
-    switch (list2Det.user_type) {
-      case GameCreatorUserType.computer:
-        this.iconname = "desktop";
-        break;
-      case GameCreatorUserType.user:
-        this.iconname = "male";
-        break;
-      case GameCreatorUserType.female:
-        this.iconname = "female";
-        break;
-    }
-    this.user = list2Det.user;
-    this.game_name = list2Det.game;
-    this.opzioni_short = list2Det.getOptionsShortText();
-  }
-}
 
 @Component({
   selector: 'app-game-list',
@@ -41,9 +13,10 @@ export class GameItem {
 
 export class GameListComponent implements OnInit, OnDestroy {
   games: GameItem[];
+  model: any = {};
   private countMsg: number;
   private subsc_list2: Subscription;
-  
+
   constructor(private cardGameService: CardGameService, private modalService: ModalService) {
     this.countMsg = 0;
   }
@@ -73,12 +46,16 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   askNewGame(modalId: string) {
     console.log('Ask for a new game with a modal', modalId);
-
     this.modalService.open(modalId);
-    //this.cardGameService.createNewGame(gameName, this.getOpt(gameName));
   }
 
-  cancelNewGame(){
+  cancelNewGame() {
+    this.modalService.close("");
+  }
+
+  createNewGame() {
+    console.log("Create a new game request");
+    //this.cardGameService.createNewGame(gameName, this.getOpt(gameName));
     this.modalService.close("");
   }
 
