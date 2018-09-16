@@ -28,4 +28,13 @@ export class CardGameService {
       }))
       .pipe(filter(m => m != null));
   }
+
+  createNewGame(gameName: string, opt: any){
+    var payloadObj = {
+      game: gameName, prive: { val: false, pin: '' }, class: false,
+      opt_game: opt
+    }
+    
+    this.socketService.createNewGameReq(payloadObj);
+  }
 }

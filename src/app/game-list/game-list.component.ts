@@ -4,14 +4,15 @@ import { List2Message, List2detail } from '../data-models/socket/List2Message';
 import { Subscription } from 'rxjs';
 import { GameCreatorUserType } from '../data-models/sharedEnums'
 
-class GameItem {
+// Used in html template
+export class GameItem {
   index: number;
   iconname: string;
   user: string;
   opzioni_short: string;
   message: List2Message;
   game_name: string;
-  
+
 
   constructor(list2Det: List2detail) {
     this.index = list2Det.index;
@@ -42,14 +43,14 @@ export class GameListComponent implements OnInit, OnDestroy {
   private countMsg: number;
   private subsc_list2: Subscription;
 
-  constructor(private cardGameService: CardGameService) { 
+  constructor(private cardGameService: CardGameService) {
     this.countMsg = 0;
   }
 
   ngOnInit() {
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subsc_list2.unsubscribe();
   }
 
@@ -58,16 +59,44 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.countMsg += 1;
     this.subsc_list2 = this.cardGameService.reqGameList()
       .subscribe(lm => {
-          this.countMsg -= 1;
-          console.log("*** Msg recognized,is...", lm.details, this.countMsg);
-          this.games = new Array<GameItem>();
-          for (let item of lm.details) {
-            let gi = new GameItem(item);
-            gi.message = lm;
-            this.games.push(gi);
-          }
-        });
+        this.countMsg -= 1;
+        console.log("game avail list msg", lm.details, this.countMsg);
+        this.games = new Array<GameItem>();
+        for (let item of lm.details) {
+          let gi = new GameItem(item);
+          gi.message = lm;
+          this.games.push(gi);
+        }
+      });
   }
+
+  createNewGame(gameName: string) {
+    console.log('Create a new game', gameName);
+    //this.cardGameService.createNewGame(gameName, this.getOpt(gameName));
+  }
+
+  getOpt(gameName: string) {
+    switch (gameName) {
+      case "Briscola":
+        return {
+          target_points_segno: {
+            type: 'textbox',
+            name: 'Punti vittoria segno',
+            val: 61
+          },
+          num_segni_match: {
+            type: 'textbox',
+            name: 'Segni in una partita',
+            val: 2
+          }
+        };
+      default:
+        console.warn("Game option not found");
+        break;
+    }
+  }
+
+  
 
   selectGame(gi: GameItem) {
 

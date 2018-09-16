@@ -6,7 +6,7 @@ import { LoginComponent } from './login/login.component'
 import { SignUpComponent } from './sign-up/sign-up.component'
 import { UserDetailsComponent } from './user-details/user-details.component'
 import { AuthenticationService } from './services/authentication.service'
-import { OnlineModeService } from './services/onlineMode.service'
+import { OnlineModeService } from './services/networkMode.service'
 import { GameListComponent } from './game-list/game-list.component'
 
 

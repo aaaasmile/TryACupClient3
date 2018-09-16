@@ -12,7 +12,7 @@ import { UserService } from './services/user.service';
 import { CardGameService } from './services/cardGame.service';
 import { AuthenticationService } from './services/authentication.service';
 import { AlertService } from './services/alert.service';
-import { OnlineModeService } from './services/onlineMode.service';
+import { OnlineModeService } from './services/networkMode.service';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersComponent } from './users/users.component';

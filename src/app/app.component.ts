@@ -5,7 +5,7 @@ import { Log4Cup } from './shared/log4cup'
 import { takeWhile } from 'rxjs/operators'
 import { Subscription } from 'rxjs';
 import { SocketService } from './services/socket.service';
-import { OnlineModeService } from './services/onlineMode.service';
+import { OnlineModeService } from './services/networkMode.service';
 
 @Component({
   selector: 'app-root',

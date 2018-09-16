@@ -6,7 +6,7 @@ import { CardGame } from '../data-models/cardGame';
 import { CardGameService } from '../services/cardGame.service';
 import { Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
-import { OnlineModeService } from '../services/onlineMode.service';
+import { OnlineModeService } from '../services/networkMode.service';
 import {SocketService} from '../services/socket.service';
 
 

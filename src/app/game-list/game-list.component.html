@@ -2,10 +2,11 @@
 <h3 class="ui header">Giochi disponibili in rete</h3>
 <div class="ui divider"></div>
 
-<table class="ui very basic collapsing celled table">
-  <thead>
+<table class="ui compact celled definition table">
+  <thead class="full-width">
     <tr>
-      <th>#</th>
+      <th></th>
+      <th>N.</th>
       <th>Nome</th>
       <th>Gioco</th>
       <th>Comandi</th>
@@ -28,7 +29,19 @@
           </div>
         </h4>
       </td>
-      <td><a href="#" (click)="selectGame(game)">Gioca <i class="hand point right outline icon"></i></a> </td>
+      <td><button (click)="selectGame(game)">
+        <i class="hand point right outline icon"></i>Gioca</button> 
+      </td>
     </tr>
   </tbody>
+  <tfoot class="full-width">
+    <tr>
+      <th></th>
+      <th colspan="4">
+        <button class="ui right floated small primary labeled icon button" (click)="createNewGame()">
+          <i class="plus circle icon"></i> Nuovo Gioco
+        </button>
+      </th>
+    </tr>
+  </tfoot>
 </table>
