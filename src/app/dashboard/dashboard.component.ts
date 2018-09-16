@@ -50,6 +50,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    this.checkForAutologin()
+  }
+
+  ngOnDestroy(): void {
+    if (this._subscription) {
+      this._subscription.unsubscribe();
+    }
+    if (this._subscription2) {
+      this._subscription2.unsubscribe();
+    }
+    this._alive = false;
+  }
+
+  gotoCardGame(item: CardGame): void {
+    console.log('Goto to card game ' + item.name);
+    this.router.navigate([item.link]);
+  }
+
+  checkForAutologin(){
+    if (this.authService.isLoggedin){
+      return;
+    }
     if (this.onlineService.isModeOnline()) {
       this.authService.activate_loginService();
       let user = this.authService.get_autologin_user();
@@ -71,21 +93,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         console.log('No autologing because no user is setup');
       }
     }
-  }
-
-  ngOnDestroy(): void {
-    if (this._subscription) {
-      this._subscription.unsubscribe();
-    }
-    if (this._subscription2) {
-      this._subscription2.unsubscribe();
-    }
-    this._alive = false;
-  }
-
-  gotoCardGame(item: CardGame): void {
-    console.log('Goto to card game ' + item.name);
-    this.router.navigate([item.link]);
   }
 }
 
