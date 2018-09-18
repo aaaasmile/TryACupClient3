@@ -82,17 +82,30 @@ export class List2Message implements Message {
       "players":["robot1"]
     }]
   }*/
+  constructor(){
+    this.details = new Array<List2detail>();
+  }
+
   parseCmdDetails(cmd_details: string) {
     let payload = JSON.parse(cmd_details);
     this.type = payload.type;
     this.slice = parseInt(payload.slice, 10);
     this.slice_state = payload.slice_state;
-    this.details = new Array<List2detail>();
     for (let d of payload.detail) {
       let dd = new List2detail();
       dd.assignPayload(d);
       this.details.push(dd);
     }
+    console.log(this.details);
+  }
+
+  parseCmdAddSingleDetail(cmd_details: string) {
+    // La differenza qui è solo che vi è un singolo elemento nel messaggio detail
+    let payload = JSON.parse(cmd_details);
+    this.type = payload.type;
+    let dd = new List2detail();
+    dd.assignPayload(payload.detail);
+    this.details.push(dd);
     console.log(this.details);
   }
 

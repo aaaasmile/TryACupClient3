@@ -1,5 +1,5 @@
 import { Message, InfoMessage, VerMessage } from './SocketMessages'
-import { UserLogoutOk,  UserLoginFailed, UserLoginOk, UserExistResult, UserOperationResult } from './UserMessage'
+import { UserLogoutOk, UserLoginFailed, UserLoginOk, UserExistResult, UserOperationResult } from './UserMessage'
 import { List2Message } from './List2Message'
 
 
@@ -66,6 +66,14 @@ export class MessageBuilder {
           msg.cmd = cmd;
 
           msg.parseCmdDetails(cmd_details);
+          result = msg;
+          break;
+        }
+      case 'LIST2ADD':
+        {
+          let msg = new List2Message();
+          msg.cmd = cmd;
+          msg.parseCmdAddSingleDetail(cmd_details);
           result = msg;
           break;
         }

@@ -4,6 +4,10 @@ import { Subscription } from 'rxjs';
 import { GameItem } from './game-item';
 import { ModalService } from '../services/modal.service';
 import { NgForm } from '@angular/forms';
+import { SocketService } from '../services/socket.service';
+import { map, filter } from 'rxjs/operators';
+import { Message } from '../data-models/socket/SocketMessages'
+import { List2Message } from '../data-models/socket/List2Message';
 
 
 
@@ -17,8 +21,11 @@ export class GameListComponent implements OnInit, OnDestroy {
   model: any = {};
   private countMsg: number;
   private subsc_list2: Subscription;
+  private subsc_ls_add: Subscription;
 
-  constructor(private cardGameService: CardGameService, private modalService: ModalService) {
+  constructor(private cardGameService: CardGameService,
+    private modalService: ModalService,
+    private socketService: SocketService) {
     this.countMsg = 0;
   }
 
@@ -31,6 +38,7 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subsc_list2.unsubscribe();
+    this.subsc_ls_add.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -46,6 +54,12 @@ export class GameListComponent implements OnInit, OnDestroy {
           gi.message = lm;
           this.games.push(gi);
         }
+      });
+    this.subsc_ls_add = this.socketService.Messages
+      .pipe(map((msg: Message) => {return (msg instanceof List2Message) ? msg : null;}))
+      .pipe(filter(m => m != null))
+      .subscribe(lm => {
+        // TODO
       });
   }
 
