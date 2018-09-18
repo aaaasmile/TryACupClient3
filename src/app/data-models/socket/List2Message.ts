@@ -117,7 +117,7 @@ export class List2Message implements Message {
   parseCmdRemoveSingleDetail(cmd_details: string) {
     let payload = JSON.parse(cmd_details);
     this.type = payload.type;
-    this.details = this.details.filter(x => x.index !== payload.detail.index);
+    //this.details = this.details.filter(x => x.index !== payload.detail.index); // TODO: remove without reassign otherwise you loose the binding
     console.log(this.details);
   }
 
