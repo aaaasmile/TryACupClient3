@@ -82,7 +82,7 @@ export class List2Message implements Message {
       "players":["robot1"]
     }]
   }*/
-  constructor(){
+  constructor() {
     this.details = new Array<List2detail>();
   }
 
@@ -99,6 +99,10 @@ export class List2Message implements Message {
     console.log(this.details);
   }
 
+  //  //LIST2ADD:{"type":"pgamelist",
+  // "detail":{"index":"2","user":"aaaasmile","user_type":"user","user_score":0,"game":"Briscola","prive":false,"class":false,
+  // "opt_game":{"target_points_segno":{"type":"textbox","name":"Punti vittoria segno","val":61},
+  // "num_segni_match":{"type":"textbox","name":"Segni in una partita","val":2}},"players":["aaaasmile"]}}
   parseCmdAddSingleDetail(cmd_details: string) {
     // La differenza qui è solo che vi è un singolo elemento nel messaggio detail
     let payload = JSON.parse(cmd_details);
@@ -106,6 +110,14 @@ export class List2Message implements Message {
     let dd = new List2detail();
     dd.assignPayload(payload.detail);
     this.details.push(dd);
+    console.log(this.details);
+  }
+
+  //LIST2REMOVE:{"type":"pgamelist","detail":{"index":7}}
+  parseCmdRemoveSingleDetail(cmd_details: string) {
+    let payload = JSON.parse(cmd_details);
+    this.type = payload.type;
+    this.details = this.details.filter(x => x.index !== payload.detail.index);
     console.log(this.details);
   }
 

@@ -77,6 +77,14 @@ export class MessageBuilder {
           result = msg;
           break;
         }
+      case 'LIST2REMOVE':
+        {
+          let msg = new List2Message();
+          msg.cmd = cmd;
+          msg.parseCmdRemoveSingleDetail(cmd_details);
+          result = msg;
+          break;
+        }
       default:
         console.warn('Parseframe: ignore message ' + srv_message);
         break;

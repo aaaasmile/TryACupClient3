@@ -45,22 +45,31 @@ export class GameListComponent implements OnInit, OnDestroy {
     console.log('Request table list');
     this.countMsg += 1;
     this.subsc_list2 = this.cardGameService.reqGameList()
-      .subscribe(lm => {
+      .subscribe(lm => { // ListMessage contains operation
         this.countMsg -= 1;
-        console.log("game avail list msg", lm.details, this.countMsg);
-        this.games = new Array<GameItem>();
-        for (let item of lm.details) {
-          let gi = new GameItem(item);
-          gi.message = lm;
-          this.games.push(gi);
+        console.log("game list message msg", lm.details, this.countMsg);
+        switch (lm.cmd) {
+          case 'LIST2':
+            {
+              this.games = new Array<GameItem>();
+              for (let item of lm.details) {
+                let gi = new GameItem(item);
+                gi.message = lm;
+                this.games.push(gi);
+              }
+              break;
+            }
+          case 'LIST2ADD':
+            {
+              let item = lm.details[0];
+              let gi = new GameItem(item);
+              gi.message = lm;
+              this.games.push(gi);
+              break;
+            }
         }
       });
-    this.subsc_ls_add = this.socketService.Messages
-      .pipe(map((msg: Message) => {return (msg instanceof List2Message) ? msg : null;}))
-      .pipe(filter(m => m != null))
-      .subscribe(lm => {
-        // TODO
-      });
+
   }
 
   askNewGame(modalId: string) {
