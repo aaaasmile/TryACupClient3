@@ -10,10 +10,12 @@ export class GameItem {
   opzioni_short: string;
   message: List2Message;
   game_name: string;
+  is_me: boolean;
 
 
-  constructor(list2Det: List2detail) {
+  constructor(list2Det: List2detail, username: string) {
     this.index = list2Det.index;
+    this.is_me = (list2Det.user === username);
     switch (list2Det.user_type) {
       case GameCreatorUserType.computer:
         this.iconname = "desktop";

@@ -5,9 +5,7 @@ import { GameItem } from './game-item';
 import { ModalService } from '../services/modal.service';
 import { NgForm } from '@angular/forms';
 import { SocketService } from '../services/socket.service';
-import { map, filter } from 'rxjs/operators';
-import { Message } from '../data-models/socket/SocketMessages'
-import { List2Message } from '../data-models/socket/List2Message';
+import { AuthenticationService } from '../services/authentication.service';
 
 
 
@@ -24,6 +22,7 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   constructor(private cardGameService: CardGameService,
     private modalService: ModalService,
+    private authService: AuthenticationService,
     private socketService: SocketService) {
     this.countMsg = 0;
   }
@@ -51,7 +50,7 @@ export class GameListComponent implements OnInit, OnDestroy {
             {
               this.games = new Array<GameItem>();
               for (let item of lm.details) {
-                let gi = new GameItem(item);
+                let gi = new GameItem(item, this.authService.get_user_name());
                 gi.message = lm;
                 this.games.push(gi);
               }
@@ -60,15 +59,15 @@ export class GameListComponent implements OnInit, OnDestroy {
           case 'LIST2ADD':
             {
               let item = lm.details[0];
-              let gi = new GameItem(item);
+              let gi = new GameItem(item, this.authService.get_user_name());
               gi.message = lm;
               this.games.push(gi);
               break;
             }
           case 'LIST2REMOVE':
             {
-              this.games.forEach( (item, index) => {
-                if( item.index === lm.removedIx){
+              this.games.forEach((item, index) => {
+                if (item.index === lm.removedIx) {
                   console.log('Remove item from array games with ix: ', index);
                   this.games.splice(index, 1);
                 }

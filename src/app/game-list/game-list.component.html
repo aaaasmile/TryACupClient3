@@ -32,8 +32,8 @@
       </td>
       <td>
         <div>
-          <button (click)="joinGameReq(game)"><i class="hand point right outline icon"></i>Gioca</button>
-          <button (click)="removeGameReq(game)"><i class="trash icon"></i></button>
+          <button *ngIf="!game.is_me" (click)="joinGameReq(game)"><i class="hand point right outline icon"></i>Gioca</button>
+          <button *ngIf="game.is_me" (click)="removeGameReq(game)"><i class="trash icon"></i></button>
         </div>
       </td>
     </tr>
