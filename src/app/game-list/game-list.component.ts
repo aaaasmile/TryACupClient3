@@ -114,7 +114,7 @@ export class GameListComponent implements OnInit, OnDestroy {
           num_segni_match: {
             type: 'textbox',
             name: 'Segni in una partita',
-            val: diaOpt.num_segni
+            val: +diaOpt.num_segni
           }
         };
       default:

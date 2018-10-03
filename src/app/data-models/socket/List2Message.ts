@@ -4,11 +4,11 @@ import { Message, MessageType } from './SocketMessages'
 export class List2detailOption {
   type: string;
   name: string;
-  value: number;
+  val: number;
   assignPayload(p: any) {
     this.type = p.type;
     this.name = p.name;
-    this.value = p.value;
+    this.val = p.val;
   }
 }
 
@@ -57,9 +57,9 @@ export class List2detail {
 
   getOptionsShortText(): string {
     let res = "2 giocatori";
+    console.log('option text: ',this.options);
     if (this.options["num_segni_match"] != null) {
-      console.log(this.options);
-      //res += ", segni " + this.options["num_segni_match"].value.toString(); //TODO
+      res += ", segni " + this.options["num_segni_match"].val.toString();
     }
     return res;
   }
