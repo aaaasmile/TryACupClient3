@@ -24,7 +24,8 @@ export class List2detail {
   players: string[];
 
   assignPayload(p: any) {
-    this.index = p.index;
+    // attenzione che i valori di p possono essere una stringa
+    this.index = +p.index;
     this.user = p.user;
     switch (p.user_type) {//(:user, :computer, :female)
       case "user":
@@ -70,6 +71,7 @@ export class List2Message implements Message {
   slice: number;
   slice_state: string;
   details: List2detail[];
+  removedIx: number;
   /* Esempio di messaggio in json
   {
     "type":"pgamelist","slice":0,"slice_state":"last","detail":[
@@ -118,7 +120,9 @@ export class List2Message implements Message {
     let payload = JSON.parse(cmd_details);
     this.type = payload.type;
     //this.details = this.details.filter(x => x.index !== payload.detail.index); // TODO: remove without reassign otherwise you loose the binding
-    console.log(this.details);
+    //console.log(this.details);
+    this.removedIx = payload.detail.index;
+    console.log('Removed index is: ', this.removedIx);
   }
 
   msgType(): MessageType {

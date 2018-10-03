@@ -37,4 +37,8 @@ export class CardGameService {
     
     this.socketService.createNewGameReq(payloadObj);
   }
+
+  removePendingGame(ix: number){
+    this.socketService.removeGameReq(ix);
+  }
 }

@@ -65,6 +65,21 @@ export class GameListComponent implements OnInit, OnDestroy {
               this.games.push(gi);
               break;
             }
+          case 'LIST2REMOVE':
+            {
+              this.games.forEach( (item, index) => {
+                if( item.index === lm.removedIx){
+                  console.log('Remove item from array games with ix: ', index);
+                  this.games.splice(index, 1);
+                }
+              });
+              break;
+            }
+          default:
+            {
+              console.warn('Message not recognized:', lm.cmd);
+              break;
+            }
         }
       });
 
@@ -75,12 +90,12 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.modalService.open(modalId);
   }
 
-  cancelNewGame() {
-    console.log("Cancel modal create neew game")
+  cancelDialogNewGame() {
+    console.log("Cancel modal dialog create neew game")
     this.modalService.close("");
   }
 
-  createNewGame(form: NgForm) {
+  createNewGameReq(form: NgForm) {
     console.log("Create a new game request", this.model);
     this.modalService.close("");
     let gameName = this.model.game;
@@ -109,10 +124,13 @@ export class GameListComponent implements OnInit, OnDestroy {
     }
   }
 
+  joinGameReq(gi: GameItem) {
+    console.log('Join  game: TODO...');
+  }
 
-
-  selectGame(gi: GameItem) {
-
+  removeGameReq(gi: GameItem) {
+    console.log("remove game request", gi);
+    this.cardGameService.removePendingGame(gi.index);
   }
 
 }

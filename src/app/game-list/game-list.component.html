@@ -14,6 +14,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let game of games">
+      <td></td>
       <td>
         {{game.index}}
       </td>
@@ -29,8 +30,11 @@
           </div>
         </h4>
       </td>
-      <td><button (click)="selectGame(game)">
-          <i class="hand point right outline icon"></i>Gioca</button>
+      <td>
+        <div>
+          <button (click)="joinGameReq(game)"><i class="hand point right outline icon"></i>Gioca</button>
+          <button (click)="removeGameReq(game)"><i class="trash icon"></i></button>
+        </div>
       </td>
     </tr>
   </tbody>
@@ -93,10 +97,10 @@
           </div>
         </div>
         <div class="actions">
-          <button class="ui deny button submit" (click)="cancelNewGame()">
+          <button class="ui deny button submit" (click)="cancelDialogNewGame()">
             Cancella
           </button>
-          <button class="ui positive right labeled icon submit button" (click)="f.form.valid && createNewGame(f)">
+          <button class="ui positive right labeled icon submit button" (click)="f.form.valid && createNewGameReq(f)">
             OK
             <i class="checkmark icon"></i>
           </button>

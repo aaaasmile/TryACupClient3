@@ -186,6 +186,11 @@ export class SocketService {
         this.sendCmdDetReq('PGCREATE2:' + payloadJson);
     }
 
+    removeGameReq(ix: number){
+        console.log('remove game ix: ', ix);
+        this.sendCmdDetReq('PGREMOVEREQ:' + ix);
+    }
+
     joinGameReq(ix: number) {
         this._log.debug('Join game ix: ' + ix);
         this.sendCmdDetReq('PGJOIN:' + ix);
