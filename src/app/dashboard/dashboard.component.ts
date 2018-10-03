@@ -7,7 +7,7 @@ import { CardGameService } from '../services/cardGame.service';
 import { Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { OnlineModeService } from '../services/networkMode.service';
-import {SocketService} from '../services/socket.service';
+import { SocketService } from '../services/socket.service';
 
 
 @Component({
@@ -68,8 +68,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.navigate([item.link]);
   }
 
-  checkForAutologin(){
-    if (this.authService.isLoggedin){
+  checkForAutologin() {
+    console.log('Check for autologin');
+    if (this.authService.isLoggedin()) {
+      console.log('User already logged in');
       return;
     }
     if (this.onlineService.isModeOnline()) {
@@ -89,9 +91,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
               }
               this.isConnected = this.authService.isAvailable();
             });
-      }else{
+      } else {
         console.log('No autologing because no user is setup');
       }
+    } else {
+      console.log('No autologin because is offline mode');
     }
   }
 }

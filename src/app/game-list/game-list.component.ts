@@ -21,7 +21,6 @@ export class GameListComponent implements OnInit, OnDestroy {
   model: any = {};
   private countMsg: number;
   private subsc_list2: Subscription;
-  private subsc_ls_add: Subscription;
 
   constructor(private cardGameService: CardGameService,
     private modalService: ModalService,
@@ -38,7 +37,6 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subsc_list2.unsubscribe();
-    this.subsc_ls_add.unsubscribe();
   }
 
   ngAfterViewInit() {
