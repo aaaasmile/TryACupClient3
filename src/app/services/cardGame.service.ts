@@ -4,6 +4,7 @@ import { SocketService } from './socket.service'
 import { Observable } from 'rxjs';
 import { List2Message } from '../data-models/socket/List2Message';
 import { map, filter, } from 'rxjs/operators';
+import { ChatType } from '../data-models/sharedEnums';
 
 
 @Injectable()
@@ -40,5 +41,9 @@ export class CardGameService {
 
   removePendingGame(ix: number){
     this.socketService.removeGameReq(ix);
+  }
+
+  sendChatTableMsg(msg: string){
+    this.socketService.chatCup(ChatType.Lobby, msg);
   }
 }

@@ -6,7 +6,7 @@ import { ModalService } from '../services/modal.service';
 import { NgForm } from '@angular/forms';
 import { SocketService } from '../services/socket.service';
 import { AuthenticationService } from '../services/authentication.service';
-
+import { ChatItem } from './chat-item';
 
 
 @Component({
@@ -16,6 +16,7 @@ import { AuthenticationService } from '../services/authentication.service';
 
 export class GameListComponent implements OnInit, OnDestroy {
   games: GameItem[];
+  chatMsgs: ChatItem[];
   model: any = {};
   private countMsg: number;
   private subsc_list2: Subscription;
@@ -32,6 +33,7 @@ export class GameListComponent implements OnInit, OnDestroy {
       num_segni: 2,
       game: "Briscola" // valore preso dal file game_info di cup_srv/games/briscola campo :name
     }
+    this.chatMsgs = new Array<ChatItem>();
   }
 
   ngOnDestroy() {
@@ -82,6 +84,11 @@ export class GameListComponent implements OnInit, OnDestroy {
         }
       });
 
+  }
+
+  sendChatMsg(msg){
+    console.log('send chat msg: ', msg)
+    this.cardGameService.sendChatTableMsg(msg)
   }
 
   askNewGame(modalId: string) {

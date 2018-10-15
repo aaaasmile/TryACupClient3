@@ -49,7 +49,29 @@
     </tr>
   </tfoot>
 </table>
+<!-- Chat Page -->
+<div class="ui minimal comments">
+  <h3 class="ui dividing header">Chat</h3>
 
+  <div class="comment" *ngFor="let msgItem of chatMsgs">
+    <div class="content">
+      <a class="author">{{msgItem.username}}</a>
+      <div class="metadata">
+        <span class="date">{{msgItem.datetime}}</span>
+      </div>
+      <div class="text">
+        {{msgItem.body}}
+      </div>
+    </div>
+  </div>
+  <div class="ui left icon action input">
+    <i class="comment outline icon"></i>
+    <input type="text" id="chat-text-id" placeholder="Chat #">
+    <button class="ui icon right attached primary button" (click)="sendChatMsg()"><i class="paper plane icon"></i>
+    </button>
+  </div>
+</div>
+<!-- modal dialogbox for creating a new game -->
 <jw-modal id="modalGamesAsk">
   <form class="ui large form" name="form" #f="ngForm" novalidate>
     <div class="ui dimmer modals page transition visible active" style="display: flex !important;">
