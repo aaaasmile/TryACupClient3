@@ -57,6 +57,8 @@ Per esempio, quando ho creato il compoente UserDetails ho usato:
 ..\node_modules\.bin\ng generate component UserDetails
 
 ==  TODO
+- La chat nella lobby funziona nell'invio del messaggio (ho cambiato il protocollo, il robot va adattato), manca
+il parsing e la notifica che va ad aggiornare la lista.
 - Lista dei giochi: chat, join game
 - admin pagina per vedere la lista degli utenti resitrati e cancellarne qualcuno
 - sidebar menu se la dimensione è minore di 700px

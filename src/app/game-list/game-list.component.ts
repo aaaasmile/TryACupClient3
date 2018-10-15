@@ -86,9 +86,11 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   }
 
-  sendChatMsg(msg){
-    console.log('send chat msg: ', msg)
-    this.cardGameService.sendChatTableMsg(msg)
+  sendChatMsg(msg) {
+    if (msg) {
+      console.log('send chat msg: ', msg)
+      this.cardGameService.sendChatTableMsg(msg)
+    }
   }
 
   askNewGame(modalId: string) {
