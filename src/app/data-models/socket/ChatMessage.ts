@@ -1,6 +1,6 @@
 import { Message, MessageType } from './SocketMessages'
 
-export class ChatMessage implements Message{
+export class ChatMessage implements Message {
   cmd: string;
   type: string;
   username: string;
@@ -17,25 +17,37 @@ export class ChatMessage implements Message{
     this.body = payload.body
     this.username = payload.username
     let d1 = new Date(Date.parse(payload.time))
+    this.assignDate(d1)
+    console.log('Parse chat details at: ', this.date, this.time)
+  }
+
+  parseServerMsgCmdDetails(cmd_details: string) {
+    // tipo di messaggio ricevuto come risposta PGCREATEREJECT
+    // La rendo come un messaggio chat del server, anche perché non si può fare nulla
+    this.username = "CUPERATIVA"
+    this.body = cmd_details
+    this.assignDate(new Date(Date.now()))
+  }
+
+  assignDate(d1: Date) {
     let mm = d1.getMonth() + 1
     let mms = mm.toString()
-    if (mm < 10){
+    if (mm < 10) {
       mms = '0' + mm.toString()
     }
     let day = d1.getDate()
     let days = day.toString()
-    if(day < 10){
+    if (day < 10) {
       days = '0' + day.toString()
     }
     let yys = d1.getFullYear().toString()
     this.time = this.padToZeroStr(d1.getHours()) + ':' + this.padToZeroStr(d1.getMinutes());
     this.date = days + '/' + mms + '/' + yys
     this.datetime = d1
-    console.log('Parse chat details at: ', this.date, this.time)
   }
 
-  padToZeroStr(num: number): string{
-    if(num < 10){
+  padToZeroStr(num: number): string {
+    if (num < 10) {
       return '0' + num.toString()
     }
     return num.toString()

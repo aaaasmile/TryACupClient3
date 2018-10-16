@@ -94,6 +94,14 @@ export class MessageBuilder {
           result = msg;
           break;
         }
+      case 'PGCREATEREJECT':
+        {
+          let msg = new ChatMessage()
+          msg.cmd = cmd;
+          msg.parseServerMsgCmdDetails(cmd_details);
+          result = msg;
+          break;
+        }
       default:
         console.warn('Parseframe: ignore message ' + srv_message);
         break;
