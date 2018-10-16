@@ -20,6 +20,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   model: any = {};
   private countMsg: number;
   private subsc_list2: Subscription;
+  private subsc_chat: Subscription;
 
   constructor(private cardGameService: CardGameService,
     private modalService: ModalService,
@@ -38,6 +39,7 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subsc_list2.unsubscribe();
+    this.subsc_chat.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -83,7 +85,13 @@ export class GameListComponent implements OnInit, OnDestroy {
             }
         }
       });
-
+    console.log('Request chat subsc')
+    this.subsc_chat = this.cardGameService.subscribeChatMsg()
+      .subscribe(cm => {
+        console.log('Chat?', cm)
+        let ci = new ChatItem(cm)
+        this.chatMsgs.push(ci)
+      })
   }
 
   sendChatMsg(msg) {

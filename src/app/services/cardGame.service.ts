@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { List2Message } from '../data-models/socket/List2Message';
 import { map, filter, } from 'rxjs/operators';
 import { ChatType } from '../data-models/sharedEnums';
+import { ChatMessage } from '../data-models/socket/ChatMessage';
 
 
 @Injectable()
@@ -26,6 +27,14 @@ export class CardGameService {
       .pipe(map(msg => {
         //(msg instanceof List2Message) ? msg : null; // Mah, non ho la minima idea...
         return (msg instanceof List2Message) ? msg : null;
+      }))
+      .pipe(filter(m => m != null));
+  }
+
+  subscribeChatMsg(): Observable<ChatMessage>{
+    return this.socketService.Messages
+      .pipe(map(msg =>{
+        return (msg instanceof ChatMessage) ? msg : null;
       }))
       .pipe(filter(m => m != null));
   }
