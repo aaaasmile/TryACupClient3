@@ -27,6 +27,7 @@ import { ShowErrorComponent } from './show-error/show-error.component';
 import { ReCaptchaComponent } from './directives/captcha.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { GameListComponent } from './game-list/game-list.component';
+import { BriscolaInDueComponent } from './games/briscola/briscola_in_due/briscola-in-due.component';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import { GameListComponent } from './game-list/game-list.component';
     ShowErrorComponent,
     ReCaptchaComponent,
     UserDetailsComponent,
-    GameListComponent
+    GameListComponent,
+    BriscolaInDueComponent
   ],
   providers: [
     UserService,

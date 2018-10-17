@@ -191,9 +191,9 @@ export class SocketService {
         this.sendCmdDetReq('PGREMOVEREQ:' + ix);
     }
 
-    joinGameReq(ix: number) {
-        this._log.debug('Join game ix: ' + ix);
-        this.sendCmdDetReq('PGJOIN:' + ix);
+    joinGameReq(ix: number): Observable<Message> {
+        console.log('Join game ix: ', ix);
+        return this.sendCmdDetReq('PGJOIN:' + ix);
     }
 
     chatCup(type: ChatType, text: string) {

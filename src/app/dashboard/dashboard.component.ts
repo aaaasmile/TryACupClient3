@@ -7,7 +7,6 @@ import { CardGameService } from '../services/cardGame.service';
 import { Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { OnlineModeService } from '../services/networkMode.service';
-import { SocketService } from '../services/socket.service';
 
 
 @Component({
@@ -29,7 +28,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private authService: AuthenticationService,
     private onlineService: OnlineModeService,
     private cardGameService: CardGameService,
-    private socketService: SocketService,
     private router: Router) {
     this.isloggedin = authService.isLoggedin();
     this.isConnected = authService.isAvailable();

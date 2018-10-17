@@ -8,16 +8,18 @@ import { UserDetailsComponent } from './user-details/user-details.component'
 import { AuthenticationService } from './services/authentication.service'
 import { OnlineModeService } from './services/networkMode.service'
 import { GameListComponent } from './game-list/game-list.component'
+import { BriscolaInDueComponent } from './games/briscola/briscola_in_due/briscola-in-due.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'users', component: UsersComponent, canActivate: [AuthenticationService]  },
+  { path: 'users', component: UsersComponent, canActivate: [AuthenticationService] },
   { path: 'login', component: LoginComponent, canActivate: [OnlineModeService] },
   { path: 'signup', component: SignUpComponent, canActivate: [OnlineModeService] },
   { path: 'user-details', component: UserDetailsComponent, canActivate: [AuthenticationService] },
-  { path: 'app/games', component: GameListComponent, canActivate: [AuthenticationService] }
+  { path: 'app/games', component: GameListComponent, canActivate: [AuthenticationService] },
+  { path: 'games/briscola/briscola-in-due', component: BriscolaInDueComponent }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -11,6 +11,7 @@ export class GameItem {
   message: List2Message;
   game_name: string;
   is_me: boolean;
+  link: string;
 
 
   constructor(list2Det: List2detail, username: string) {
@@ -30,5 +31,6 @@ export class GameItem {
     this.user = list2Det.user;
     this.game_name = list2Det.game;
     this.opzioni_short = list2Det.getOptionsShortText();
+    this.link = list2Det.game_link;
   }
 }

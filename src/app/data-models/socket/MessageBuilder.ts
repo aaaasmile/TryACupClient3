@@ -2,6 +2,7 @@ import { Message, InfoMessage, VerMessage } from './SocketMessages'
 import { UserLogoutOk, UserLoginFailed, UserLoginOk, UserExistResult, UserOperationResult } from './UserMessage'
 import { List2Message } from './List2Message'
 import { ChatMessage } from './ChatMessage'
+import { JoinMessage } from './JoinMessage';
 
 
 export class MessageBuilder {
@@ -101,6 +102,14 @@ export class MessageBuilder {
           msg.parseServerMsgCmdDetails(cmd_details);
           result = msg;
           break;
+        }
+      case 'PGJOINOK':
+        {
+          let msg = new JoinMessage()
+          msg.cmd = cmd
+          msg.parseDetailsJoinOK(cmd_details)
+          result = msg
+          break
         }
       default:
         console.warn('Parseframe: ignore message ' + srv_message);

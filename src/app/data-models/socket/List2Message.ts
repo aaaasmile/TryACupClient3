@@ -6,6 +6,7 @@ export class List2detailOption {
   name: string;
   val: number;
   assignPayload(p: any) {
+    console.log('Payload Option is: ', p);
     this.type = p.type;
     this.name = p.name;
     this.val = p.val;
@@ -18,6 +19,7 @@ export class List2detail {
   user_type: GameCreatorUserType;
   user_score: number;
   game: string;
+  game_link: string;
   prive: boolean;
   rated: boolean;
   options: Map<string, List2detailOption>;
@@ -25,6 +27,7 @@ export class List2detail {
 
   assignPayload(p: any) {
     // attenzione che i valori di p possono essere una stringa
+    console.log('Payload detail is: ', p);
     this.index = +p.index;
     this.user = p.user;
     switch (p.user_type) {//(:user, :computer, :female)
@@ -42,6 +45,7 @@ export class List2detail {
     }
     this.user_score = parseInt(p.user_score, 10);
     this.game = p.game;
+    this.game_link = this.getGameLink(p.game);
     this.prive = p.prive;
     this.rated = p.class;
     this.options = new Map<string, List2detailOption>();
@@ -57,11 +61,22 @@ export class List2detail {
 
   getOptionsShortText(): string {
     let res = "2 giocatori";
-    console.log('option text: ',this.options);
+    console.log('option text: ', this.options);
     if (this.options["num_segni_match"] != null) {
       res += ", segni " + this.options["num_segni_match"].val.toString();
     }
     return res;
+  }
+
+  getGameLink(game: string): string {
+    switch (game) {
+      case 'Briscola':
+        {
+          return 'games/briscola/briscola-in-due'
+        }
+    }
+    console.error('Game link not set: ', game)
+    return '';
   }
 }
 

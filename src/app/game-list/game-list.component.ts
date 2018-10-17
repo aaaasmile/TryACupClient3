@@ -4,9 +4,9 @@ import { Subscription } from 'rxjs';
 import { GameItem } from './game-item';
 import { ModalService } from '../services/modal.service';
 import { NgForm } from '@angular/forms';
-import { SocketService } from '../services/socket.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { ChatItem } from './chat-item';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -21,11 +21,12 @@ export class GameListComponent implements OnInit, OnDestroy {
   private countMsg: number;
   private subsc_list2: Subscription;
   private subsc_chat: Subscription;
+  private subsc_join: Subscription;
 
   constructor(private cardGameService: CardGameService,
     private modalService: ModalService,
     private authService: AuthenticationService,
-    private socketService: SocketService) {
+    private router: Router) {
     this.countMsg = 0;
   }
 
@@ -38,8 +39,15 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subsc_list2.unsubscribe();
-    this.subsc_chat.unsubscribe();
+    if (this.subsc_list2) {
+      this.subsc_list2.unsubscribe();
+    }
+    if(this.subsc_chat){
+      this.subsc_chat.unsubscribe();
+    }
+    if(this.subsc_join){
+      this.subsc_join.unsubscribe();
+    }
   }
 
   ngAfterViewInit() {
@@ -141,7 +149,14 @@ export class GameListComponent implements OnInit, OnDestroy {
   }
 
   joinGameReq(gi: GameItem) {
-    console.log('Join  game: TODO...');
+    console.log('Join  the game', gi);
+    this.subsc_join = this.cardGameService.joinGame(gi.index)
+      .subscribe(lj => {
+        if (lj.isOk()) {
+          console.log("Join OK, navigate to: ", gi.link);
+          this.router.navigate([gi.link]);
+        }
+      });
   }
 
   removeGameReq(gi: GameItem) {

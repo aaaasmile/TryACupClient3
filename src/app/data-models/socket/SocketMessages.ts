@@ -3,7 +3,8 @@ export enum MessageType {
   Ver,
   User,
   List2,
-  Chat
+  Chat,
+  Join
 }
 export interface Message {
   msgType(): MessageType;

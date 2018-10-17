@@ -6,11 +6,12 @@ import { List2Message } from '../data-models/socket/List2Message';
 import { map, filter, } from 'rxjs/operators';
 import { ChatType } from '../data-models/sharedEnums';
 import { ChatMessage } from '../data-models/socket/ChatMessage';
+import { JoinMessage } from '../data-models/socket/JoinMessage';
 
 
 @Injectable()
 export class CardGameService {
- 
+
   constructor(private socketService: SocketService) {
   }
 
@@ -30,28 +31,36 @@ export class CardGameService {
       .pipe(filter(m => m != null));
   }
 
-  subscribeChatMsg(): Observable<ChatMessage>{
+  subscribeChatMsg(): Observable<ChatMessage> {
     return this.socketService.Messages
-      .pipe(map(msg =>{
+      .pipe(map(msg => {
         return (msg instanceof ChatMessage) ? msg : null;
       }))
       .pipe(filter(m => m != null));
   }
 
-  createNewGame(gameName: string, opt: any){
+  createNewGame(gameName: string, opt: any) {
     var payloadObj = {
       game: gameName, prive: { val: false, pin: '' }, class: false,
       opt_game: opt
     }
-    
+
     this.socketService.createNewGameReq(payloadObj);
   }
 
-  removePendingGame(ix: number){
+  joinGame(ix: number) {
+    return this.socketService.joinGameReq(ix)
+      .pipe(map(msg => {
+        return (msg instanceof JoinMessage) ? msg : null;
+      }))
+      .pipe(filter(m => m != null));
+  }
+
+  removePendingGame(ix: number) {
     this.socketService.removeGameReq(ix);
   }
 
-  sendChatTableMsg(msg: string){
+  sendChatTableMsg(msg: string) {
     this.socketService.chatCup(ChatType.Lobby, msg);
   }
 }
