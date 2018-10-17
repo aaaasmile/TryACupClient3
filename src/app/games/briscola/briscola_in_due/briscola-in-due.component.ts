@@ -5,8 +5,7 @@ import * as createjs from 'createjs-module';
 @Component({
   moduleId: module.id,
   selector: 'my-briscola-in-due',
-  templateUrl: 'briscola-in-due.component.html',
-  styleUrls: ['briscola-in-due.component.css']
+  templateUrl: 'briscola-in-due.component.html'
 })
 
 export class BriscolaInDueComponent implements OnInit {

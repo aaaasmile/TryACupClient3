@@ -25,7 +25,6 @@ export class CardGameService {
   reqGameList(): Observable<List2Message> {
     return this.socketService.pendingGame2Req()
       .pipe(map(msg => {
-        //(msg instanceof List2Message) ? msg : null; // Mah, non ho la minima idea...
         return (msg instanceof List2Message) ? msg : null;
       }))
       .pipe(filter(m => m != null));

@@ -17,10 +17,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [OnlineModeService] },
   { path: 'signup', component: SignUpComponent, canActivate: [OnlineModeService] },
   { path: 'user-details', component: UserDetailsComponent, canActivate: [AuthenticationService] },
-  //{ path: 'games', loadChildren: './games/games.module' }
-  { path: 'games', loadChildren: './games/games.module#GamesModule', canActivate: [AuthenticationService]  },
   { path: 'app/games', component: GameListComponent, canActivate: [AuthenticationService] }
-
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

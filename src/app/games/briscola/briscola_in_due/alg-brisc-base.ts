@@ -1,5 +1,4 @@
 import { Log4Cup, Helper } from '../../../shared/log4cup'
-import { ICoreActor } from '../../common/core/core-base'
 import { DeckInfo } from '../../common/deck-info'
 import { PlayerActor, ActorSubjectNtfy } from '../../common/core/player'
 
@@ -93,7 +92,7 @@ export class AlgBriscBase {
       this._log.debug("Play a card please");
       if (this._options.use_delay_before_play) {
         this._log.debug('Delay before play ms: ' + this._options.timeout_haveplay);
-        setTimeout(this.alg_play_acard(), this._options.timeout_haveplay);
+        setTimeout(x => this.alg_play_acard(), this._options.timeout_haveplay);
       } else {
         this.alg_play_acard();
       }
