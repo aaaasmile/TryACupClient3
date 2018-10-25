@@ -3,6 +3,7 @@ import { UserLogoutOk, UserLoginFailed, UserLoginOk, UserExistResult, UserOperat
 import { List2Message } from './List2Message'
 import { ChatMessage } from './ChatMessage'
 import { JoinMessage } from './JoinMessage';
+import { InGameMessage } from './InGameMessage';
 
 
 export class MessageBuilder {
@@ -108,6 +109,16 @@ export class MessageBuilder {
           let msg = new JoinMessage()
           msg.cmd = cmd
           msg.parseDetailsJoinOK(cmd_details)
+          result = msg
+          break
+        }
+      case 'ONALGNEWMATCH':
+      case 'ONALGNEWGIOCATA':
+      case 'ONALGNEWMANO':
+      case 'ONALGHAVETOPLAY':
+        {
+          let msg = new InGameMessage(cmd_details, cmd)
+          msg.cmd = cmd
           result = msg
           break
         }

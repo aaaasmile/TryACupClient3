@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as createjs from 'createjs-module';
+import { CardGameService } from 'src/app/services/cardGame.service';
+import { Subscription } from 'rxjs';
+import { InGameMessage } from 'src/app/data-models/socket/InGameMessage';
 
 @Component({
   moduleId: module.id,
@@ -11,12 +14,69 @@ import * as createjs from 'createjs-module';
 export class BriscolaInDueComponent implements OnInit {
   private mainStage: createjs.Stage;
   private imgTmp;
+  private subsc_msg: Subscription;
+  private subsc_chat: Subscription;
 
   constructor(
+    private cardGameService: CardGameService,
     private router: Router) {
   }
 
   ngOnInit(): void {
+    if (this.cardGameService.bufferInGameMsg.length == 0) {
+      this.onCacheProcTerminated()
+    } else {
+      this.processCache()
+    }
+    this.subsc_chat = this.cardGameService.subscribeChatMsg()
+      .subscribe(chat => {
+        console.warn("todo chat processing", chat)
+      })
+
+    this.testSomeCanvas()
+  }
+
+  onCacheProcTerminated() {
+    this.cardGameService.stopCollectInGame()
+    this.subsc_msg = this.cardGameService.subscribeInGameMsg()
+      .subscribe(mi => {
+        this.processInGameMsg(mi)
+      })
+  }
+
+  processCache(){
+    let cm = this.cardGameService.popFrontInGameMsg()
+    while(cm){
+      this.processInGameMsg(cm)
+      cm = this.cardGameService.popFrontInGameMsg()
+    }
+    this.onCacheProcTerminated()
+  }
+
+  processInGameMsg(msg: InGameMessage) {
+    console.warn("Todo process in game message", msg)
+  }
+
+  ngOnDestroy() {
+    if (this.subsc_msg) {
+      this.subsc_msg.unsubscribe()
+    }
+    if (this.subsc_chat) {
+      this.subsc_chat.unsubscribe()
+    }
+  }
+
+  imageLoaded(): void {
+    console.log('Image loaded ', this.imgTmp);
+    let card = new createjs.Bitmap(this.imgTmp);
+    card.x = 30;
+    card.y = 20;
+    this.mainStage.addChild(card);
+
+    this.mainStage.update();
+  }
+
+  testSomeCanvas() {
     console.log('Canvas initialization');
     this.mainStage = new createjs.Stage("mainCanvas");
     var circle = new createjs.Shape();
@@ -52,16 +112,6 @@ export class BriscolaInDueComponent implements OnInit {
 
     this.mainStage.update();
     console.log('Canvas created');
-  }
-
-  imageLoaded(): void {
-    console.log('Image loaded ', this.imgTmp);
-    let card = new createjs.Bitmap(this.imgTmp);
-    card.x = 30;
-    card.y = 20;
-    this.mainStage.addChild(card);
-
-    this.mainStage.update();
   }
 
 }

@@ -4,7 +4,8 @@ export enum MessageType {
   User,
   List2,
   Chat,
-  Join
+  Join,
+  OnGame
 }
 export interface Message {
   msgType(): MessageType;
