@@ -19,8 +19,8 @@ describe('brisc-base-core test', function () {
 
     let playerActorErnesto = new PlayerActor(new Player('Ernesto'), coreStateEvent);
     let playerActorLuigi = new PlayerActor(new Player('Luigi'), coreStateEvent);
-    let algErnesto = new AlgBriscBase(playerActorErnesto);
-    let algLuigi = new AlgBriscBase(playerActorLuigi);
+    new AlgBriscBase(playerActorErnesto);
+    new AlgBriscBase(playerActorLuigi);
 
     playerActorErnesto.sit_down(0);
     playerActorLuigi.sit_down(1);
