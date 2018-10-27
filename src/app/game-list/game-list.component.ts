@@ -121,7 +121,6 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   createNewGameReq(form: NgForm) {
     console.log("Create a new game request", this.model);
-    this.cardGameService.collectGameMsgs()
     this.modalService.close("");
     let gameName = this.model.game;
     let opt = this.getOpt(gameName, this.model);
@@ -151,7 +150,6 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   joinGameReq(gi: GameItem) {
     console.log('Join  the game', gi);
-    this.cardGameService.collectGameMsgs()
     this.subsc_join = this.cardGameService.joinGame(gi.index)
       .subscribe(lj => {
         if (lj.isOk()) {

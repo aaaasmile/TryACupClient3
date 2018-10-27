@@ -32,6 +32,8 @@ Per aggiungere un nuovo componente (esempio sign-up):
 <dir_root_dove_si_inserisce>D:\scratch\angular\cli_app\cli-cup-client\node_modules\.bin\ng g component sign-up
 Per aggiungere un nuovo service, vai nella dir service e lancia (nome va senza il suffisso service):
 ng g service Alert
+Nella dir service non esiste ng. Si usa:
+../../../node_modules/.bin/ng g service CurrGameState
 
 Per far partire il backend di sinatra, invece si usa la powershell e si setta il path:
 D:\scratch\sinatra\cup_sinatra> $env:path += "D:\ruby\ruby_2_3_1\bin"

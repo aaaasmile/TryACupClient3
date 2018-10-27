@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as createjs from 'createjs-module';
-import { CardGameService } from 'src/app/services/cardGame.service';
 import { Subscription } from 'rxjs';
 import { InGameMessage } from 'src/app/data-models/socket/InGameMessage';
+import { CurrGameStateService } from 'src/app/services/curr-game-state.service';
 
 @Component({
   moduleId: module.id,
@@ -18,43 +18,22 @@ export class BriscolaInDueComponent implements OnInit {
   private subsc_chat: Subscription;
 
   constructor(
-    private cardGameService: CardGameService,
+    private gameStateService: CurrGameStateService,
     private router: Router) {
   }
 
   ngOnInit(): void {
-    if (this.cardGameService.bufferInGameMsg.length == 0) {
-      this.onCacheProcTerminated()
-    } else {
-      this.processCache()
-    }
-    this.subsc_chat = this.cardGameService.subscribeChatMsg()
-      .subscribe(chat => {
-        console.warn("todo chat processing", chat)
-      })
+    // if (this.gameStateService.bufferInGameMsg.length == 0) {
+    //   this.onCacheProcTerminated()
+    // } else {
+    //   this.processCache()
+    // }
+    // this.subsc_chat = this.gameStateService.subscribeChatMsg()
+    //   .subscribe(chat => {
+    //     console.warn("todo chat processing", chat)
+    //   })
 
     this.testSomeCanvas()
-  }
-
-  onCacheProcTerminated() {
-    this.cardGameService.stopCollectInGame()
-    this.subsc_msg = this.cardGameService.subscribeInGameMsg()
-      .subscribe(mi => {
-        this.processInGameMsg(mi)
-      })
-  }
-
-  processCache(){
-    let cm = this.cardGameService.popFrontInGameMsg()
-    while(cm){
-      this.processInGameMsg(cm)
-      cm = this.cardGameService.popFrontInGameMsg()
-    }
-    this.onCacheProcTerminated()
-  }
-
-  processInGameMsg(msg: InGameMessage) {
-    console.warn("Todo process in game message", msg)
   }
 
   ngOnDestroy() {
@@ -65,6 +44,29 @@ export class BriscolaInDueComponent implements OnInit {
       this.subsc_chat.unsubscribe()
     }
   }
+
+  onCacheProcTerminated() {
+    this.gameStateService.stopCollectInGame()
+    this.subsc_msg = this.gameStateService.subscribeInGameMsg()
+      .subscribe(mi => {
+        this.processInGameMsg(mi)
+      })
+  }
+
+  processCache(){
+    let cm = this.gameStateService.popFrontInGameMsg()
+    while(cm){
+      this.processInGameMsg(cm)
+      cm = this.gameStateService.popFrontInGameMsg()
+    }
+    this.onCacheProcTerminated()
+  }
+
+  processInGameMsg(msg: InGameMessage) {
+    console.warn("Todo process in game message", msg)
+  }
+
+  
 
   imageLoaded(): void {
     console.log('Image loaded ', this.imgTmp);
