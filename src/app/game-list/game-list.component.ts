@@ -161,7 +161,11 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   removeGameReq(gi: GameItem) {
     console.log("remove game request", gi);
-    this.cardGameService.removePendingGame(gi.index);
+    if(gi){
+      this.cardGameService.removePendingGame(gi.index);
+    }else{
+      this.cardGameService.removePendingGame(-1);
+    }
   }
 
 }
