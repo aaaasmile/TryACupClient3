@@ -4,6 +4,7 @@ import { List2Message } from './List2Message'
 import { ChatMessage } from './ChatMessage'
 import { JoinMessage } from './JoinMessage';
 import { InGameMessage } from './InGameMessage';
+import { GameStatusMessage } from './GameStatusMessage';
 
 
 export class MessageBuilder {
@@ -85,6 +86,14 @@ export class MessageBuilder {
           let msg = new List2Message();
           msg.cmd = cmd;
           msg.parseCmdRemoveSingleDetail(cmd_details);
+          result = msg;
+          break;
+        }
+      case 'GAMESTATUS':
+        {
+          let msg = new GameStatusMessage();
+          msg.cmd = cmd;
+          msg.parseDetails(cmd_details);
           result = msg;
           break;
         }

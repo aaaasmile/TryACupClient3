@@ -5,6 +5,7 @@ import { UserMessage, User, UserSignupReq, UserLogoutOk } from '../data-models/s
 import { Observable, Subject } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { CanActivate } from '@angular/router';
+import { GameStatusMessage } from '../data-models/socket/GameStatusMessage';
 
 
 @Injectable({
@@ -78,6 +79,14 @@ export class AuthenticationService implements CanActivate {
             )
             .pipe(filter(m => m != null));
     }
+
+    subscribeGameStatusMsg(): Observable<GameStatusMessage> {
+        return this.socketService.Messages
+          .pipe(map(msg => {
+            return (msg instanceof GameStatusMessage) ? msg : null;
+          }))
+          .pipe(filter(m => m != null));
+      }
 
     login(username: string, password: string): Observable<UserMessage> {
         return this.socketService.loginReq(username, password, '')

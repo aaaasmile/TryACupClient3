@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private _alive: boolean;
   private _subscription: Subscription;
   private _subscription2: Subscription;
+  private _subscription3: Subscription;
 
   constructor(
     private authService: AuthenticationService,
@@ -49,6 +50,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit() {
     this.checkForAutologin()
+
   }
 
   ngOnDestroy(): void {
@@ -57,6 +59,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     if (this._subscription2) {
       this._subscription2.unsubscribe();
+    }
+    if (this._subscription3) {
+      this._subscription3.unsubscribe();
     }
     this._alive = false;
   }
@@ -74,6 +79,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     if (this.onlineService.isModeOnline()) {
       this.authService.activate_loginService();
+      this._subscription3 = this.authService.subscribeGameStatusMsg()
+      .subscribe(gs => {
+        console.debug("Game status received", gs)
+        if (gs.is_status_requested()){
+          console.log("Navigate to game list")
+          this.router.navigate(['/app/games']);
+        }
+      })
       let user = this.authService.get_autologin_user();
       if (user != null) {
         console.log('Start autologin');
