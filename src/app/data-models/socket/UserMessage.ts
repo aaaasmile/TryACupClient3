@@ -6,6 +6,7 @@ export class User {
   login: string;
   email: string;
   token: string;
+  roles: string[];
 }
 
 export class UserMessage implements Message {
@@ -46,6 +47,7 @@ export class UserLoginOk extends UserMessage {
     this.user = new User();
     this.user.login = det.name;
     this.user.token = det.token;
+    this.user.roles = det.roles;
   }
 }
 

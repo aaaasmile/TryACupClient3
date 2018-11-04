@@ -45,7 +45,7 @@
         <button class="ui right floated small primary labeled icon button" (click)="askNewGame('modalGamesAsk')">
           <i class="plus circle icon"></i> Nuovo Gioco
         </button>
-        <button class="ui right floated small negative labeled icon button" (click)="removeGameReq(null)">
+        <button *ngIf="is_admin()" class="ui right floated small negative labeled icon button" (click)="removeGameReq(null)">
           <i class="minus circle icon"></i> Rimuovi tutti
         </button>
       </th>

@@ -14,6 +14,7 @@ import { GameStatusMessage } from '../data-models/socket/GameStatusMessage';
 export class AuthenticationService implements CanActivate {
     private _isLoggedIn: boolean = false;
     private _user_name: string = '';
+    private _user_roles: string[] = new Array<string>();
     public LoginChangeEvent: Subject<boolean>;
 
     constructor(private socketService: SocketService) {
@@ -46,6 +47,13 @@ export class AuthenticationService implements CanActivate {
         return this._user_name;
     }
 
+    is_admin(): boolean{
+        if (this._user_roles){
+            return this._user_roles.findIndex( v => v === 'ADMIN') !== -1
+        }
+        return false;
+    }
+
     activate_loginService() {
         console.log('Activate login service and connect the socket');
         this.socketService.connectSocketServer();
@@ -71,6 +79,7 @@ export class AuthenticationService implements CanActivate {
                         if (lm.is_ok && lm.user) {
                             this._isLoggedIn = true;
                             this._user_name = lm.user.login;
+                            this._user_roles = lm.user.roles;
                             this.LoginChangeEvent.next(true);
                         }
                         return lm;
@@ -97,6 +106,7 @@ export class AuthenticationService implements CanActivate {
                         if (lm.is_ok && lm.user && lm.user.token && lm.user.token.length > 0) {
                             this._isLoggedIn = true;
                             this._user_name = lm.user.login;
+                            this._user_roles = lm.user.roles;
                             localStorage.setItem('currentUser', JSON.stringify(lm.user));
                         }
                         this.LoginChangeEvent.next(true);

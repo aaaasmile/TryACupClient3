@@ -168,4 +168,8 @@ export class GameListComponent implements OnInit, OnDestroy {
     }
   }
 
+  is_admin(){
+    return this.authService.is_admin();
+  }
+
 }
