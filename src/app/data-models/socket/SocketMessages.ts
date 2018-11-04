@@ -5,7 +5,7 @@ export enum MessageType {
   List2,
   Chat,
   Join,
-  OnGame,
+  InGame,
   GameStatus
 }
 export interface Message {

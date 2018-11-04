@@ -128,7 +128,6 @@ export class MessageBuilder {
       case 'ONALGHAVETOPLAY':
         {
           let msg = new InGameMessage(cmd_details, cmd)
-          msg.cmd = cmd
           result = msg
           break
         }

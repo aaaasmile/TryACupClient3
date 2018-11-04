@@ -25,6 +25,31 @@ export class LobbyCardGameService { // Used to handle the card lobby
     return games;
   }
 
+  getGameLink(game: string): string {
+    // Valori presi da: cup_srv/games/briscola/game_info
+    // nel file game_info, il gioco è identificato attraverso il campo :key. Ma anche il campo :name è unico. Quindi uso uno dei due.
+    switch (game) {
+      case 'briscola_game': // Key
+      case 'Briscola':      // Name
+        {
+          return 'games/briscola/briscola-in-due'
+        }
+    }
+    console.error('Game link not set: ', game)
+    return '';
+  }
+
+  getGameNameFromServerKey(gemkey: string): string{
+    switch (gemkey) {
+      case 'briscola_game': // Key
+        {
+          return 'Briscola'
+        }
+    }
+    console.error('Game key not recognized: ', gemkey)
+    return '';
+  }
+
   reqGameList(): Observable<List2Message> {
     return this.socketService.pendingGame2Req()
       .pipe(map(msg => {

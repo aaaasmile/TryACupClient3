@@ -1,6 +1,6 @@
 import { Message, MessageType } from './SocketMessages'
 
-export enum OnGameType {
+export enum InGameMsgType {
   NewMatch,
   NewGiocata,
   NewMano,
@@ -13,31 +13,36 @@ export class InGameMessage implements Message {
   name: string
   cmd_details: string
   table_id: string;
-  
-  constructor(cmd_details: string, name: string) {
-    this.name = name
+  public Payload: any = {};
+  public inGameMsgType: InGameMsgType
+
+  constructor(cmd_details: string, cmd: string) {
+    this.cmd = cmd
     this.cmd_details = cmd_details
+    switch (cmd) {
+      case 'ONALGNEWMATCH':
+        this.inGameMsgType = InGameMsgType.NewMatch
+        this.Payload = JSON.parse(cmd_details);
+        break
+      case 'ONALGNEWGIOCATA':
+        this.inGameMsgType = InGameMsgType.NewGiocata
+        break
+      case 'ONALGNEWMANO':
+        this.inGameMsgType = InGameMsgType.NewMano
+        break
+      case 'ONALGHAVETOPLAY':
+        this.inGameMsgType = InGameMsgType.HaveToPlay
+        break
+      default:
+        console.warn('OnGame name as type not recognized ', cmd);
+        break;
+    }
+    
     this.table_id = "1"
   }
 
-  getOnGameType(): OnGameType {
-    switch (name) {
-      case 'ONALGNEWMATCH':
-        return OnGameType.NewMatch
-      case 'ONALGNEWGIOCATA':
-        return OnGameType.NewGiocata
-      case 'ONALGNEWMANO':
-        return OnGameType.NewMano
-      case 'ONALGHAVETOPLAY':
-        return OnGameType.HaveToPlay
-      default:
-        console.warn('OnGame name as type not recognized ', name);
-        break;
-    }
-  }
-
   msgType(): MessageType {
-    return MessageType.OnGame;
+    return MessageType.InGame;
   }
 
   toString(): string {

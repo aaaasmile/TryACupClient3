@@ -7,6 +7,7 @@ import { NgForm } from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
 import { ChatItem } from './chat-item';
 import { Router } from '@angular/router';
+import { CurrGameStateService } from '../services/curr-game-state.service';
 
 
 @Component({
@@ -15,7 +16,8 @@ import { Router } from '@angular/router';
 })
 
 export class GameListComponent implements OnInit, OnDestroy {
-  games: GameItem[];
+  pendGames: GameItem[];
+  liveGames: GameItem[];
   chatMsgs: ChatItem[];
   model: any = {};
   private countMsg: number;
@@ -26,30 +28,33 @@ export class GameListComponent implements OnInit, OnDestroy {
   constructor(private lobbyCardGameService: LobbyCardGameService,
     private modalService: ModalService,
     private authService: AuthenticationService,
+    private stateGameService: CurrGameStateService,
     private router: Router) {
     this.countMsg = 0;
+    this.liveGames = new Array<GameItem>()
   }
 
   ngOnInit() {
     this.model = {
       num_segni: 2,
-      game: "Briscola" // valore preso dal file game_info di cup_srv/games/briscola campo :name
+      game: "Briscola" // valore preso dal file game_info: cup_srv/games/briscola/game_info campo :name
     }
     this.chatMsgs = new Array<ChatItem>();
-    this.lobbyCardGameService.BufferChatMsg.forEach(ele =>{
+    this.lobbyCardGameService.BufferChatMsg.forEach(ele => {
       let ci = new ChatItem(ele)
       this.chatMsgs.push(ci)
     })
+    this.populateOnGoingGames();
   }
 
   ngOnDestroy() {
     if (this.subsc_list2) {
       this.subsc_list2.unsubscribe();
     }
-    if(this.subsc_chat){
+    if (this.subsc_chat) {
       this.subsc_chat.unsubscribe();
     }
-    if(this.subsc_join){
+    if (this.subsc_join) {
       this.subsc_join.unsubscribe();
     }
   }
@@ -64,28 +69,32 @@ export class GameListComponent implements OnInit, OnDestroy {
         switch (lm.cmd) {
           case 'LIST2':
             {
-              this.games = new Array<GameItem>();
+              this.pendGames = new Array<GameItem>();
               for (let item of lm.details) {
-                let gi = new GameItem(item, this.authService.get_user_name());
+                let gi = new GameItem()
+                gi.parseList2Det(item, this.authService.get_user_name(), 
+                                 this.lobbyCardGameService.getGameLink(item.game));
                 gi.message = lm;
-                this.games.push(gi);
+                this.pendGames.push(gi);
               }
               break;
             }
           case 'LIST2ADD':
             {
               let item = lm.details[0];
-              let gi = new GameItem(item, this.authService.get_user_name());
+              let gi = new GameItem();
+              gi.parseList2Det(item, this.authService.get_user_name(),
+                               this.lobbyCardGameService.getGameLink(item.game));
               gi.message = lm;
-              this.games.push(gi);
+              this.pendGames.push(gi);
               break;
             }
           case 'LIST2REMOVE':
             {
-              this.games.forEach((item, index) => {
+              this.pendGames.forEach((item, index) => {
                 if (item.index === lm.removedIx) {
                   console.log('Remove item from array games with ix: ', index);
-                  this.games.splice(index, 1);
+                  this.pendGames.splice(index, 1);
                 }
               });
               break;
@@ -98,13 +107,28 @@ export class GameListComponent implements OnInit, OnDestroy {
         }
       });
     console.log('Request chat subsc')
-   
+
     this.subsc_chat = this.lobbyCardGameService.subscribeChatMsg()
       .subscribe(cm => {
         console.log('Chat?', cm)
         let ci = new ChatItem(cm)
         this.chatMsgs.push(ci)
       })
+  }
+
+  populateOnGoingGames(){
+    console.log("populate ongoing games")
+    let user_name = this.authService.get_user_name()
+    let arr = this.stateGameService.getPlayingGames(user_name)
+    arr.forEach(tb => {
+      let gi = new GameItem();
+      let gameName = this.lobbyCardGameService.getGameNameFromServerKey(tb.GameName)
+      let gameLink = this.lobbyCardGameService.getGameLink(gameName)
+      gi.parseTableBuffer(tb, user_name, gameName, gameLink)
+
+      this.liveGames.push(gi)
+    });
+    
   }
 
   sendChatMsg(msg) {
@@ -164,17 +188,26 @@ export class GameListComponent implements OnInit, OnDestroy {
       });
   }
 
+  viewGameOngoing(gi: GameItem){
+    console.log("View game: ", gi.game_name, gi.link)
+    this.router.navigate([gi.link]);
+  }
+
   removeGameReq(gi: GameItem) {
     console.log("remove game request", gi);
-    if(gi){
+    if (gi) {
       this.lobbyCardGameService.removePendingGame(gi.index);
-    }else{
+    } else {
       this.lobbyCardGameService.removePendingGame(-1);
     }
   }
 
-  is_admin(){
+  is_admin() {
     return this.authService.is_admin();
+  }
+
+  is_newGamePossible(): boolean {
+    return this.liveGames.length == 0
   }
 
 }

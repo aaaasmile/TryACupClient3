@@ -1,17 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subscription, Observable, Subject } from 'rxjs';
 import { SocketService } from './socket.service';
-import { InGameMessage } from '../data-models/socket/InGameMessage';
+import { InGameMessage, InGameMsgType } from '../data-models/socket/InGameMessage';
 import { map, filter } from 'rxjs/operators';
 import { ChatMessage } from '../data-models/socket/ChatMessage';
 import { ChatType } from '../data-models/sharedEnums';
+import { TableBuffer } from '../data-models/tableBuffer';
 
-class TableBuffer {
-  TableIx: string
-  GameName: string
-  BufferInGameMsg: InGameMessage[] = new Array<InGameMessage>()
-  BufferChatMsg: ChatMessage[] = new Array<ChatMessage>()
-}
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +24,17 @@ export class CurrGameStateService {
 
   ngOnDestroy() {
     this.stopCollectInGame();
+  }
+
+  getPlayingGames(playerName: string): TableBuffer[] {
+    var res = new Array<TableBuffer>()
+    for (let key in this.tables) {
+      let val = this.tables[key]
+      if (val.PlayerNames.findIndex(x => x === playerName) !== -1) {
+        res.push(val)
+      }
+    }
+    return res
   }
 
   getAllChatMesages(tableIx: string): ChatMessage[] {
@@ -58,7 +64,17 @@ export class CurrGameStateService {
       .subscribe(m => {
         if (m instanceof InGameMessage) {
           let tbix = m.table_id
-          this.tables[tbix].BufferInGameMsg.push(m)
+          let tbItem = this.tables[tbix]
+          if (m.inGameMsgType === InGameMsgType.NewMatch) {
+            console.log("New match message payload", m.Payload)
+            tbItem.PlayerNames = new Array<string>()
+            m.Payload[1].forEach(pl =>{
+              tbItem.PlayerNames.push(pl)
+            })
+            tbItem.GameName = m.Payload[0]
+            tbItem.TableIx = tbix
+          }
+          tbItem.BufferInGameMsg.push(m)
         }
       })
   }

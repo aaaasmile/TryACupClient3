@@ -13,7 +13,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let game of games">
+    <tr *ngFor="let game of pendGames">
       <td></td>
       <td>
         {{game.index}}
@@ -31,14 +31,14 @@
         </h4>
       </td>
       <td>
-        <div>
+        <div *ngIf="is_newGamePossible()">
           <button *ngIf="!game.is_me" (click)="joinGameReq(game)"><i class="hand point right outline icon"></i>Gioca</button>
           <button *ngIf="game.is_me" (click)="removeGameReq(game)"><i class="trash icon"></i></button>
         </div>
       </td>
     </tr>
   </tbody>
-  <tfoot class="full-width">
+  <tfoot class="full-width" *ngIf="is_newGamePossible()">
     <tr>
       <th></th>
       <th colspan="4">
@@ -51,6 +51,46 @@
       </th>
     </tr>
   </tfoot>
+</table>
+<!-- Partite in corso-->
+<h3 class="ui header">Partite in corso</h3>
+<div class="ui divider"></div>
+<table class="ui compact celled definition table">
+  <thead class="full-width">
+    <tr>
+      <th></th>
+      <th>N.</th>
+      <th>Utenti</th>
+      <th>Gioco</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let game of liveGames">
+      <td></td>
+      <td>
+        {{game.index}}
+      </td>
+      <td>
+        <div *ngFor="let pl of game.players">
+          {{pl}}
+        </div>
+      </td>
+      <td>
+        <h4 class="ui image header">
+          <div> <i class="{{game.iconname}} icon"></i></div>
+          <div class="content">
+            {{game.game_name}}
+          </div>
+        </h4>
+      </td>
+      <td>
+        <div>
+          <button (click)="viewGameOngoing(game)"><i class="hand point right outline icon"></i>Vai</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
 </table>
 <!-- Chat Page -->
 <div class="ui minimal comments">
