@@ -4,6 +4,7 @@ import * as createjs from 'createjs-module';
 import { Subscription } from 'rxjs';
 import { InGameMessage } from 'src/app/data-models/socket/InGameMessage';
 import { CurrGameStateService } from 'src/app/services/curr-game-state.service';
+import { ChatItem } from 'src/app/game-list/chat-item';
 
 @Component({
   moduleId: module.id,
@@ -16,6 +17,7 @@ export class BriscolaInDueComponent implements OnInit {
   private imgTmp;
   private subsc_msg: Subscription;
   private subsc_chat: Subscription;
+  chatMsgs: ChatItem[];
 
   constructor(
     private gameStateService: CurrGameStateService,
@@ -23,15 +25,17 @@ export class BriscolaInDueComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // if (this.gameStateService.bufferInGameMsg.length == 0) {
-    //   this.onCacheProcTerminated()
-    // } else {
-    //   this.processCache()
-    // }
-    // this.subsc_chat = this.gameStateService.subscribeChatMsg()
-    //   .subscribe(chat => {
-    //     console.warn("todo chat processing", chat)
-    //   })
+    this.chatMsgs = new Array<ChatItem>();
+    this.subsc_chat = this.gameStateService.subscribeChatMsg()
+      .subscribe(cm => {
+        let ci = new ChatItem(cm)
+        this.chatMsgs.push(ci)
+      })
+    this.subsc_msg = this.gameStateService.InGameMsgRecEvent
+      .subscribe(evt => {
+        console.log("InGame message received ")
+        let cm = this.gameStateService.popFrontInGameMsg()
+      });
 
     this.testSomeCanvas()
   }
@@ -45,28 +49,24 @@ export class BriscolaInDueComponent implements OnInit {
     }
   }
 
-  onCacheProcTerminated() {
-    this.gameStateService.stopCollectInGame()
-    this.subsc_msg = this.gameStateService.subscribeInGameMsg()
-      .subscribe(mi => {
-        this.processInGameMsg(mi)
-      })
-  }
-
   processCache(){
     let cm = this.gameStateService.popFrontInGameMsg()
     while(cm){
       this.processInGameMsg(cm)
       cm = this.gameStateService.popFrontInGameMsg()
     }
-    this.onCacheProcTerminated()
   }
 
   processInGameMsg(msg: InGameMessage) {
     console.warn("Todo process in game message", msg)
   }
 
-  
+  sendChatMsg(msg) {
+    if (msg) {
+      console.log('send chat msg: ', msg)
+      this.gameStateService.sendChatTableMsg(msg)
+    }
+  }
 
   imageLoaded(): void {
     console.log('Image loaded ', this.imgTmp);

@@ -1,2 +1,26 @@
 <h1> Briscola in due</h1>
 <canvas id="mainCanvas" style="padding: 10px;"></canvas>
+
+<!-- Chat Section -->
+<div class="ui minimal comments">
+  <h3 class="ui dividing header">Chat</h3>
+
+  <div class="comment" *ngFor="let msgItem of chatMsgs">
+    <div class="content">
+      <a class="author">{{msgItem.username}}</a>
+      <div class="metadata">
+        <span class="date">{{msgItem.datetime}}</span>
+      </div>
+      <div class="text">
+        {{msgItem.body}}
+      </div>
+    </div>
+  </div>
+  <div class="ui left icon action input">
+    <i class="comment outline icon"></i>
+    <input type="text" #chatbox placeholder="Chat #" (keyup.enter)="sendChatMsg(chatbox.value); chatbox.value=''">
+    <button class="ui icon right attached primary button" (click)="sendChatMsg(chatbox.value); chatbox.value=''"><i
+        class="paper plane icon"></i>
+    </button>
+  </div>
+</div>

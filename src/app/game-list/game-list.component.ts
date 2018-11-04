@@ -23,7 +23,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   private subsc_chat: Subscription;
   private subsc_join: Subscription;
 
-  constructor(private cardGameService: LobbyCardGameService,
+  constructor(private lobbyCardGameService: LobbyCardGameService,
     private modalService: ModalService,
     private authService: AuthenticationService,
     private router: Router) {
@@ -53,7 +53,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {
     console.log('Request table list');
     this.countMsg += 1;
-    this.subsc_list2 = this.cardGameService.reqGameList()
+    this.subsc_list2 = this.lobbyCardGameService.reqGameList()
       .subscribe(lm => { // ListMessage contains operation
         this.countMsg -= 1;
         console.log("game list message msg", lm.details, this.countMsg);
@@ -94,7 +94,7 @@ export class GameListComponent implements OnInit, OnDestroy {
         }
       });
     console.log('Request chat subsc')
-    this.subsc_chat = this.cardGameService.subscribeChatMsg()
+    this.subsc_chat = this.lobbyCardGameService.subscribeChatMsg()
       .subscribe(cm => {
         console.log('Chat?', cm)
         let ci = new ChatItem(cm)
@@ -105,7 +105,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   sendChatMsg(msg) {
     if (msg) {
       console.log('send chat msg: ', msg)
-      this.cardGameService.sendChatTableMsg(msg)
+      this.lobbyCardGameService.sendChatLobbyMsg(msg)
     }
   }
 
@@ -124,7 +124,7 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.modalService.close("");
     let gameName = this.model.game;
     let opt = this.getOpt(gameName, this.model);
-    this.cardGameService.createNewGame(gameName, opt);
+    this.lobbyCardGameService.createNewGame(gameName, opt);
   }
 
   getOpt(gameName: string, diaOpt: any) {
@@ -150,7 +150,7 @@ export class GameListComponent implements OnInit, OnDestroy {
 
   joinGameReq(gi: GameItem) {
     console.log('Join  the game', gi);
-    this.subsc_join = this.cardGameService.joinGame(gi.index)
+    this.subsc_join = this.lobbyCardGameService.joinGame(gi.index)
       .subscribe(lj => {
         if (lj.isOk()) {
           console.log("Join OK, navigate to: ", gi.link);
@@ -162,9 +162,9 @@ export class GameListComponent implements OnInit, OnDestroy {
   removeGameReq(gi: GameItem) {
     console.log("remove game request", gi);
     if(gi){
-      this.cardGameService.removePendingGame(gi.index);
+      this.lobbyCardGameService.removePendingGame(gi.index);
     }else{
-      this.cardGameService.removePendingGame(-1);
+      this.lobbyCardGameService.removePendingGame(-1);
     }
   }
 

@@ -21,6 +21,10 @@ export class ChatMessage implements Message {
     console.log('Parse chat details at: ', this.date, this.time)
   }
 
+  is_chatTableItem(): boolean {
+    return this.cmd === 'CHATTAVOLO'
+  }
+
   parseServerMsgCmdDetails(cmd_details: string) {
     // tipo di messaggio ricevuto come risposta PGCREATEREJECT
     // La rendo come un messaggio chat del server, anche perché non si può fare nulla

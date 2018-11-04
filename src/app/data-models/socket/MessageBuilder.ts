@@ -97,6 +97,7 @@ export class MessageBuilder {
           result = msg;
           break;
         }
+      case 'CHATTAVOLO':
       case 'CHATLOBBY':
         {
           let msg = new ChatMessage();

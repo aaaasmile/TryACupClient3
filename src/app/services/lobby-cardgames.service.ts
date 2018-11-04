@@ -61,7 +61,7 @@ export class LobbyCardGameService { // Used to handle the card lobby
     this.socketService.removeGameReq(ix);
   }
 
-  sendChatTableMsg(msg: string) {
+  sendChatLobbyMsg(msg: string) {
     this.socketService.chatCup(ChatType.Lobby, msg);
   }
 }
