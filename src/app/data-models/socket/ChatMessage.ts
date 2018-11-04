@@ -10,7 +10,7 @@ export class ChatMessage implements Message {
   body: string;
   table_id: string;
 
-  constructor(){
+  constructor() {
     this.table_id = "1"
   }
 
@@ -29,6 +29,10 @@ export class ChatMessage implements Message {
 
   is_chatTableItem(): boolean {
     return this.cmd === 'CHATTAVOLO'
+  }
+
+  is_chatLobbyItem(): boolean {
+    return this.cmd === 'CHATLOBBY'
   }
 
   parseServerMsgCmdDetails(cmd_details: string) {

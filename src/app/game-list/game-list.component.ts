@@ -36,6 +36,10 @@ export class GameListComponent implements OnInit, OnDestroy {
       game: "Briscola" // valore preso dal file game_info di cup_srv/games/briscola campo :name
     }
     this.chatMsgs = new Array<ChatItem>();
+    this.lobbyCardGameService.BufferChatMsg.forEach(ele =>{
+      let ci = new ChatItem(ele)
+      this.chatMsgs.push(ci)
+    })
   }
 
   ngOnDestroy() {
@@ -94,6 +98,7 @@ export class GameListComponent implements OnInit, OnDestroy {
         }
       });
     console.log('Request chat subsc')
+   
     this.subsc_chat = this.lobbyCardGameService.subscribeChatMsg()
       .subscribe(cm => {
         console.log('Chat?', cm)

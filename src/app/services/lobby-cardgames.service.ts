@@ -11,6 +11,7 @@ import { JoinMessage } from '../data-models/socket/JoinMessage';
 
 @Injectable()
 export class LobbyCardGameService { // Used to handle the card lobby
+  BufferChatMsg: ChatMessage[] = new Array<ChatMessage>()
 
   constructor(private socketService: SocketService) {
     
@@ -35,7 +36,12 @@ export class LobbyCardGameService { // Used to handle the card lobby
   subscribeChatMsg(): Observable<ChatMessage> {
     return this.socketService.Messages
       .pipe(map(msg => {
-        return (msg instanceof ChatMessage) ? msg : null;
+        if ((msg instanceof ChatMessage) && msg.is_chatLobbyItem()) {
+          this.BufferChatMsg.push(msg)
+          return msg;
+        } else {
+          return null;
+        }
       }))
       .pipe(filter(m => m != null));
   }
