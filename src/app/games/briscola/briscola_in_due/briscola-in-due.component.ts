@@ -15,6 +15,7 @@ import { ChatItem } from 'src/app/game-list/chat-item';
 export class BriscolaInDueComponent implements OnInit {
   private mainStage: createjs.Stage;
   private imgTmp;
+  private tableIx: string;
   private subsc_msg: Subscription;
   private subsc_chat: Subscription;
   chatMsgs: ChatItem[];
@@ -22,10 +23,15 @@ export class BriscolaInDueComponent implements OnInit {
   constructor(
     private gameStateService: CurrGameStateService,
     private router: Router) {
+      this.tableIx = "1" // TODO get from route
   }
 
   ngOnInit(): void {
     this.chatMsgs = new Array<ChatItem>();
+    this.gameStateService.getAllChatMesages(this.tableIx).forEach(element => {
+      let ci = new ChatItem(element)
+        this.chatMsgs.push(ci)
+    });
     this.subsc_chat = this.gameStateService.subscribeChatMsg()
       .subscribe(cm => {
         let ci = new ChatItem(cm)
@@ -34,7 +40,7 @@ export class BriscolaInDueComponent implements OnInit {
     this.subsc_msg = this.gameStateService.InGameMsgRecEvent
       .subscribe(evt => {
         console.log("InGame message received ")
-        let cm = this.gameStateService.popFrontInGameMsg()
+        let cm = this.gameStateService.popFrontInGameMsg(this.tableIx)
       });
 
     this.testSomeCanvas()
@@ -50,10 +56,10 @@ export class BriscolaInDueComponent implements OnInit {
   }
 
   processCache(){
-    let cm = this.gameStateService.popFrontInGameMsg()
+    let cm = this.gameStateService.popFrontInGameMsg(this.tableIx)
     while(cm){
       this.processInGameMsg(cm)
-      cm = this.gameStateService.popFrontInGameMsg()
+      cm = this.gameStateService.popFrontInGameMsg(this.tableIx)
     }
   }
 
@@ -64,7 +70,7 @@ export class BriscolaInDueComponent implements OnInit {
   sendChatMsg(msg) {
     if (msg) {
       console.log('send chat msg: ', msg)
-      this.gameStateService.sendChatTableMsg(msg)
+      this.gameStateService.sendChatTableMsg(msg, this.tableIx)
     }
   }
 

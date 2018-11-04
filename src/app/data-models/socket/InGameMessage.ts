@@ -12,10 +12,12 @@ export class InGameMessage implements Message {
   type: string;
   name: string
   cmd_details: string
-
+  table_id: string;
+  
   constructor(cmd_details: string, name: string) {
     this.name = name
     this.cmd_details = cmd_details
+    this.table_id = "1"
   }
 
   getOnGameType(): OnGameType {

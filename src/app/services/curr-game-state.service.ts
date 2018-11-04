@@ -3,52 +3,62 @@ import { Subscription, Observable, Subject } from 'rxjs';
 import { SocketService } from './socket.service';
 import { InGameMessage } from '../data-models/socket/InGameMessage';
 import { map, filter } from 'rxjs/operators';
-import { AuthenticationService } from './authentication.service';
 import { ChatMessage } from '../data-models/socket/ChatMessage';
 import { ChatType } from '../data-models/sharedEnums';
+
+class TableBuffer {
+  TableIx: string
+  GameName: string
+  BufferInGameMsg: InGameMessage[] = new Array<InGameMessage>()
+  BufferChatMsg: ChatMessage[] = new Array<ChatMessage>()
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class CurrGameStateService {
   private subsc_InGame: Subscription;
-  private bufferInGameMsg: InGameMessage[];
-  public InGameMsgRecEvent: Subject<boolean>;
-  
-  constructor(private socketService: SocketService,
-    private authService: AuthenticationService) {
-    this.bufferInGameMsg = new Array<InGameMessage>()
-    this.InGameMsgRecEvent = new Subject();
-    this.collectGameMsgs();
-   }
+  private tables: { [key: string]: TableBuffer; } = {};
+  public InGameMsgRecEvent: Subject<number>;
 
-   ngOnDestroy() {
+  constructor(private socketService: SocketService) {
+    this.InGameMsgRecEvent = new Subject();
+    this.tables["1"] = new TableBuffer
+    this.collectGameMsgs();
+  }
+
+  ngOnDestroy() {
     this.stopCollectInGame();
   }
 
-  subscribeInGameMsg():Observable<InGameMessage> {
-    return this.socketService.Messages
-      .pipe(map(msg => {
-        return (msg instanceof InGameMessage) ? msg : null;
-      }))
-      .pipe(filter(m => m != null));
+  getAllChatMesages(tableIx: string): ChatMessage[] {
+    if (this.tables[tableIx]) {
+      return this.tables[tableIx].BufferChatMsg;
+    } else {
+      return []
+    }
   }
 
   subscribeChatMsg(): Observable<ChatMessage> {
     return this.socketService.Messages
       .pipe(map(msg => {
-        return (msg instanceof ChatMessage) && msg.is_chatTableItem() ? msg : null;
+        if ((msg instanceof ChatMessage) && msg.is_chatTableItem()) {
+          this.tables[msg.table_id].BufferChatMsg.push(msg)
+          return msg;
+        } else {
+          return null;
+        }
       }))
       .pipe(filter(m => m != null));
   }
 
   collectGameMsgs(): void {
     console.log("Collect in-game messages")
-    this.bufferInGameMsg = new Array<InGameMessage>()
     this.subsc_InGame = this.socketService.Messages
       .subscribe(m => {
         if (m instanceof InGameMessage) {
-          this.bufferInGameMsg.push(m)
+          let tbix = m.table_id
+          this.tables[tbix].BufferInGameMsg.push(m)
         }
       })
   }
@@ -57,19 +67,20 @@ export class CurrGameStateService {
     if (this.subsc_InGame) {
       this.subsc_InGame.unsubscribe()
       this.subsc_InGame = null
+      this.tables = {}
     }
   }
 
-  popFrontInGameMsg(): InGameMessage {
-    if (!this.bufferInGameMsg || this.bufferInGameMsg.length == 0) {
+  popFrontInGameMsg(tableIx: string): InGameMessage {
+    if (!this.tables[tableIx].BufferInGameMsg || this.tables[tableIx].BufferInGameMsg.length == 0) {
       return null
     }
-    let r = this.bufferInGameMsg[0]
-    this.bufferInGameMsg.splice(0, 1)
+    let r = this.tables[tableIx].BufferInGameMsg[0]
+    this.tables[tableIx].BufferInGameMsg.splice(0, 1)
     return r
   }
 
-  sendChatTableMsg(msg: string) {
+  sendChatTableMsg(msg: string, tableIx: string) {
     this.socketService.chatCup(ChatType.Table, msg);
   }
 

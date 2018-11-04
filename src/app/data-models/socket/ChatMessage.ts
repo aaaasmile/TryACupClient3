@@ -8,6 +8,12 @@ export class ChatMessage implements Message {
   time: string;
   date: string;
   body: string;
+  table_id: string;
+
+  constructor(){
+    this.table_id = "1"
+  }
+
   /* Esempio di messaggio in json
   {
     "username":"aaaasmile","body":"hi","time":"2018-10-16 21:23:31 +0200"
