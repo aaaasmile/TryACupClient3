@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CardGameService } from '../services/cardGame.service';
+import { LobbyCardGameService } from '../services/lobby-cardgames.service';
 import { Subscription } from 'rxjs';
 import { GameItem } from './game-item';
 import { ModalService } from '../services/modal.service';
@@ -23,7 +23,7 @@ export class GameListComponent implements OnInit, OnDestroy {
   private subsc_chat: Subscription;
   private subsc_join: Subscription;
 
-  constructor(private cardGameService: CardGameService,
+  constructor(private cardGameService: LobbyCardGameService,
     private modalService: ModalService,
     private authService: AuthenticationService,
     private router: Router) {

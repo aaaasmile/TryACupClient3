@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { CardGame } from '../data-models/cardGame';
-import { CardGameService } from '../services/cardGame.service';
+import { LobbyCardGameService } from '../services/lobby-cardgames.service';
 import { Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { OnlineModeService } from '../services/networkMode.service';
@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthenticationService,
     private onlineService: OnlineModeService,
-    private cardGameService: CardGameService,
+    private cardGameService: LobbyCardGameService,
     private router: Router) {
     this.isloggedin = authService.isLoggedin();
     this.isConnected = authService.isAvailable();

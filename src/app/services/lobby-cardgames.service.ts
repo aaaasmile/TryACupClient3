@@ -10,7 +10,7 @@ import { JoinMessage } from '../data-models/socket/JoinMessage';
 
 
 @Injectable()
-export class CardGameService {
+export class LobbyCardGameService { // Used to handle the card lobby
 
   constructor(private socketService: SocketService) {
     

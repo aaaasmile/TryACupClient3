@@ -9,7 +9,7 @@ import {
 import { AppComponent } from './app.component';
 import { SocketService } from './services/socket.service';
 import { UserService } from './services/user.service';
-import { CardGameService } from './services/cardGame.service';
+import { LobbyCardGameService } from './services/lobby-cardgames.service';
 import { AuthenticationService } from './services/authentication.service';
 import { AlertService } from './services/alert.service';
 import { OnlineModeService } from './services/networkMode.service';
@@ -53,7 +53,7 @@ import { BriscolaInDueComponent } from './games/briscola/briscola_in_due/briscol
   providers: [
     UserService,
     SocketService,
-    CardGameService,
+    LobbyCardGameService,
     ResourceLoader,
     AuthenticationService,
     AlertService,
