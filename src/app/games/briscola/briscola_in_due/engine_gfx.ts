@@ -7,10 +7,10 @@ export class EngineGfx {
   private nomi_simboli = ["cope", "zero", "xxxx", "vuot"]
   private current_deck_type = ''
   private cards = []
+  private symbols_card = []
   private cards_rotated = []
   private deck_information = new DeckInfo();
-  private images = []
-
+  
   loadCards(folder: string) {
     let card_fname = ""
     let num_cards_onsuit = this.getNumCardOnSuit(folder)
@@ -26,6 +26,7 @@ export class EngineGfx {
     }
     this.cards = []
     this.cards_rotated = []
+    this.symbols_card = []
     let folder_fullpath = "assets/carte/" + folder + "/"
     console.log("Load cards...")
     if (num_cards_onsuit === 13) {
@@ -34,7 +35,6 @@ export class EngineGfx {
       this.deck_information.setToDeck40()
     }
     
-    let count = 0
     for (let i = 0; i < this.nomi_semi.length; i++) {
       let seed = this.nomi_semi[i]
       for (let index = 1; index <= num_cards_onsuit; index++) {
@@ -43,14 +43,7 @@ export class EngineGfx {
           ixname = '0' + ixname
         }
         card_fname = `${folder_fullpath}${ixname}_${seed}.png`
-        console.log('Card fname is: ', card_fname)
-        // this.images.push(new Image())
-        // this.images[count].src = card_fname
-        // this.images[count].onload = () => {
-        //   console.log('Image Loaded: ', this.images[count].src);
-        //   let card = new createjs.Bitmap(this.images[count]);
-        //   this.cards.push(card)
-        // }
+        //console.log('Card fname is: ', card_fname)
         let img = new Image()
         img.src = card_fname
         img.onload = () => {
@@ -58,11 +51,22 @@ export class EngineGfx {
           let card = new createjs.Bitmap(img);
           this.cards.push(card)
         }
-        count += 1
       }
     }
     // symbols
-
+    console.log("Load all symbols...")
+    for(let i = 0; i < this.nomi_simboli.length; i++){
+      let seed = this.nomi_simboli[i]
+      card_fname = `${folder_fullpath}01_${seed}.png`
+      let img = new Image()
+        img.src = card_fname
+        img.onload = () => {
+          console.log('Image Loaded: ', img.src);
+          let symb = new createjs.Bitmap(img);
+          this.symbols_card.push(symb)
+        }
+    }
+    this.current_deck_type = folder
   }
 
   getNumCardOnSuit(folder): number {
