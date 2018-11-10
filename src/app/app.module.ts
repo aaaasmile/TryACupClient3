@@ -28,6 +28,9 @@ import { ReCaptchaComponent } from './directives/captcha.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { GameListComponent } from './game-list/game-list.component';
 import { BriscolaInDueComponent } from './games/briscola/briscola_in_due/briscola-in-due.component';
+import { TestGfxComponent } from './games/test-gfx/test-gfx.component';
+import { TestCardComponent } from './games/test-gfx/testcard/testcard.component';
+import { TestCardComponent2 } from './games/test-gfx/testcard2/testcard2.component';
 
 @NgModule({
   imports: [
@@ -48,7 +51,11 @@ import { BriscolaInDueComponent } from './games/briscola/briscola_in_due/briscol
     ReCaptchaComponent,
     UserDetailsComponent,
     GameListComponent,
-    BriscolaInDueComponent
+    BriscolaInDueComponent,
+    TestGfxComponent,
+    TestCardComponent,
+    TestCardComponent2,
+    TestCardComponent2
   ],
   providers: [
     UserService,

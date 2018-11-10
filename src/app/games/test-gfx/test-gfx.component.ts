@@ -5,8 +5,7 @@ import * as createjs from 'createjs-module';
 @Component({
   moduleId: module.id,
   selector: 'my-test-gfx',
-  templateUrl: 'test-gfx.component.html',
-  styleUrls: ['test-gfx.component.css']
+  templateUrl: 'test-gfx.component.html'
 })
 
 export class TestGfxComponent implements OnInit {
