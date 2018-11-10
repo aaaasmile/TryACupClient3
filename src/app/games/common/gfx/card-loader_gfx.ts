@@ -1,7 +1,7 @@
-import { DeckInfo } from "../../common/deck-info";
+import { DeckInfo } from "../deck-info";
 import * as createjs from 'createjs-module';
 
-export class EngineGfx {
+export class CardLoaderGfx {
   private deck_france: boolean
   private nomi_semi = ["basto", "coppe", "denar", "spade"]
   private nomi_simboli = ["cope", "zero", "xxxx", "vuot"]

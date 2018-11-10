@@ -6,6 +6,7 @@ import { map, filter } from 'rxjs/operators';
 import { ChatMessage } from '../data-models/socket/ChatMessage';
 import { ChatType } from '../data-models/sharedEnums';
 import { TableBuffer } from '../data-models/tableBuffer';
+import { CardLoaderGfx } from '../games/common/gfx/card-loader_gfx';
 
 
 @Injectable({
@@ -15,6 +16,7 @@ export class CurrGameStateService {
   private subsc_InGame: Subscription;
   private tables: { [key: string]: TableBuffer; } = {};
   public InGameMsgRecEvent: Subject<number>;
+  private cardLoaderGfx = new CardLoaderGfx()
 
   constructor(private socketService: SocketService) {
     this.InGameMsgRecEvent = new Subject();
@@ -37,6 +39,10 @@ export class CurrGameStateService {
       }
     }
     return res
+  }
+
+  getCardLoaderGfx(){
+    return this.cardLoaderGfx;
   }
 
   getAllChatMesages(tableIx: string): ChatMessage[] {
