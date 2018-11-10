@@ -1,13 +1,13 @@
 import { DeckInfo } from "../../common/deck-info";
 
 export class EngineGfx {
-  deck_france: boolean
-  nomi_simboli = ["basto", "coppe", "denar", "spade"]
-  nomi_semi = ["cope", "zero", "xxxx", "vuot"]
-  current_deck_type = ''
-  cards = []
-  cards_rotated = []
-  deck_information = new DeckInfo();
+  private deck_france: boolean
+  private nomi_semi = ["basto", "coppe", "denar", "spade"]
+  private nomi_simboli = ["cope", "zero", "xxxx", "vuot"]
+  private current_deck_type = ''
+  private cards = []
+  private cards_rotated = []
+  private deck_information = new DeckInfo();
 
   loadCards(folder: string) {
     let card_fname = ""
@@ -26,8 +26,21 @@ export class EngineGfx {
     this.cards_rotated = []
     let folder_fullpath = "assets/carte/" + folder + "/"
     console.log("Load cards...")
-    if (num_cards_onsuit === 13){
-      this.deck_information.deck_info_dabriscola()
+    if (num_cards_onsuit === 13) {
+      this.deck_information.activateThe52deck()
+    } else {
+      this.deck_information.setToDeck40()
+    }
+    for (let i = 0; i < this.nomi_semi.length; i++) {
+      let seed = this.nomi_semi[i]
+      for (let index = 1; index <= num_cards_onsuit; index++) {
+        let ixname = `${index}`
+        if (index < 10) {
+          ixname = '0' + ixname
+        }
+        card_fname = `${folder_fullpath}${ixname}${seed}.png`
+        console.log('Card fname is: ', card_fname)
+      }
     }
   }
 

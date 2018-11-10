@@ -155,3 +155,7 @@ e in angular.json va messo come referenza:
 anche se magari in src/styles.css si potrebbe importare meglio.
 - problema loadChildren: https://github.com/angular/angular-cli/issues/10673
 
+== Provare il codice Typescript
+Per provare il codice in typescript si può usare il seguente link:
+https://www.typescriptlang.org/play/index.html
+Non si può usare la keyword export nella definizione della classe

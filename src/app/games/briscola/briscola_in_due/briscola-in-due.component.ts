@@ -6,6 +6,7 @@ import { InGameMessage } from 'src/app/data-models/socket/InGameMessage';
 import { CurrGameStateService } from 'src/app/services/curr-game-state.service';
 import { ChatItem } from 'src/app/game-list/chat-item';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { EngineGfx } from './engine_gfx';
 
 @Component({
   moduleId: module.id,
@@ -120,6 +121,8 @@ export class BriscolaInDueComponent implements OnInit {
     // card.x = 30;
     // card.y = 20;
     // this.mainStage.addChild(card);
+    let endgfx = new EngineGfx()
+    endgfx.loadCards(this.authService.get_deck_name())
 
     this.mainStage.update();
     console.log('Canvas created');

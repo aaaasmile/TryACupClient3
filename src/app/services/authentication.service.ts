@@ -14,6 +14,7 @@ import { GameStatusMessage } from '../data-models/socket/GameStatusMessage';
 export class AuthenticationService implements CanActivate {
     private _isLoggedIn: boolean = false;
     private _user_name: string = '';
+    private _deck_name: string = "piac";
     private _user_roles: string[] = new Array<string>();
     public LoginChangeEvent: Subject<boolean>;
 
@@ -29,10 +30,10 @@ export class AuthenticationService implements CanActivate {
         console.debug('is logged in' + this._isLoggedIn.toString());
         return this._isLoggedIn;
     }
-    
-    Refresh(){
+
+    Refresh() {
         console.log("Refresh login message")
-        if(!this.socketService.isConnected()){
+        if (!this.socketService.isConnected()) {
             this._isLoggedIn = false;
         }
 
@@ -47,9 +48,13 @@ export class AuthenticationService implements CanActivate {
         return this._user_name;
     }
 
-    is_admin(): boolean{
-        if (this._user_roles){
-            return this._user_roles.findIndex( v => v === 'ADMIN') !== -1
+    get_deck_name(): string {
+        return this._deck_name
+    }
+
+    is_admin(): boolean {
+        if (this._user_roles) {
+            return this._user_roles.findIndex(v => v === 'ADMIN') !== -1
         }
         return false;
     }
@@ -91,11 +96,11 @@ export class AuthenticationService implements CanActivate {
 
     subscribeGameStatusMsg(): Observable<GameStatusMessage> {
         return this.socketService.Messages
-          .pipe(map(msg => {
-            return (msg instanceof GameStatusMessage) ? msg : null;
-          }))
-          .pipe(filter(m => m != null));
-      }
+            .pipe(map(msg => {
+                return (msg instanceof GameStatusMessage) ? msg : null;
+            }))
+            .pipe(filter(m => m != null));
+    }
 
     login(username: string, password: string): Observable<UserMessage> {
         return this.socketService.loginReq(username, password, '')
