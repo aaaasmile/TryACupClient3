@@ -21,6 +21,7 @@ export class BriscolaInDueComponent implements OnInit {
   private subsc_msg: Subscription;
   private subsc_chat: Subscription;
   chatMsgs: ChatItem[];
+  private endgfx = new EngineGfx()
 
   constructor(
     private gameStateService: CurrGameStateService,
@@ -109,7 +110,7 @@ export class BriscolaInDueComponent implements OnInit {
     this.imgTmp.src = "assets/carte/piac/01_denar.png";
     //this.imgTmp.onload = this.imageLoaded;
     this.imgTmp.onload = () => {
-      console.log('Image Loaded');
+      console.log('Example image Loaded');
       let card = new createjs.Bitmap(this.imgTmp);
       //card.x = 30;
       //card.y = 20;
@@ -121,8 +122,8 @@ export class BriscolaInDueComponent implements OnInit {
     // card.x = 30;
     // card.y = 20;
     // this.mainStage.addChild(card);
-    let endgfx = new EngineGfx()
-    endgfx.loadCards(this.authService.get_deck_name())
+    
+    this.endgfx.loadCards(this.authService.get_deck_name())
 
     this.mainStage.update();
     console.log('Canvas created');

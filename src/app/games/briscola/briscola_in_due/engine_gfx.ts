@@ -1,4 +1,5 @@
 import { DeckInfo } from "../../common/deck-info";
+import * as createjs from 'createjs-module';
 
 export class EngineGfx {
   private deck_france: boolean
@@ -8,6 +9,7 @@ export class EngineGfx {
   private cards = []
   private cards_rotated = []
   private deck_information = new DeckInfo();
+  private images = []
 
   loadCards(folder: string) {
     let card_fname = ""
@@ -31,6 +33,8 @@ export class EngineGfx {
     } else {
       this.deck_information.setToDeck40()
     }
+    
+    let count = 0
     for (let i = 0; i < this.nomi_semi.length; i++) {
       let seed = this.nomi_semi[i]
       for (let index = 1; index <= num_cards_onsuit; index++) {
@@ -38,10 +42,27 @@ export class EngineGfx {
         if (index < 10) {
           ixname = '0' + ixname
         }
-        card_fname = `${folder_fullpath}${ixname}${seed}.png`
+        card_fname = `${folder_fullpath}${ixname}_${seed}.png`
         console.log('Card fname is: ', card_fname)
+        // this.images.push(new Image())
+        // this.images[count].src = card_fname
+        // this.images[count].onload = () => {
+        //   console.log('Image Loaded: ', this.images[count].src);
+        //   let card = new createjs.Bitmap(this.images[count]);
+        //   this.cards.push(card)
+        // }
+        let img = new Image()
+        img.src = card_fname
+        img.onload = () => {
+          console.log('Image Loaded: ', img.src);
+          let card = new createjs.Bitmap(img);
+          this.cards.push(card)
+        }
+        count += 1
       }
     }
+    // symbols
+
   }
 
   getNumCardOnSuit(folder): number {
