@@ -2,7 +2,7 @@
 <canvas id="mainCanvas" style="padding: 10px;"></canvas>
 
 <!-- Chat Section -->
-<div class="ui minimal comments">
+<div *ngIf="chatMsgs" class="ui minimal comments">
   <h3 class="ui dividing header">Chat</h3>
 
   <div class="comment" *ngFor="let msgItem of chatMsgs">

@@ -19,7 +19,9 @@ export class CurrGameStateService {
   constructor(private socketService: SocketService) {
     this.InGameMsgRecEvent = new Subject();
     this.tables["1"] = new TableBuffer
-    this.collectGameMsgs();
+    if (socketService.isConnected()) {
+      this.collectGameMsgs();
+    }
   }
 
   ngOnDestroy() {
@@ -68,7 +70,7 @@ export class CurrGameStateService {
           if (m.inGameMsgType === InGameMsgType.NewMatch) {
             console.log("New match message payload", m.Payload)
             tbItem.PlayerNames = new Array<string>()
-            m.Payload[1].forEach(pl =>{
+            m.Payload[1].forEach(pl => {
               tbItem.PlayerNames.push(pl)
             })
             tbItem.GameName = m.Payload[0]

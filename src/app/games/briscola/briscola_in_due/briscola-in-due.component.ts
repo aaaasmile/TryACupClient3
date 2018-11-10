@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { InGameMessage } from 'src/app/data-models/socket/InGameMessage';
 import { CurrGameStateService } from 'src/app/services/curr-game-state.service';
 import { ChatItem } from 'src/app/game-list/chat-item';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   moduleId: module.id,
@@ -22,11 +23,13 @@ export class BriscolaInDueComponent implements OnInit {
 
   constructor(
     private gameStateService: CurrGameStateService,
+    private authService: AuthenticationService,
     private router: Router) {
       this.tableIx = "1" // TODO get from route
   }
 
   ngOnInit(): void {
+    if (this.authService.isAvailable()){
     this.chatMsgs = new Array<ChatItem>();
     this.gameStateService.getAllChatMesages(this.tableIx).forEach(element => {
       let ci = new ChatItem(element)
@@ -42,7 +45,7 @@ export class BriscolaInDueComponent implements OnInit {
         console.log("InGame message received ")
         let cm = this.gameStateService.popFrontInGameMsg(this.tableIx)
       });
-
+    }
     this.testSomeCanvas()
   }
 
