@@ -1,59 +1,62 @@
 <body>
-  <!-- Sidebar Menu -->
-  <div class="ui vertical sidebar menu">
-    <a class="item" routerLink="/dashboard" routerLinkActive="active">Cuperativa</a>
-    <a class="item" routerLink="/app/games" routerLinkActive="active">Giochi in rete</a>
-    <a class="item" routerLink="/users" routerLinkActive="active">Utenti collegati</a>
-    <a class="item">Login</a>
-    <a class="item">Registra</a>
-  </div>
+  <div class="ui container">
+    <!-- Sidebar Menu -->
+    <div class="ui vertical sidebar menu">
+      <a class="item" routerLink="/dashboard" routerLinkActive="active">Cuperativa</a>
+      <a class="item" routerLink="/app/games" routerLinkActive="active">Giochi in rete</a>
+      <a class="item" routerLink="/users" routerLinkActive="active">Utenti collegati</a>
+      <a class="item">Login</a>
+      <a class="item">Registra</a>
+    </div>
 
-  <div id="Home" class="pusher">
-    <div class="ui  vertical masthead center aligned segment">
-      <div class="ui container">
-        <div class="ui large secondary pointing menu">
-          <a class="toc item">
-            <i class="sidebar icon"></i>
-          </a>
-          <a class="item" routerLink="/dashboard" routerLinkActive="active">Cuperativa</a>
-          <a *ngIf="isloggedin" class="item" routerLink="/app/games" routerLinkActive="active">Giochi</a>
-          <a *ngIf="isloggedin" class="item" routerLink="/users" routerLinkActive="active">Utenti collegati</a>
-          <div *ngIf="isConnected" class="ui container">
-            <div *ngIf="!isloggedin" class="right item">
-              <a class="ui button" routerLink="/login" routerLinkActive="active">Login</a>
-              <a class="ui button"routerLink="/signup" routerLinkActive="active">Registra</a>
+    <div id="Home" class="pusher">
+      <div class="ui vertical center aligned segment">
+        <div class="ui container">
+          <div class="ui large secondary pointing menu">
+            <a class="toc item">
+              <i class="sidebar icon"></i>
+            </a>
+            <a class="item" routerLink="/dashboard" routerLinkActive="active">Cuperativa</a>
+            <a *ngIf="isloggedin" class="item" routerLink="/app/games" routerLinkActive="active">Giochi</a>
+            <a *ngIf="isloggedin" class="item" routerLink="/users" routerLinkActive="active">Utenti collegati</a>
+            <div *ngIf="isConnected" class="ui container">
+              <div *ngIf="!isloggedin" class="right item">
+                <a class="ui button" routerLink="/login" routerLinkActive="active">Login</a>
+                <a class="ui button" routerLink="/signup" routerLinkActive="active">Registra</a>
+              </div>
+              <div *ngIf="isloggedin" class="right item">
+                <a class="ui button" routerLink="/user-details" routerLinkActive="active">{{user_name}}</a>
+                <button class="ui button" (click)=logout()>Logout</button>
+              </div>
             </div>
-            <div *ngIf="isloggedin" class="right item" >
-              <a class="ui button" routerLink="/user-details" routerLinkActive="active">{{user_name}}</a>
-              <button class="ui button" (click)=logout()>Logout</button>
-            </div>
-          </div>  
+          </div>
         </div>
-      </div>
-      <div class="ui text container">
-        <alert></alert> <!-- usato dalla directive alert -->
-        <p></p>
-        <router-outlet></router-outlet> <!-- contenuto della pagina -->
+        <div class="ui">
+          <alert></alert> <!-- usato dalla directive alert -->
+          <p></p>
+          <router-outlet></router-outlet> <!-- contenuto della pagina -->
+        </div>
       </div>
     </div>
-  </div>
-  <div class="ui vertical footer segment">
-    <div class="ui divider"></div>
-    <div class="ui container">
-      <div class="ui stackable  divided equal ten stackable grid">
-        <div class="five wide column">
-          <h4 class="ui header">Versione</h4>
-          <p>Cuperativa ver {{cup_version}}</p>
-        </div>
-        <div class="seven wide column">
-          <h4 class="ui header">Info</h4>
-          <p>
-            <i class="copyright icon"></i> 1999 - 2018 by Igor powerd by Invido.it</p>
-        </div>
-        <div class="two wide column">
-          <h4 class="ui header">Server</h4>
-          <!-- <p ><i class="server icon" [ngClass]="{'green': isConnected}"></i></p> -->
-          <button  [ngClass]="{'disabled': isloggedin, ui: true, button: true}"  (click)=toggleConnect()><i class="server icon" [ngClass]="{'green': isConnected}"></i></button>
+    <div class="ui vertical footer segment">
+      <div class="ui divider"></div>
+      <div class="ui container">
+        <div class="ui stackable  divided equal ten stackable grid">
+          <div class="five wide column">
+            <h4 class="ui header">Versione</h4>
+            <p>Cuperativa ver {{cup_version}}</p>
+          </div>
+          <div class="seven wide column">
+            <h4 class="ui header">Info</h4>
+            <p>
+              <i class="copyright icon"></i> 1999 - 2018 by Igor powerd by Invido.it</p>
+          </div>
+          <div class="two wide column">
+            <h4 class="ui header">Server</h4>
+            <!-- <p ><i class="server icon" [ngClass]="{'green': isConnected}"></i></p> -->
+            <button [ngClass]="{'disabled': isloggedin, ui: true, button: true}" (click)=toggleConnect()><i class="server icon"
+                [ngClass]="{'green': isConnected}"></i></button>
+          </div>
         </div>
       </div>
     </div>

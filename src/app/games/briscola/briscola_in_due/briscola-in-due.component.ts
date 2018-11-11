@@ -119,6 +119,10 @@ export class BriscolaInDueComponent implements OnInit {
     console.log('Init scene')
     this.mainStage = new createjs.Stage("mainCanvas");
     let canvas: any = this.mainStage.canvas // non si usa getElementID, ma any in canvas
+    var width = canvas.clientWidth;
+    var height = canvas.clientHeight;
+    canvas.width = width;
+    canvas.height = height;
 
     let cardLoader = this.gameStateService.getCardLoaderGfx()
     let loaderGfx: any = cardLoader.getProgressGfx(canvas)
