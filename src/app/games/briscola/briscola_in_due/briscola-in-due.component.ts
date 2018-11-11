@@ -117,28 +117,16 @@ export class BriscolaInDueComponent implements OnInit {
 
   initScene(): void {
     console.log('Init scene')
-    //let canvas: HTMLElement = document.getElementById("mainCanvas");
     this.mainStage = new createjs.Stage("mainCanvas");
-    let canvas: any = this.mainStage.canvas
-    let loaderColor = createjs.Graphics.getRGB(0, 247, 10);
-    let loaderColor2 = createjs.Graphics.getRGB(247, 0, 10);
-    let loaderBar = new createjs.Container();
-    let bar = new createjs.Shape();
-    let barHeight = 20
-    bar.graphics.beginFill(loaderColor2).drawRect(0, 0, 1, barHeight).endFill();
-    let loaderWidth = 200;
-    let bgBar = new createjs.Shape();
-    let padding = 3
-    bgBar.graphics.setStrokeStyle(1).beginStroke(loaderColor).drawRect(-padding / 2, -padding / 2, loaderWidth + padding, barHeight + padding);
-    loaderBar.x = canvas.width - loaderWidth >> 1;
-    loaderBar.y = canvas.height - barHeight >> 1;
-    console.log("Canvas size is: ", canvas.width, canvas.height)
-    loaderBar.addChild(bar, bgBar);
-    this.mainStage.addChild(loaderBar);
+    let canvas: any = this.mainStage.canvas // non si usa getElementID, ma any in canvas
+
+    let cardLoader = this.gameStateService.getCardLoaderGfx()
+    let loaderGfx: any = cardLoader.getProgressGfx(canvas)
+    console.log("loaderGfx is", loaderGfx)
+    this.mainStage.addChild(loaderGfx.loaderBar);
 
     createjs.Ticker.framerate = 30;
 
-    let cardLoader = this.gameStateService.getCardLoaderGfx()
     let totItems = -1
     cardLoader.loadCards(this.authService.get_deck_name())
       .subscribe(x => {
@@ -147,27 +135,24 @@ export class BriscolaInDueComponent implements OnInit {
           console.log("Expect tot items to load: ", totItems)
           return
         }
-        console.log("Next loaded is ", x, bar.scaleX)
-        bar.scaleX = (x * loaderWidth) / totItems;
+        console.log("Next loaded is ", x, loaderGfx.bar.scaleX)
+        loaderGfx.bar.scaleX = (x * loaderGfx.loaderWidth) / totItems;
         this.mainStage.update();
       },
         (err) => {
           console.error("Load error")
         }, () => {
           console.log("Load Completed!")
-          loaderBar.alpha = 1;
+          loaderGfx.loaderBar.alpha = 1;
           let that = this
-          createjs.Tween.get(loaderBar).wait(500).to({ alpha: 0, visible: false }, 2000)
+          createjs.Tween.get(loaderGfx.loaderBar).wait(500).to({ alpha: 0, visible: false }, 500)
             .on("change", x => that.mainStage.update())
             .call(handleComplete);
           function handleComplete() {
             //Tween complete
             console.log("Tween complete")
-            //loaderBar.visible = false;
-            //this.mainStage.update();
+            that.mainStage.update();
           }
-
-          //this.mainStage.update();
         })
   }
 

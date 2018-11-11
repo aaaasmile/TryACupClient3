@@ -12,6 +12,28 @@ export class CardLoaderGfx {
   private cards_rotated = []
   private deck_information = new DeckInfo();
 
+  getProgressGfx(canvas:any){
+    let that = {}
+    let loaderColor = createjs.Graphics.getRGB(247, 247, 247);
+    let loaderColor2 = createjs.Graphics.getRGB(247, 247, 247);
+    let loaderBar = new createjs.Container();
+    let bar = new createjs.Shape();
+    let barHeight = 20
+    bar.graphics.beginFill(loaderColor2).drawRect(0, 0, 1, barHeight).endFill();
+    let loaderWidth = canvas.width - 20;
+    let bgBar = new createjs.Shape();
+    let padding = 3
+    bgBar.graphics.setStrokeStyle(1).beginStroke(loaderColor).drawRect(-padding / 2, -padding / 2, loaderWidth + padding, barHeight + padding);
+    loaderBar.x = canvas.width - loaderWidth >> 1;
+    loaderBar.y = canvas.height - barHeight >> 1;
+    console.log("Canvas size is: ", canvas.width, canvas.height)
+    loaderBar.addChild(bar, bgBar);
+    that["loaderBar"] = loaderBar
+    that["bar"] = bar
+    that["loaderWidth"] = loaderWidth
+    return that
+  }
+
   loadCards(folder: string): Observable<number> {
     let that = this
     // Nota sull'implementazione: uso Observable anzichè Subject
