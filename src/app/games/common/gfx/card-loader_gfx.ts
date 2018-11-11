@@ -11,7 +11,7 @@ export class CardLoaderGfx {
   private symbols_card = []
   private cards_rotated = []
   private deck_information = new DeckInfo();
-  public scene_background: createjs.Bitmap;
+  public scene_background: any;
 
   getProgressGfx(canvas:any){
     let that = {}
@@ -121,13 +121,18 @@ export class CardLoaderGfx {
         }
       }
       // background
+      var container = new createjs.Container();
       let img = new Image()
+      var bmp
       img.src = "assets/images/table/table.png"
       countToLoad += 1
         img.onload = () => {
           console.log('Image Loaded: ', img.src);
-          let bmp = new createjs.Bitmap(img);
-          that.scene_background = bmp 
+          bmp = new createjs.Bitmap(img);
+          bmp.scale = bmp.originalScale * 0.5;
+          container.addChild(bmp)
+          container.addChild(that.cards[2])
+          that.scene_background = container
           countLoaded += 1
           obs.next(countLoaded)
           if (countToLoad <= countLoaded) {

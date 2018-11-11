@@ -27,7 +27,7 @@ export class ResourceLoader extends createjs.EventDispatcher {
       console.log('File loaded: ');
     });
 
-    
+    // NOTA : questa roba sembra non funzionare. Ho usato il card-loader invece.
 
     //this.queue.loadFile({ id: SoundIds.ClickSound, src: "/dist/res/sound/click_4bit.wav" });
     this.queue.loadFile({ id: SoundIds.ClickSound, src: "assets/sound/click_4bit.wav" });
