@@ -1,5 +1,6 @@
 import { DeckInfo } from "../deck-info";
 import * as createjs from 'createjs-module';
+import { Subject } from "rxjs";
 
 export class CardLoaderGfx {
   private deck_france: boolean
@@ -11,7 +12,8 @@ export class CardLoaderGfx {
   private cards_rotated = []
   private deck_information = new DeckInfo();
   
-  loadCards(folder: string) {
+  loadCards(folder: string): Subject<number>{
+    let subjFinish = new Subject<number>()
     let card_fname = ""
     let num_cards_onsuit = this.getNumCardOnSuit(folder)
     if (this.deck_france) {
@@ -22,7 +24,8 @@ export class CardLoaderGfx {
     console.log("Load cards from folder %s and type %s", folder, this.current_deck_type)
     if (this.current_deck_type === folder) {
       console.log("Avoid to load a new card deck")
-      return
+      subjFinish.complete()
+      return subjFinish
     }
     this.cards = []
     this.cards_rotated = []
@@ -35,6 +38,7 @@ export class CardLoaderGfx {
       this.deck_information.setToDeck40()
     }
     
+    let countToLoad = 0
     for (let i = 0; i < this.nomi_semi.length; i++) {
       let seed = this.nomi_semi[i]
       for (let index = 1; index <= num_cards_onsuit; index++) {
@@ -46,10 +50,16 @@ export class CardLoaderGfx {
         //console.log('Card fname is: ', card_fname)
         let img = new Image()
         img.src = card_fname
+        countToLoad += 1
         img.onload = () => {
           console.log('Image Loaded: ', img.src);
           let card = new createjs.Bitmap(img);
           this.cards.push(card)
+          countToLoad -= 1
+          subjFinish.next(countToLoad + 1)
+          if (countToLoad === 0){
+            subjFinish.complete()
+          }
         }
       }
     }
@@ -60,13 +70,20 @@ export class CardLoaderGfx {
       card_fname = `${folder_fullpath}01_${seed}.png`
       let img = new Image()
         img.src = card_fname
+        countToLoad += 1
         img.onload = () => {
           console.log('Image Loaded: ', img.src);
           let symb = new createjs.Bitmap(img);
           this.symbols_card.push(symb)
+          countToLoad -= 1
+          subjFinish.next(countToLoad + 1)
+          if (countToLoad === 0){
+            subjFinish.complete()
+          }
         }
     }
     this.current_deck_type = folder
+    return subjFinish
   }
 
   getNumCardOnSuit(folder): number {

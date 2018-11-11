@@ -124,6 +124,14 @@ export class BriscolaInDueComponent implements OnInit {
     // this.mainStage.addChild(card);
     let cardLoader = this.gameStateService.getCardLoaderGfx()
     cardLoader.loadCards(this.authService.get_deck_name())
+      .subscribe( x => {
+        console.log("Next loaded is ", x)
+      },
+      (err) => {
+        console.error("Load error")
+      }, () => {
+        console.log("Completed!")
+      })
 
     this.mainStage.update();
     console.log('Canvas created');
