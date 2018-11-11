@@ -128,7 +128,7 @@ export class BriscolaInDueComponent implements OnInit {
     createjs.Ticker.framerate = 30;
 
     let totItems = -1
-    cardLoader.loadCards(this.authService.get_deck_name())
+    cardLoader.loadResources(this.authService.get_deck_name())
       .subscribe(x => {
         if (totItems === -1) {
           totItems = x
@@ -136,6 +136,7 @@ export class BriscolaInDueComponent implements OnInit {
           return
         }
         console.log("Next loaded is ", x, loaderGfx.bar.scaleX)
+        // scaleX semplicemante sposta la nuova x nel rect
         loaderGfx.bar.scaleX = (x * loaderGfx.loaderWidth) / totItems;
         this.mainStage.update();
       },
@@ -146,11 +147,12 @@ export class BriscolaInDueComponent implements OnInit {
           loaderGfx.loaderBar.alpha = 1;
           let that = this
           createjs.Tween.get(loaderGfx.loaderBar).wait(500).to({ alpha: 0, visible: false }, 500)
-            .on("change", x => that.mainStage.update())
-            .call(handleComplete);
+            .call(handleComplete)
+            .on("change", x => {that.mainStage.update()})
           function handleComplete() {
             //Tween complete
             console.log("Tween complete")
+            that.mainStage.addChild(cardLoader.scene_background)
             that.mainStage.update();
           }
         })

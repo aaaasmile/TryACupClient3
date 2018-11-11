@@ -11,6 +11,7 @@ export class CardLoaderGfx {
   private symbols_card = []
   private cards_rotated = []
   private deck_information = new DeckInfo();
+  public scene_background: createjs.Bitmap;
 
   getProgressGfx(canvas:any){
     let that = {}
@@ -34,7 +35,7 @@ export class CardLoaderGfx {
     return that
   }
 
-  loadCards(folder: string): Observable<number> {
+  loadResources(folder: string): Observable<number> {
     let that = this
     // Nota sull'implementazione: uso Observable anzichè Subject
     // in quanto il Subject è per il multicast. In questo caso ho una semplice promise.
@@ -49,6 +50,8 @@ export class CardLoaderGfx {
         that.nomi_semi = ["fiori", "quadr", "cuori", "picch"]
       }
       let totItems = that.nomi_semi.length * num_cards_onsuit + that.nomi_simboli.length
+      totItems += 1 // table background
+      
       console.log("Load cards from folder %s and type %s", folder, that.current_deck_type)
       if (that.current_deck_type === folder) {
         console.log("Avoid to load a new card deck")
@@ -117,6 +120,20 @@ export class CardLoaderGfx {
           }
         }
       }
+      // background
+      let img = new Image()
+      img.src = "assets/images/table/table.png"
+      countToLoad += 1
+        img.onload = () => {
+          console.log('Image Loaded: ', img.src);
+          let bmp = new createjs.Bitmap(img);
+          that.scene_background = bmp 
+          countLoaded += 1
+          obs.next(countLoaded)
+          if (countToLoad <= countLoaded) {
+            obs.complete()
+          }
+        }
       that.current_deck_type = folder
     })
     return obsLoader
