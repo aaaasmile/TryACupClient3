@@ -59,6 +59,8 @@ Per esempio, quando ho creato il compoente UserDetails ho usato:
 ..\node_modules\.bin\ng generate component UserDetails
 
 ==  TODO
+- createjs module non va l'audio. Si dovrebbe usare la lib soundjs-NEXT.js che sul sito createjs
+funziona
 - in pgitem db c'è lo stato del gioco. Delete e remove all è implementato,
 manca nella fase di login l'invio dello stato del pgitem
 - Quando il server riparte, deve ricreare i pgitems dal database anche 

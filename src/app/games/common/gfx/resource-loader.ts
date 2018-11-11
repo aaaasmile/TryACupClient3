@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Log4Cup } from '../../../shared/log4cup'
 import * as createjs from 'createjs-module';
 
 export class SoundIds {
@@ -13,24 +12,31 @@ export class ImagesIds {
 
 @Injectable()
 export class ResourceLoader extends createjs.EventDispatcher {
-  private _log: Log4Cup = new Log4Cup('ResourceLoader');
-  private queue = new createjs.LoadQueue;
+  private queue = new createjs.LoadQueue(false);
   private bitmaps = {};
 
   loadResources() {
+    console.log('Start to load resources...')
     this.queue.installPlugin(createjs.Sound);
     this.queue.on("complete", (e: createjs.Event) => {
       this.dispatchEvent(e);
-      this._log.debug('Resource loaded');
+      console.log('All resources loaded');
     });
+
+    this.queue.on("fileload", (e: createjs.Event) => {
+      console.log('File loaded: ');
+    });
+
+    
 
     //this.queue.loadFile({ id: SoundIds.ClickSound, src: "/dist/res/sound/click_4bit.wav" });
     this.queue.loadFile({ id: SoundIds.ClickSound, src: "assets/sound/click_4bit.wav" });
-    this.queue.loadFile({ id: SoundIds.MixSound, src: "assets/sound/mischen1.wav" });
-    this.queue.loadManifest([
-      { id: ImagesIds.Table, src: "assets/images/table/table.png" }
-    ]);
-
+    //this.queue.loadFile("assets/sound/click_4bit.wav");
+    //this.queue.loadFile({ id: SoundIds.MixSound, src: "assets/sound/mischen1.wav" });
+     this.queue.loadManifest([
+       { id: ImagesIds.Table, src: "assets/images/table/table.png" }
+     ]);
+    this.queue.load()
   }
 
   getImageBitmap(imageID: string): createjs.Bitmap {
