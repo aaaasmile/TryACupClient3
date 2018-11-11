@@ -21,34 +21,35 @@ export class BriscolaInDueComponent implements OnInit {
   private subsc_msg: Subscription;
   private subsc_chat: Subscription;
   chatMsgs: ChatItem[];
-  
+
 
   constructor(
     private gameStateService: CurrGameStateService,
     private authService: AuthenticationService,
     private router: Router) {
-      this.tableIx = "1" // TODO get from route
+    this.tableIx = "1" // TODO get from route
   }
 
   ngOnInit(): void {
-    if (this.authService.isAvailable()){
-    this.chatMsgs = new Array<ChatItem>();
-    this.gameStateService.getAllChatMesages(this.tableIx).forEach(element => {
-      let ci = new ChatItem(element)
+    if (this.authService.isAvailable()) {
+      this.chatMsgs = new Array<ChatItem>();
+      this.gameStateService.getAllChatMesages(this.tableIx).forEach(element => {
+        let ci = new ChatItem(element)
         this.chatMsgs.push(ci)
-    });
-    this.subsc_chat = this.gameStateService.subscribeChatMsg()
-      .subscribe(cm => {
-        let ci = new ChatItem(cm)
-        this.chatMsgs.push(ci)
-      })
-    this.subsc_msg = this.gameStateService.InGameMsgRecEvent
-      .subscribe(evt => {
-        console.log("InGame message received ")
-        let cm = this.gameStateService.popFrontInGameMsg(this.tableIx)
       });
+      this.subsc_chat = this.gameStateService.subscribeChatMsg()
+        .subscribe(cm => {
+          let ci = new ChatItem(cm)
+          this.chatMsgs.push(ci)
+        })
+      this.subsc_msg = this.gameStateService.InGameMsgRecEvent
+        .subscribe(evt => {
+          console.log("InGame message received ")
+          let cm = this.gameStateService.popFrontInGameMsg(this.tableIx)
+        });
     }
-    this.testSomeCanvas()
+    //this.testSomeCanvas()
+    this.initScene()
   }
 
   ngOnDestroy() {
@@ -60,9 +61,9 @@ export class BriscolaInDueComponent implements OnInit {
     }
   }
 
-  processCache(){
+  processCache() {
     let cm = this.gameStateService.popFrontInGameMsg(this.tableIx)
-    while(cm){
+    while (cm) {
       this.processInGameMsg(cm)
       cm = this.gameStateService.popFrontInGameMsg(this.tableIx)
     }
@@ -77,16 +78,6 @@ export class BriscolaInDueComponent implements OnInit {
       console.log('send chat msg: ', msg)
       this.gameStateService.sendChatTableMsg(msg, this.tableIx)
     }
-  }
-
-  imageLoaded(): void {
-    console.log('Image loaded ', this.imgTmp);
-    let card = new createjs.Bitmap(this.imgTmp);
-    card.x = 30;
-    card.y = 20;
-    this.mainStage.addChild(card);
-
-    this.mainStage.update();
   }
 
   testSomeCanvas() {
@@ -122,19 +113,62 @@ export class BriscolaInDueComponent implements OnInit {
     // card.x = 30;
     // card.y = 20;
     // this.mainStage.addChild(card);
-    let cardLoader = this.gameStateService.getCardLoaderGfx()
-    cardLoader.loadCards(this.authService.get_deck_name())
-      .subscribe( x => {
-        console.log("Next loaded is ", x)
-      },
-      (err) => {
-        console.error("Load error")
-      }, () => {
-        console.log("Completed!")
-      })
+  }
 
-    this.mainStage.update();
-    console.log('Canvas created');
+  initScene(): void {
+    console.log('Init scene')
+    //let canvas: HTMLElement = document.getElementById("mainCanvas");
+    this.mainStage = new createjs.Stage("mainCanvas");
+    let canvas: any = this.mainStage.canvas
+    let loaderColor = createjs.Graphics.getRGB(0, 247, 10);
+    let loaderColor2 = createjs.Graphics.getRGB(247, 0, 10);
+    let loaderBar = new createjs.Container();
+    let bar = new createjs.Shape();
+    let barHeight = 20
+    bar.graphics.beginFill(loaderColor2).drawRect(0, 0, 1, barHeight).endFill();
+    let loaderWidth = 200;
+    let bgBar = new createjs.Shape();
+    let padding = 3
+    bgBar.graphics.setStrokeStyle(1).beginStroke(loaderColor).drawRect(-padding / 2, -padding / 2, loaderWidth + padding, barHeight + padding);
+    loaderBar.x = canvas.width - loaderWidth >> 1;
+    loaderBar.y = canvas.height - barHeight >> 1;
+    console.log("Canvas size is: ", canvas.width, canvas.height)
+    loaderBar.addChild(bar, bgBar);
+    this.mainStage.addChild(loaderBar);
+
+    createjs.Ticker.framerate = 30;
+
+    let cardLoader = this.gameStateService.getCardLoaderGfx()
+    let totItems = -1
+    cardLoader.loadCards(this.authService.get_deck_name())
+      .subscribe(x => {
+        if (totItems === -1) {
+          totItems = x
+          console.log("Expect tot items to load: ", totItems)
+          return
+        }
+        console.log("Next loaded is ", x, bar.scaleX)
+        bar.scaleX = (x * loaderWidth) / totItems;
+        this.mainStage.update();
+      },
+        (err) => {
+          console.error("Load error")
+        }, () => {
+          console.log("Load Completed!")
+          loaderBar.alpha = 1;
+          let that = this
+          createjs.Tween.get(loaderBar).wait(500).to({ alpha: 0, visible: false }, 2000)
+            .on("change", x => that.mainStage.update())
+            .call(handleComplete);
+          function handleComplete() {
+            //Tween complete
+            console.log("Tween complete")
+            //loaderBar.visible = false;
+            //this.mainStage.update();
+          }
+
+          //this.mainStage.update();
+        })
   }
 
 }

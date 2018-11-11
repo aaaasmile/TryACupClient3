@@ -1,6 +1,6 @@
 import { DeckInfo } from "../deck-info";
 import * as createjs from 'createjs-module';
-import { Subject } from "rxjs";
+import { Subject, Observable } from "rxjs";
 
 export class CardLoaderGfx {
   private deck_france: boolean
@@ -11,79 +11,93 @@ export class CardLoaderGfx {
   private symbols_card = []
   private cards_rotated = []
   private deck_information = new DeckInfo();
-  
-  loadCards(folder: string): Subject<number>{
-    let subjFinish = new Subject<number>()
-    let card_fname = ""
-    let num_cards_onsuit = this.getNumCardOnSuit(folder)
-    if (this.deck_france) {
-      num_cards_onsuit = 13
-      this.nomi_simboli = ['simbo', 'simbo', 'simbo']
-      this.nomi_semi = ["fiori", "quadr", "cuori", "picch"]
-    }
-    console.log("Load cards from folder %s and type %s", folder, this.current_deck_type)
-    if (this.current_deck_type === folder) {
-      console.log("Avoid to load a new card deck")
-      subjFinish.complete()
-      return subjFinish
-    }
-    this.cards = []
-    this.cards_rotated = []
-    this.symbols_card = []
-    let folder_fullpath = "assets/carte/" + folder + "/"
-    console.log("Load cards...")
-    if (num_cards_onsuit === 13) {
-      this.deck_information.activateThe52deck()
-    } else {
-      this.deck_information.setToDeck40()
-    }
-    
-    let countToLoad = 0
-    for (let i = 0; i < this.nomi_semi.length; i++) {
-      let seed = this.nomi_semi[i]
-      for (let index = 1; index <= num_cards_onsuit; index++) {
-        let ixname = `${index}`
-        if (index < 10) {
-          ixname = '0' + ixname
+
+  loadCards(folder: string): Observable<number> {
+    let that = this
+    // Nota sull'implementazione: uso Observable anzichè Subject
+    // in quanto il Subject è per il multicast. In questo caso ho una semplice promise.
+    // Qui viene fatto un wrapper di tutta la funzione e Observable.create(...) la 
+    // deve includere tutta. In questo caso devo anche usare let that = this. 
+    let obsLoader = Observable.create(function (obs) {
+      let card_fname = ""
+      let num_cards_onsuit = that.getNumCardOnSuit(folder)
+      if (that.deck_france) {
+        num_cards_onsuit = 13
+        that.nomi_simboli = ['simbo', 'simbo', 'simbo']
+        that.nomi_semi = ["fiori", "quadr", "cuori", "picch"]
+      }
+      let totItems = that.nomi_semi.length * num_cards_onsuit + that.nomi_simboli.length
+      console.log("Load cards from folder %s and type %s", folder, that.current_deck_type)
+      if (that.current_deck_type === folder) {
+        console.log("Avoid to load a new card deck")
+        obs.next(totItems)
+        obs.next(totItems)
+        obs.complete()
+        return obs
+      }
+      that.cards = []
+      that.cards_rotated = []
+      that.symbols_card = []
+      let folder_fullpath = "assets/carte/" + folder + "/"
+      console.log("Load cards...")
+      if (num_cards_onsuit === 13) {
+        that.deck_information.activateThe52deck()
+      } else {
+        that.deck_information.setToDeck40()
+      }
+
+      let countToLoad = 0
+      let countLoaded = 0
+      
+      obs.next(totItems)
+      for (let i = 0; i < that.nomi_semi.length; i++) {
+        let seed = that.nomi_semi[i]
+        for (let index = 1; index <= num_cards_onsuit; index++) {
+          let ixname = `${index}`
+          if (index < 10) {
+            ixname = '0' + ixname
+          }
+          card_fname = `${folder_fullpath}${ixname}_${seed}.png`
+          //console.log('Card fname is: ', card_fname)
+          let img = new Image()
+          img.src = card_fname
+          countToLoad += 1
+          img.onload = () => {
+            //console.log('Image Loaded: ', img.src);
+            let card = new createjs.Bitmap(img);
+            that.cards.push(card)
+           // setInterval(x => {
+              countLoaded += 1
+              obs.next(countLoaded)
+              if (countToLoad <= countLoaded) {
+                obs.complete()
+              }
+             // }}, 5000)
+          }
         }
-        card_fname = `${folder_fullpath}${ixname}_${seed}.png`
-        //console.log('Card fname is: ', card_fname)
+      }
+      // symbols
+      console.log("Load all symbols...")
+      for (let i = 0; i < that.nomi_simboli.length; i++) {
+        let seed = that.nomi_simboli[i]
+        card_fname = `${folder_fullpath}01_${seed}.png`
         let img = new Image()
         img.src = card_fname
         countToLoad += 1
         img.onload = () => {
           console.log('Image Loaded: ', img.src);
-          let card = new createjs.Bitmap(img);
-          this.cards.push(card)
-          countToLoad -= 1
-          subjFinish.next(countToLoad + 1)
-          if (countToLoad === 0){
-            subjFinish.complete()
+          let symb = new createjs.Bitmap(img);
+          that.symbols_card.push(symb)
+          countLoaded += 1
+          obs.next(countLoaded)
+          if (countToLoad <= countLoaded) {
+            obs.complete()
           }
         }
       }
-    }
-    // symbols
-    console.log("Load all symbols...")
-    for(let i = 0; i < this.nomi_simboli.length; i++){
-      let seed = this.nomi_simboli[i]
-      card_fname = `${folder_fullpath}01_${seed}.png`
-      let img = new Image()
-        img.src = card_fname
-        countToLoad += 1
-        img.onload = () => {
-          console.log('Image Loaded: ', img.src);
-          let symb = new createjs.Bitmap(img);
-          this.symbols_card.push(symb)
-          countToLoad -= 1
-          subjFinish.next(countToLoad + 1)
-          if (countToLoad === 0){
-            subjFinish.complete()
-          }
-        }
-    }
-    this.current_deck_type = folder
-    return subjFinish
+      that.current_deck_type = folder
+    })
+    return obsLoader
   }
 
   getNumCardOnSuit(folder): number {

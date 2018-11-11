@@ -20,7 +20,7 @@ export class LobbyCardGameService { // Used to handle the card lobby
   getCardGames(): CardGame[] {
     const games: CardGame[] = [
       { id: 1, name: 'Briscola in due', link: 'games/briscola/briscola-in-due' },
-      { id: 2, name: 'Test Gfx', link: 'games/test-gfx' }
+      //{ id: 2, name: 'Test Gfx', link: 'games/test-gfx' }
     ];
     return games;
   }
