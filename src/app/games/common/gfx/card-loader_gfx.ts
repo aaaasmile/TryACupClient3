@@ -13,7 +13,7 @@ export class CardLoaderGfx {
   private deck_information = new DeckInfo();
   public scene_background: any;
 
-  getProgressGfx(canvas:any){
+  getProgressGfx(canvas: any) {
     let that = {}
     let loaderColor = createjs.Graphics.getRGB(247, 247, 247);
     let loaderColor2 = createjs.Graphics.getRGB(247, 247, 247);
@@ -51,7 +51,7 @@ export class CardLoaderGfx {
       }
       let totItems = that.nomi_semi.length * num_cards_onsuit + that.nomi_simboli.length
       totItems += 1 // table background
-      
+
       console.log("Load cards from folder %s and type %s", folder, that.current_deck_type)
       if (that.current_deck_type === folder) {
         console.log("Avoid to load a new card deck")
@@ -73,7 +73,7 @@ export class CardLoaderGfx {
 
       let countToLoad = 0
       let countLoaded = 0
-      
+
       obs.next(totItems)
       for (let i = 0; i < that.nomi_semi.length; i++) {
         let seed = that.nomi_semi[i]
@@ -88,16 +88,17 @@ export class CardLoaderGfx {
           img.src = card_fname
           countToLoad += 1
           img.onload = () => {
-            //console.log('Image Loaded: ', img.src);
+            let posIx = i * num_cards_onsuit + index - 1
+            console.log('Image Loaded: ', img.src, posIx);
             let card = new createjs.Bitmap(img);
-            that.cards.push(card)
-           // setInterval(x => {
-              countLoaded += 1
-              obs.next(countLoaded)
-              if (countToLoad <= countLoaded) {
-                obs.complete()
-              }
-             // }}, 5000)
+            that.cards[posIx] = card
+            // setInterval(x => {
+            countLoaded += 1
+            obs.next(countLoaded)
+            if (countToLoad <= countLoaded) {
+              obs.complete()
+            }
+            // }}, 5000)
           }
         }
       }
@@ -112,7 +113,7 @@ export class CardLoaderGfx {
         img.onload = () => {
           console.log('Image Loaded: ', img.src);
           let symb = new createjs.Bitmap(img);
-          that.symbols_card.push(symb)
+          that.symbols_card[i] = symb
           countLoaded += 1
           obs.next(countLoaded)
           if (countToLoad <= countLoaded) {
@@ -126,22 +127,46 @@ export class CardLoaderGfx {
       var bmp
       img.src = "assets/images/table/table.png"
       countToLoad += 1
-        img.onload = () => {
-          console.log('Image Loaded: ', img.src);
-          bmp = new createjs.Bitmap(img);
-          bmp.scale = bmp.originalScale * 0.5;
-          container.addChild(bmp)
-          container.addChild(that.cards[2])
-          that.scene_background = container
-          countLoaded += 1
-          obs.next(countLoaded)
-          if (countToLoad <= countLoaded) {
-            obs.complete()
-          }
+      img.onload = () => {
+        console.log('Image Loaded: ', img.src);
+        bmp = new createjs.Bitmap(img);
+        bmp.scale = bmp.originalScale * 0.5; // Sta roba sembra non funzionare
+        container.addChild(bmp)
+
+        that.scene_background = container
+        countLoaded += 1
+        obs.next(countLoaded)
+        if (countToLoad <= countLoaded) {
+          obs.complete()
         }
+      }
       that.current_deck_type = folder
     })
     return obsLoader
+  }
+
+  printDeck(): createjs.Container{
+    var container = new createjs.Container();
+    let lasty = 0
+    for (let jj = 0; jj < 4; jj++) {
+      for (let ii = 0; ii < 10; ii++) {
+        let cd: createjs.Bitmap = this.cards[ii + jj * 10]
+        cd.x = ii * 50
+        cd.y = jj * 80
+        lasty = cd.y
+        container.addChild(cd)
+      }
+    }
+    lasty += 50
+    for(let i = 0; i < this.nomi_simboli.length; i++){
+      let cd: createjs.Bitmap = this.symbols_card[i]
+        cd.x = i * 50
+        cd.y = lasty
+        lasty = cd.y
+        container.addChild(cd)
+    }
+    
+    return container
   }
 
   getNumCardOnSuit(folder): number {

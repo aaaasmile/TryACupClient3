@@ -9,3 +9,10 @@ jw-modal {
   display: none;
 }
 
+
+#mainCanvas{
+  width: 80vw; 
+  height: 60vh;
+  display: block;
+}
+

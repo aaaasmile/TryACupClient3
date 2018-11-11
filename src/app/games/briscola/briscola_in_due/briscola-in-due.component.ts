@@ -157,6 +157,7 @@ export class BriscolaInDueComponent implements OnInit {
             //Tween complete
             console.log("Tween complete")
             that.mainStage.addChild(cardLoader.scene_background)
+            that.mainStage.addChild(cardLoader.printDeck())
             that.mainStage.update();
           }
         })
