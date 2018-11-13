@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResourceLoader, SoundIds, ImagesIds } from '../../common/gfx/resource-loader'
-import * as createjs from 'createjs-module';
 
 @Component({
   moduleId: module.id,

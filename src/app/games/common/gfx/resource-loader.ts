@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as createjs from 'createjs-module';
 
 export class SoundIds {
   static ClickSound = "Click";

@@ -129,6 +129,23 @@ npm install @types/createjs --save
 Ora ho il type createjs disponibile in ogni componente. Quindi non mi serve il comando import.
 Quello che mi serve è caricare la libreria easeljs-0.8.2.min.js nel file index.html.
 
+Quando ho fatto l'update alla versione di angular 6 ho usato il createjs-module. Lo svantaggio è che 
+è una libreria datata e i bug, per esempio audio in chrome, non sono corretti.
+
+Allora ho deinstallato createjs-module ed ho instalato la versione 1.0.0 manualmente per avere la versione
+più stabile la 1.0.0. Le lib le ho messi sotto ext_lib. I files li ho caricati nella sezione scripts del file
+angular.json. Per usarli nei componenti occorronno i types. Per questi ho usato i due comandi:
+npm install --save @types/easeljs
+npm install --save @types/soundjs
+Ora i types sono installati ma non sono referenziati nel codice. Un tizio consiglia di usare l'osceno comando:
+/// <reference path="../../node_modules/@types/easeljs/index.d.ts" />
+in ogni files che usa il namespace createjs. Funziona ma è orrendo.
+Invece ho creato il nuovo file src/typings.d.ts e dentro ho messo:
+/// <reference path="../node_modules/@types/easeljs/index.d.ts" />
+declare module 'createjs';
+Queste due righe hanno il seguente compito: la prima è di caricare i files di types e di metterle a disposizione
+ovunque nell'app. La seconda crea un modulo dal namespace createjs
+
 == Source
 I sorgenti sono su github al progetto TryACupClient
 

@@ -26,7 +26,11 @@
               "src/styles.css",
               "node_modules/semantic-ui-css/semantic.css"
             ],
-            "scripts": []
+            "scripts": [
+              "ext_lib/createjs/easeljs.js",
+              "ext_lib/createjs/soundjs.js",
+              "ext_lib/createjs/tweenjs.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import * as createjs from 'createjs-module';
 import { Subscription } from 'rxjs';
 import { InGameMessage } from 'src/app/data-models/socket/InGameMessage';
 import { CurrGameStateService } from 'src/app/services/curr-game-state.service';

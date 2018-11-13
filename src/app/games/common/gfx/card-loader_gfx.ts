@@ -1,5 +1,4 @@
 import { DeckInfo } from "../deck-info";
-import * as createjs from 'createjs-module';
 import { Subject, Observable } from "rxjs";
 
 export class CardLoaderGfx {
@@ -124,13 +123,17 @@ export class CardLoaderGfx {
       // background
       var container = new createjs.Container();
       let img = new Image()
-      var bmp
+      var bmp //: createjs.ScaleBitmap
       img.src = "assets/images/table/table.png"
       countToLoad += 1
       img.onload = () => {
         console.log('Image Loaded: ', img.src);
         bmp = new createjs.Bitmap(img);
-        bmp.scale = bmp.originalScale * 0.5; // Sta roba sembra non funzionare
+        //bmp.scale = bmp.originalScale * 0.5; // Sta roba sembra non funzionare
+        //let rct = new createjs.Rectangle(0, 600, 800, 1200)
+        //var sb = new createjs.ScaleBitmap(img, new createjs.Rectangle(12, 12, 5, 10));
+        //sb.setDrawSize(700,500)
+        //container.addChild(sb)
         container.addChild(bmp)
 
         that.scene_background = container
@@ -145,7 +148,7 @@ export class CardLoaderGfx {
     return obsLoader
   }
 
-  printDeck(): createjs.Container{
+  printDeck(): createjs.Container {
     var container = new createjs.Container();
     let lasty = 0
     for (let jj = 0; jj < 4; jj++) {
@@ -158,14 +161,14 @@ export class CardLoaderGfx {
       }
     }
     lasty += 50
-    for(let i = 0; i < this.nomi_simboli.length; i++){
+    for (let i = 0; i < this.nomi_simboli.length; i++) {
       let cd: createjs.Bitmap = this.symbols_card[i]
-        cd.x = i * 50
-        cd.y = lasty
-        lasty = cd.y
-        container.addChild(cd)
+      cd.x = i * 50
+      cd.y = lasty
+      lasty = cd.y
+      container.addChild(cd)
     }
-    
+
     return container
   }
 
