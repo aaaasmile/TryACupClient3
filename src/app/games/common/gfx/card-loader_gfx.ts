@@ -123,7 +123,7 @@ export class CardLoaderGfx {
       // background
       var container = new createjs.Container();
       let img = new Image()
-      var bmp //: createjs.ScaleBitmap
+      var bmp: createjs.Bitmap
       img.src = "assets/images/table/table.png"
       countToLoad += 1
       img.onload = () => {
@@ -134,6 +134,9 @@ export class CardLoaderGfx {
         //var sb = new createjs.ScaleBitmap(img, new createjs.Rectangle(12, 12, 5, 10));
         //sb.setDrawSize(700,500)
         //container.addChild(sb)
+        let fx = 800.0 / bmp.image.width // scale to fit the canvas
+        bmp.scaleX = fx
+        bmp.scaleY = fx
         container.addChild(bmp)
 
         that.scene_background = container
@@ -149,6 +152,7 @@ export class CardLoaderGfx {
   }
 
   printDeck(): createjs.Container {
+    let fx = 0.7
     var container = new createjs.Container();
     let lasty = 0
     for (let jj = 0; jj < 4; jj++) {
@@ -157,6 +161,8 @@ export class CardLoaderGfx {
         cd.x = ii * 50
         cd.y = jj * 80
         lasty = cd.y
+        cd.scaleX = fx
+        cd.scaleY = fx
         container.addChild(cd)
       }
     }
@@ -166,6 +172,7 @@ export class CardLoaderGfx {
       cd.x = i * 50
       cd.y = lasty
       lasty = cd.y
+      cd.rotation = -90
       container.addChild(cd)
     }
 
